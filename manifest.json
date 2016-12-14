@@ -1,0 +1,17 @@
+{
+  "name": "Open Multiple URLs",
+  "version": "1.3.2",
+  "manifest_version": 2,
+  "description": "Opens a list of URLs",
+  "icons": { "16": "icon16.png",
+           "48": "icon48.png",
+          "128": "icon128.png" },
+  "browser_action": {
+    "default_icon": "icon19.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "tabs",
+	"file:///*"
+  ]
+}
