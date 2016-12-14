@@ -18,7 +18,7 @@ function loadSites(e) {
 			if(urlschemes.indexOf(theurl.split(':')[0]) == -1) {
 				theurl = 'http://' + theurl;
 			}
-			if(lazyloading && theurl.split(':')[0] != 'view-source') {
+			if(lazyloading && theurl.split(':')[0] != 'view-source' && theurl.split(':')[0] != 'file') {
 				chrome.tabs.create({url: chrome.extension.getURL('lazyloading.html#') + theurl, selected: false}); 
 			} else {
 				chrome.tabs.create({url: theurl, selected: false}); 
