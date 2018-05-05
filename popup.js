@@ -1,37 +1,47 @@
-document.addEventListener('DOMContentLoaded', function () {
-  // read stored opts
-  var oldOpts = getCachedOpts()
-  var txtArea = document.getElementById('urls')
-  txtArea.value = oldOpts.txt
+document.addEventListener('DOMContentLoaded', init)
 
-  var lazyLoadCheckbox = document.getElementById('lazyLoad')
+var cacheKey = 'open-mul-url-cache'
+var txtArea = document.getElementById('urls')
+var lazyLoadCheckbox = document.getElementById('lazyLoad')
+var randomCheckbox = document.getElementById('random')
+
+function init () {
+  // read cached opts
+  var oldOpts = getCachedOpts()
+  txtArea.value = oldOpts.txt
   lazyLoadCheckbox.checked = oldOpts.lazyLoad
+  randomCheckbox.checked = oldOpts.random
 
   // add event listener for buttons
   document.getElementById('open').addEventListener('click', loadSites)
   document.getElementById('extract').addEventListener('click', extractURLs)
+
+  // record on state change
   txtArea.addEventListener('change', function (e) {
     recordOpts({ txt: e.target.value })
   })
   lazyLoadCheckbox.addEventListener('change', function () {
     recordOpts({ lazyLoad: this.checked })
   })
+  randomCheckbox.addEventListener('change', function () {
+    recordOpts({ random: this.checked })
+  })
 
   // focus on form field
   txtArea.focus()
-})
+}
 
-var cacheKey = 'open-mul-url-cache'
-
+// get options from localStorage
 function getCachedOpts () {
   let cache = localStorage.getItem(cacheKey)
   if (cache) {
     return JSON.parse(cache)
   } else {
-    return { txt: '', lazyLoad: false }
+    return { txt: '', lazyLoad: false, random: false }
   }
 }
 
+// record options into localStorage
 function recordOpts (newOpt) {
   var oldOpt = getCachedOpts()
   localStorage.setItem(
@@ -40,11 +50,31 @@ function recordOpts (newOpt) {
   )
 }
 
+/**
+ * Shuffles array in place.
+ * @param {Array} a items An array containing the items.
+ */
+function shuffle (a) {
+  var j, x, i
+  for (i = a.length - 1; i > 0; i--) {
+    j = Math.floor(Math.random() * (i + 1))
+    x = a[i]
+    a[i] = a[j]
+    a[j] = x
+  }
+  return a
+}
+
 // load sites in new background tabs
 function loadSites (e) {
   var urlschemes = ['http', 'https', 'file', 'view-source']
-  var urls = document.getElementById('urls').value.split('\n')
-  var lazyloading = document.getElementsByName('lazyloading')[0].checked
+  var urls = txtArea.value.split(/\r\n?|\n/g)
+  var lazyloading = lazyLoadCheckbox.checked
+  var random = randomCheckbox.checked
+
+  if (random) {
+    urls = shuffle(urls)
+  }
 
   for (var i = 0; i < urls.length; i++) {
     theurl = urls[i].trim()
@@ -70,7 +100,7 @@ function loadSites (e) {
 
 // extract urls from text
 function extractURLs (e) {
-  var text = document.getElementById('urls').value
+  var text = txtArea.value
 
   var urls = ''
   var urlmatcharr
@@ -80,5 +110,5 @@ function extractURLs (e) {
     urls += match + '\n'
   }
 
-  document.getElementById('urls').value = urls
+  txtArea.value = urls
 }

@@ -8,6 +8,7 @@ Since you can't use window.open to open multipule urls, you have to use a chrome
 - Load and render page on tab focus.
 - Extract url from text.
 - Input text and options cached locally.
+- Open in random order.
 
 ## Usage
 
