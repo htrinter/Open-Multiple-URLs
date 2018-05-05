@@ -1,28 +1,36 @@
 <!DOCTYPE html>
+
 <head>
+	<meta charset="UTF-8">
 	<style type="text/css">
-	<!--
-	body {
-		font-family: Helvetica, Arial, sans;
-		font-size: 12px;
-	}
-	#label {
-		padding-bottom: 5px;
-	}
-	#controls {
-		padding-top: 5px;
-	}
-	#extract {
-		float: right;
-	}
-	#urls {
-		white-space: nowrap;
-		overflow: auto;
-	}
-	-->
+		body {
+			font-family: Helvetica, Arial, sans;
+			font-size: 12px;
+		}
+
+		textarea {
+			resize: none;
+		}
+		
+		#label {
+			padding-bottom: 5px;
+		}
+
+		#controls {
+			padding-top: 5px;
+		}
+
+		#extract {
+			float: right;
+		}
+
+		#urls {
+			white-space: nowrap;
+			overflow: auto;
+		}
 	</style>
-	<script type="text/javascript" src="popup.js"></script>
 </head>
+
 <body>
 	<div id="label">List of URLs / Text to extract URLs from:</div>
 
@@ -30,7 +38,13 @@
 
 	<div id="controls">
 		<button id="extract" tabindex="4">Extract URLs from text</button>
-		<button id="open" tabindex="2">Open URLs</button> <label><input type="checkbox" name="lazyloading" tabindex="3">Don't load tabs until selected</label>
+		<button id="open" tabindex="2">Open URLs</button>
+
+		<input type="checkbox" id="lazyLoad" name="lazyloading" tabindex="3" />
+		<label for="lazyLoad">Don't load tabs until selected</label>
 	</div>
+
+	<script type="text/javascript" src="popup.js"></script>
 </body>
+
 </html>
