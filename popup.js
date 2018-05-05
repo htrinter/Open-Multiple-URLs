@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // read stored opts
   var oldOpts = getCachedOpts()
   var txtArea = document.getElementById('urls')
-  txtArea.innerText = oldOpts.txt
+  txtArea.value = oldOpts.txt
 
   var lazyLoadCheckbox = document.getElementById('lazyLoad')
   lazyLoadCheckbox.checked = oldOpts.lazyLoad
