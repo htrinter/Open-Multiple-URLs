@@ -27,8 +27,8 @@ function init () {
     recordOpts({ random: this.checked })
   })
 
-  // focus on form field
-  txtArea.focus()
+  // select text in form field
+  txtArea.select()
 }
 
 // get options from localStorage
