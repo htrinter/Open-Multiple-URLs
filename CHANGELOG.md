@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.4.1
+
+- Fixed
+    - Fixed problem where text was not stored after use of the URL extraction feature
+
 ## v1.4
 
 - Added

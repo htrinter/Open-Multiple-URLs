@@ -111,4 +111,5 @@ function extractURLs (e) {
   }
 
   txtArea.value = urls
+  recordOpts({ txt: urls })
 }
