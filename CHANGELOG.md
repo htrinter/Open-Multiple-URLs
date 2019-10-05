@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.2
+
+- Changed
+    - Migrate to ECMAScript 6
+    - Replace deprecated property 'selected' of 'tabs.create' API with 'active'
+- Fixed
+    - Fix line wrap in Firefox
+
 ## v1.4.1
 
 - Fixed
