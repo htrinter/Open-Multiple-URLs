@@ -89,10 +89,13 @@ function loadSites (e) {
       ) {
         chrome.tabs.create({
           url: chrome.extension.getURL('lazyloading.html#') + theurl,
-          selected: false
+          active: false
         });
       } else {
-        chrome.tabs.create({ url: theurl, selected: false });
+        chrome.tabs.create({
+          url: theurl,
+          active: false
+        });
       }
     }
   }
