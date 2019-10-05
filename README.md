@@ -12,15 +12,18 @@ A Chrome extension that opens a list of URLs and optionally extracts URLs from t
 
 ## Usage
 
-**Option 1: [Get this extension from the Chrome Web Store](https://chrome.google.com/webstore/detail/open-multiple-urls/oifijhaokejakekmnjmphonojcfkpbbh?hl=de)**
+**Option 1: Download from store**
+
+- [Get this extension from Chrome Web Store](https://chrome.google.com/webstore/detail/open-multiple-urls/oifijhaokejakekmnjmphonojcfkpbbh)
+- [Get this extension from Firefox Add-ons](https://addons.mozilla.org/de/firefox/addon/open-multiple-urls/)
 
 **Option 2: Load from source code**
 
-1. Clone this repo.
-2. Visit [chrome://extensions](chrome://extensions) (via Omnibox or Menu -> Tools -> Extensions).
-    - Enable Developer mode by ticking the checkbox in the upper-right corner.
-    - Click on the "Load unpacked" button.
-    - Select the directory containing the unpacked extension.
+1. Clone this repo
+2. Load extension from source
+    1. [Instructions for Chrome](https://developer.chrome.com/extensions/getstarted#manifest)
+    2. [Instructions for Firefox](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/)
+
 
 ## Permissions
 
