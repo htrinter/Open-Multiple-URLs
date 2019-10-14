@@ -1,10 +1,10 @@
-# Open Multiple URLs Chrome Extension
+# Open Multiple URLs Browser Extension (Chrome and Firefox)
 
-A Chrome extension that opens a list of URLs and optionally extracts URLs from text.
+Browser extension that opens a list of URLs and additionally extracts URLs from text.
 
 ## Features
 
-- Open multiple URLs simultaneously.
+- Open a list of URLs simultaneously.
 - Load and render page on tab focus.
 - Extract URLs from text.
 - Input text and options cached locally.
