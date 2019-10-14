@@ -1,6 +1,6 @@
-# Open Multiple URLs Browser Extension (Chrome and Firefox)
+# Open Multiple URLs Browser Extension
 
-Browser extension that opens a list of URLs and additionally extracts URLs from text.
+Browser extension for Chrome and Firefox that opens a list of URLs and additionally extracts URLs from text.
 
 ## Features
 
