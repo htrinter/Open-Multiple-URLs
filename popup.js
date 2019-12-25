@@ -85,7 +85,8 @@ function loadSites (e) {
       if (
         lazyloading &&
         theurl.split(':')[0] !== 'view-source' &&
-        theurl.split(':')[0] !== 'file'
+        theurl.split(':')[0] !== 'file' &&
+        theurl.split(':')[0] !== 'chrome'
       ) {
         chrome.tabs.create({
           url: chrome.extension.getURL('lazyloading.html#') + theurl,
