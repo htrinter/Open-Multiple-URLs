@@ -67,7 +67,7 @@ function shuffle (a) {
 
 // load sites in new background tabs
 function loadSites (e) {
-  let urlschemes = ['http', 'https', 'file', 'view-source'];
+  let urlschemes = ['http', 'https', 'chrome', 'file', 'view-source'];
   let urls = txtArea.value.split(/\r\n?|\n/g);
   let lazyloading = lazyLoadCheckbox.checked;
   let random = randomCheckbox.checked;
