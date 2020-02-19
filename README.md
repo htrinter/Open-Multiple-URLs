@@ -27,7 +27,8 @@ Browser extension for Chromium and Firefox-based browsers, that allows you to op
 
 
 ## Permissions
+"Storage" permission in order to save options. This does not grant the extension access to any other storage (like your personal files).
 
-This extension requires the "Tabs" permission in order to open new tabs.
+"Tabs" permission in order to open new tabs.
 
 On Chromium-based browsers, the permission appears as "Access your browsing activity" because URLs of tabs are accessible, although this access is only used to set the URL of tabs opened by the extension.

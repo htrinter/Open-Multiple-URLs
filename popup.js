@@ -6,36 +6,72 @@ let lazyLoadCheckbox = document.getElementById('lazyLoad');
 let randomCheckbox = document.getElementById('random');
 let newWindowCheckbox = document.getElementById('newWindow');
 let urlFromTextCheckbox = document.getElementById('urlFromText');
+// Save options to sync, when changed
+function saveLazyLoad(e) {
+  e.preventDefault();
+  browser.storage.sync.set({
+      lazyLoad: lazyLoadCheckbox.checked
+  });
+  browser.runtime.reload()
+}
+function saveRandom(e) {
+  e.preventDefault();
+  browser.storage.sync.set({
+      random: randomCheckbox.checked
+  });
+  browser.runtime.reload()
+}
+function saveNewWindow(e) {
+  e.preventDefault();
+  browser.storage.sync.set({
+      saveNewWindow: newWindowCheckbox.checked
+  });
+  browser.runtime.reload()
+}
+function saveUrlFromText(e) {
+  e.preventDefault();
+  browser.storage.sync.set({
+      urlFromText: urlFromTextCheckbox.checked
+  });
+  browser.runtime.reload()
+}
+// Get options from sync on load
+function restoreOptions() {
+  function setLazyLoad(result) {
+      lazyLoad.checked = result.lazyLoad || "true";
+  }
+  function setRandom(result) {
+    random.checked = result.random || "false";
+  }
+  function setNewWindow(result) {
+    newWindow.checked = result.newWindow || "false";
+  }
+  function setUrlFromText(result) {
+    urlFromText.checked = result.urlFromText || "false";
+  }
+
+  function onError(error) {
+      console.log(`Error: ${error}`);
+  }
+  let gettingLazyLoad = browser.storage.sync.get("lazyLoad");
+  let gettingRandom = browser.storage.sync.get("random");
+  let gettingNewWindow = browser.storage.sync.get("newWindow");
+  let gettingUrlFromText = browser.storage.sync.get("urlFromText");
+  gettingLazyLoad.then(setLazyLoad, onError);
+  gettingRandom.then(setRandom, onError);
+  gettingNewWindow.then(setNewWindow, onError);
+  gettingUrlFromText.then(setUrlFromText, onError);
+}
 
 function init() {
-  // read cached opts
-  let oldOpts = getCachedOpts();
-  txtArea.value = oldOpts.txt;
-  lazyLoadCheckbox.checked = oldOpts.lazyLoad;
-  randomCheckbox.checked = oldOpts.random;
-  newWindowCheckbox.checked = oldOpts.newWindow
-  urlFromTextCheckbox.checked = oldOpts.urlFromText
-  // add event listener for buttons
-  document.getElementById('open').addEventListener('click', loadSites);
-
-  // record on state change
-  txtArea.addEventListener('change', (e) => {
-    recordOpts({ txt: e.target.value });
-  });
-  lazyLoadCheckbox.addEventListener('change', () => {
-    recordOpts({ lazyLoad: this.checked });
-  });
-  randomCheckbox.addEventListener('change', () => {
-    recordOpts({ random: this.checked });
-  });
-  newWindowCheckbox.addEventListener('change', () => {
-    recordOpts({ newWindow: this.checked });
-  });
-  urlFromTextCheckbox.addEventListener('change', () => {
-    recordOpts({ urlFromText: this.checked });
-  });
-  // select text in form field
-  txtArea.select();
+  txtArea.select(); // select text in form field
+  restoreOptions // restore options
+  document.getElementById('open').addEventListener('click', loadSites);   // add event listener for buttons
+  // listeners for options
+  lazyLoadCheckbox.addEventListener("change", saveLazyLoad);
+  randomCheckbox.addEventListener("change", saveRandom);
+  newWindowCheckbox.addEventListener("change", saveNewWindow);
+  urlFromTextCheckbox.addEventListener("change", saveUrlFromText);
 }
 
 // get options from localStorage

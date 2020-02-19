@@ -14,7 +14,8 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "tabs"
+    "tabs",
+    "storage"
   ],
   "commands": {
     "_execute_browser_action": {
@@ -22,6 +23,11 @@
         "default": "Alt+Insert"
       },
       "description": "Open the menu to insert URLs."
+    }
+  },
+  "applications": {
+    "gecko": {
+      "id": "open-multiple-urls@jtagcat"
     }
   }
 }
