@@ -89,7 +89,7 @@ function extractURLs(e) {
 
 // load sites in new background tabs
 function loadSites(e) {
-  let urlschemes = ['http', 'https', 'file', 'view-source', 'chrome-extension', 'about', 'chrome-extension'];
+  let urlschemes = ['http', 'https', 'file', 'view-source', 'chrome-extension', 'about'];
   let urlfromtext = urlFromTextCheckbox.checked
   if (urlfromtext) {
     extractURLs
@@ -116,7 +116,7 @@ function loadSites(e) {
   if (lazyloading) {
     var compatibleUrls = [];
     for (var i = 0, len = cleanUrls.length; i < len; i++) {
-      if (cleanUrls[i].split(':')[0] !== 'file' && cleanUrls[i].split(':')[0] !== 'file' && urls[i].split(':')[0] !== 'chrome-extension') {
+      if (cleanUrls[i].split(':')[0] !== 'file' && cleanUrls[i].split(':')[0] !== 'file') {
         compatibleUrls.push(urls[i]);
       };
     }; // remove urls not compatible with lazyloader
