@@ -1,6 +1,7 @@
 # Open Multiple URLs Browser Extension
+[![Get the Add-on on Firefox Add-ons](https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_2.png)](https://addons.mozilla.org/de/firefox/addon/open-multiple-urls/) [![Get it on Chrome Web Store](https://developer.chrome.com/webstore/images/ChromeWebStore_Badge_v2_206x58.png)](https://chrome.google.com/webstore/detail/open-multiple-urls/oifijhaokejakekmnjmphonojcfkpbbh)
 
-Browser extension for Chrome and Firefox that opens a list of URLs and additionally extracts URLs from text.
+Browser extension for Chromium and Firefox-based browsers, that allows you to open multiple URLs. It can also parse text and get the URLs from any text!
 
 ## Features
 
@@ -10,14 +11,14 @@ Browser extension for Chrome and Firefox that opens a list of URLs and additiona
 - Input text and options cached locally.
 - Open tabs in random order.
 
-## Usage
+## Installation
 
-**Option 1: Download from store**
+### Download from store
 
 - [Get this extension from Chrome Web Store](https://chrome.google.com/webstore/detail/open-multiple-urls/oifijhaokejakekmnjmphonojcfkpbbh)
 - [Get this extension from Firefox Add-ons](https://addons.mozilla.org/de/firefox/addon/open-multiple-urls/)
 
-**Option 2: Load from source code**
+### Temporarily Load from source code
 
 1. Clone this repo
 2. Load extension from source
@@ -27,4 +28,6 @@ Browser extension for Chrome and Firefox that opens a list of URLs and additiona
 
 ## Permissions
 
-This extension requires the "Tabs" permission in order to open new tabs. The permission appears as "Access your browsing activity" because URLs of tabs are accessible, although this access is only used to set the URL of tabs opened by the extension.
+This extension requires the "Tabs" permission in order to open new tabs.
+
+On Chromium-based browsers, the permission appears as "Access your browsing activity" because URLs of tabs are accessible, although this access is only used to set the URL of tabs opened by the extension.
