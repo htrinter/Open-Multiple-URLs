@@ -89,7 +89,7 @@ function extractURLs(e) {
 
 // load sites in new background tabs
 function loadSites(e) {
-  let urlschemes = ['http', 'https', 'file', 'view-source'];
+  let urlschemes = ['http', 'https', 'file', 'view-source', 'chrome-extension', 'about', 'chrome-extension'];
   let urlfromtext = urlFromTextCheckbox.checked
   if (urlfromtext) {
     extractURLs
@@ -104,18 +104,19 @@ function loadSites(e) {
   }
   var cleanUrls = []
   for (var i = 0, len = urls.length; i < len; i++) {
-    if (urls[i] !== '') {
+    if (urls[i] !== '' && urls[i].split(':')[0] !== 'chrome' && urls[i].split(':')[0] !== 'brave') {
       if (urlschemes.indexOf(urls[i].split(':')[0]) === -1) {
-        urls[i] = 'http://' + urls[i];
+        urls[i] = 'http://' + urls[i]; //http, not https, because compatability
       } // if is not url, make it an url
       urls[i] = urls[i].trim(); // remove whitespace
       cleanUrls.push(urls[i]);
     };
   }; // get legit urls
+  
   if (lazyloading) {
     var compatibleUrls = [];
     for (var i = 0, len = cleanUrls.length; i < len; i++) {
-      if (cleanUrls[i].split(':')[0] !== 'file' && cleanUrls[i].split(':')[0] !== 'file') {
+      if (cleanUrls[i].split(':')[0] !== 'file' && cleanUrls[i].split(':')[0] !== 'file' && urls[i].split(':')[0] !== 'chrome-extension') {
         compatibleUrls.push(urls[i]);
       };
     }; // remove urls not compatible with lazyloader
