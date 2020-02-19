@@ -34,17 +34,27 @@
 <body>
 	<div id="label">List of URLs / Text to extract URLs from:</div>
 
-	<textarea rows="20" cols="80" id="urls" wrap="soft" tabindex="1"></textarea>
+	<textarea rows="20" cols="80" id="urls" wrap="soft" tabindex="0"></textarea>
 
 	<div id="controls">
-		<button id="extract" tabindex="5">Extract URLs from text</button>
-		<button id="open" tabindex="2">Open URLs</button>
+		<button id="open" tabindex="1">Open URLs</button>
+		<br>
+		<input type="checkbox" id="newWindow" tabindex="1" />
+		<label for="newWindow">In new window</label>
 
-		<input type="checkbox" id="lazyLoad" tabindex="3" />
-		<label for="lazyLoad">Don't load tabs until selected</label>
+		<input type="checkbox" id="urlFromText" tabindex="2" />
+		<label for="urlFromText">Extract URLs from text</label>
 
-		<input type="checkbox" id="random" tabindex="4" />
+		<input type="checkbox" id="random" tabindex="3"/>
 		<label for="random">Random order</label>
+
+		<input type="checkbox" id="lazyLoad" tabindex="4"/>
+		<label for="lazyLoad">Don't load tabs until focused.</label>
+		
+
+		
+
+		
 	</div>
 
 	<script type="text/javascript" src="popup.js"></script>
