@@ -49,3 +49,6 @@ Temporary Items
 # Project
 .idea/
 *.iml
+
+# because testing is important
+test.js

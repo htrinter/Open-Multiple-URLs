@@ -6,72 +6,53 @@ let lazyLoadCheckbox = document.getElementById('lazyLoad');
 let randomCheckbox = document.getElementById('random');
 let newWindowCheckbox = document.getElementById('newWindow');
 let urlFromTextCheckbox = document.getElementById('urlFromText');
-// Save options to sync, when changed
-function saveLazyLoad(e) {
-  e.preventDefault();
-  browser.storage.sync.set({
-    lazyLoad: lazyLoadCheckbox.checked
-  });
-  console.log("heythere")
-}
-function saveRandom(e) {
-  e.preventDefault();
-  browser.storage.sync.set({
-    random: randomCheckbox.checked
-  });
-  console.log("sup")
-}
-function saveNewWindow(e) {
-  e.preventDefault();
-  browser.storage.sync.set({
-    saveNewWindow: newWindowCheckbox.checked
-  });
-}
-function saveUrlFromText(e) {
-  e.preventDefault();
-  browser.storage.sync.set({
-    urlFromText: urlFromTextCheckbox.checked
-  });
-}
-// Get options from sync on load
-function restoreOptions() {
-  function setLazyLoad(result) {
-    lazyLoad.checked = result.lazyLoad || "true";
-    console.log("1")
-  }
-  function setRandom(result) {
-    random.checked = result.random || "false";
-    console.log("2")
-  }
-  function setNewWindow(result) {
-    newWindow.checked = result.newWindow || "false";
-  }
-  function setUrlFromText(result) {
-    urlFromText.checked = result.urlFromText || "false";
-  }
-
-  function onError(error) {
-    console.log(`Error: ${error}`);
-  }
-  let gettingLazyLoad = browser.storage.sync.get("lazyLoad");
-  let gettingRandom = browser.storage.sync.get("random");
-  let gettingNewWindow = browser.storage.sync.get("newWindow");
-  let gettingUrlFromText = browser.storage.sync.get("urlFromText");
-  gettingLazyLoad.then(setLazyLoad, onError);
-  gettingRandom.then(setRandom, onError);
-  gettingNewWindow.then(setNewWindow, onError);
-  gettingUrlFromText.then(setUrlFromText, onError);
-}
 
 function init() {
+  let oldOpts = getCachedOpts(); // read cached options
+  txtArea.value = oldOpts.txt;
+  lazyLoadCheckbox.checked = oldOpts.lazyLoad;
+  randomCheckbox.checked = oldOpts.random;
+  newWindowCheckbox.checked = oldOpts.newWindow
+  urlFromTextCheckbox.checked = oldOpts.urlFromText
   txtArea.select(); // select text in form field
-  restoreOptions() // restore options
-  document.getElementById('open').addEventListener('click', loadSites);   // add event listener for buttons
+
+
+  document.getElementById('open').addEventListener('click', loadSites);   // add event listener for button
   // listeners for options
-  lazyLoadCheckbox.addEventListener("change", saveLazyLoad);
-  randomCheckbox.addEventListener("change", saveRandom);
   newWindowCheckbox.addEventListener("change", saveNewWindow);
   urlFromTextCheckbox.addEventListener("change", saveUrlFromText);
+  // record on state change
+  txtArea.addEventListener('change', (e) => {
+    recordOpts({ txt: e.target.value });
+  });
+  lazyLoadCheckbox.addEventListener('change',() => {
+    recordOpts({ lazyLoad: this.checked });
+  });
+  randomCheckbox.addEventListener('change', () => {
+    recordOpts({ random: this.checked });
+  });
+  newWindowCheckbox.addEventListener('change', () => {
+    recordOpts({ newWindow: this.checked });
+  });
+  urlFromTextCheckbox.addEventListener('change', () => {
+    recordOpts({ urlFromText: this.checked });
+  });
+}
+function getCachedOpts () { // get options from localStorage
+  let cache = localStorage.getItem(cacheKey);
+  if (cache) {
+    return JSON.parse(cache);
+  } else {
+    return { txt: '', lazyLoad: false, random: false };
+  }
+}
+
+function recordOpts (newOpt) { // record options into localStorage
+  let oldOpt = getCachedOpts();
+  localStorage.setItem(
+    cacheKey,
+    JSON.stringify(Object.assign({}, oldOpt, newOpt))
+  );
 }
 
 /**
@@ -97,7 +78,6 @@ function loadSites(e) {
     var urls = [];
     let urlmatcharr;
     let urlregex = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/gi;
-    //  let urlregex = "(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?"
     while ((urlmatcharr = urlregex.exec(text)) !== null) {
       urls.push(urlmatcharr[0]);
     }
