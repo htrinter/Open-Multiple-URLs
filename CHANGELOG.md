@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.3
+
+- Added
+    - Add abstraction of browser API object to make extension work with both Chromium and Firefox API
+- Changed
+    - Migrate to new storage API
+- Fixed
+    - Fix save of selected lazy loading and random option
+
 ## 1.4.2
 
 - Changed

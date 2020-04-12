@@ -7,7 +7,7 @@ Browser extension for Chrome and Firefox that opens a list of URLs and additiona
 - Open a list of URLs simultaneously.
 - Load and render page on tab focus.
 - Extract URLs from text.
-- Input text and options cached locally.
+- Input text and options saved locally.
 - Open tabs in random order.
 
 ## Usage
