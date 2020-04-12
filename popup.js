@@ -16,12 +16,25 @@ let txtArea = document.getElementById('urls');
 let lazyLoadCheckbox = document.getElementById('lazyLoad');
 let randomCheckbox = document.getElementById('random');
 
-function init () {
-  // read cached opts
-  let oldOpts = getCachedOpts();
-  txtArea.value = oldOpts.txt;
-  lazyLoadCheckbox.checked = oldOpts.lazyLoad;
-  randomCheckbox.checked = oldOpts.random;
+async function init () {
+  // migrate from deprecated storage
+  let deprecatedStorageKey = 'open-mul-url-cache';
+  let oldOptionsVal = localStorage.getItem(deprecatedStorageKey);
+  if (oldOptionsVal) {
+    console.log('old options found: ' + oldOptionsVal);
+    let oldOptions = JSON.parse(oldOptionsVal);
+    if (oldOptions.txt != undefined) {
+      await browserApi.storage.local.set({ 'txt' : oldOptions.txt });
+    }
+    if (oldOptions.lazyLoad != undefined) {
+      await browserApi.storage.local.set({ 'lazyload' : oldOptions.lazyLoad });
+    }
+    if (oldOptions.random != undefined) {
+      await browserApi.storage.local.set({ 'random' : oldOptions.random });
+    }
+    localStorage.removeItem(deprecatedStorageKey);
+  }
+
   // restore options
   browserApi.storage.local.get('txt', data => {
     if (data != undefined && data.txt != undefined) {
