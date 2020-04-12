@@ -95,12 +95,12 @@ function loadSites (e) {
         theurl.split(':')[0] !== 'view-source' &&
         theurl.split(':')[0] !== 'file'
       ) {
-        chrome.tabs.create({
-          url: chrome.extension.getURL('lazyloading.html#') + theurl,
+        browserApi.tabs.create({
+          url: browserApi.extension.getURL('lazyloading.html#') + theurl,
           active: false
         });
       } else {
-        chrome.tabs.create({
+        browserApi.tabs.create({
           url: theurl,
           active: false
         });
