@@ -12,7 +12,6 @@ try {
 
 document.addEventListener('DOMContentLoaded', init);
 
-let cacheKey = 'open-mul-url-cache';
 let txtArea = document.getElementById('urls');
 let lazyLoadCheckbox = document.getElementById('lazyLoad');
 let randomCheckbox = document.getElementById('random');
@@ -23,43 +22,40 @@ function init () {
   txtArea.value = oldOpts.txt;
   lazyLoadCheckbox.checked = oldOpts.lazyLoad;
   randomCheckbox.checked = oldOpts.random;
+  // restore options
+  browserApi.storage.local.get('txt', data => {
+    if (data != undefined && data.txt != undefined) {
+      txtArea.value = data.txt;
+    }
+  });
+  browserApi.storage.local.get('lazyload', data => {
+    if (data != undefined && data.lazyload != undefined) {
+      lazyLoadCheckbox.checked = data.lazyload;
+    }
+  });
+  browserApi.storage.local.get('random', data => {
+    if (data != undefined && data.random != undefined ) {
+      randomCheckbox.checked = data.random;
+    }
+  });
 
   // add event listener for buttons
   document.getElementById('open').addEventListener('click', loadSites);
   document.getElementById('extract').addEventListener('click', extractURLs);
 
   // record on state change
-  txtArea.addEventListener('change', (e) => {
-    recordOpts({ txt: e.target.value });
+  txtArea.addEventListener('change', event => {
+    browserApi.storage.local.set({ txt : event.target.value });
   });
-  lazyLoadCheckbox.addEventListener('change',() => {
-    recordOpts({ lazyLoad: this.checked });
+  lazyLoadCheckbox.addEventListener('change', event => {
+    browserApi.storage.local.set({ lazyload : event.target.checked });
   });
-  randomCheckbox.addEventListener('change', () => {
-    recordOpts({ random: this.checked });
+  randomCheckbox.addEventListener('change', event => {
+    browserApi.storage.local.set({ random : event.target.checked });
   });
 
   // select text in form field
   txtArea.select();
-}
-
-// get options from localStorage
-function getCachedOpts () {
-  let cache = localStorage.getItem(cacheKey);
-  if (cache) {
-    return JSON.parse(cache);
-  } else {
-    return { txt: '', lazyLoad: false, random: false };
-  }
-}
-
-// record options into localStorage
-function recordOpts (newOpt) {
-  let oldOpt = getCachedOpts();
-  localStorage.setItem(
-    cacheKey,
-    JSON.stringify(Object.assign({}, oldOpt, newOpt))
-  );
 }
 
 /**
