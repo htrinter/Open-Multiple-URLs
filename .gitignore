@@ -49,3 +49,11 @@ Temporary Items
 # Project
 .idea/
 *.iml
+
+# Build
+.cache
+dev-out
+dist
+node_modules
+coverage
+open-multiple-urls-*.zip
