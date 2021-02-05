@@ -21,15 +21,10 @@ export async function getStoredOptions(): Promise<StoredOptions> {
   const preserveVal = await browser.storage.local.get(StorageKey.preserve);
 
   return {
-    txt: txtVal ? txtVal.txt || '' : '',
-    lazyload: lazyloadVal ? lazyloadVal.lazyload || false : false,
-    random: randomVal ? randomVal.random || false : false,
-    preserve:
-      txtVal && txtVal.txt
-        ? true
-        : preserveVal
-        ? preserveVal.preserve || false
-        : false,
+    txt: txtVal?.txt || '',
+    lazyload: lazyloadVal?.lazyload || false,
+    random: randomVal?.random || false,
+    preserve: txtVal?.txt || preserveVal?.preserve || false,
   };
 }
 
