@@ -1,4 +1,8 @@
 .cache
 dist
+dist-chrome
+dist-firefox
+dist-zip
+dist-dev
 node_modules
 coverage

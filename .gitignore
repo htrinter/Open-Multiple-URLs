@@ -54,6 +54,10 @@ Temporary Items
 .cache
 dev-out
 dist
+dist-chrome
+dist-firefox
+dist-zip
+dist-dev
 node_modules
 coverage
 open-multiple-urls-*.zip

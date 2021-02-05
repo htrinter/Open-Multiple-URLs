@@ -3,13 +3,17 @@
   "version": "1.5.0",
   "description": "Browser extension that opens a list of URLs",
   "scripts": {
-    "dev": "parcel watch src/*.html --out-dir dev-out --no-hmr",
-    "build": "parcel build src/*.html",
-    "build-run-all": "npm run format && npm run lint && npm run test && npm run build",
+    "dev:firefox": "NODE_ENV=firefox parcel watch src/*.html --out-dir dist-dev --no-hmr",
+    "dev:chrome": "NODE_ENV=chrome parcel watch src/*.html --out-dir dist-dev --no-hmr",
+    "build:firefox": "NODE_ENV=firefox parcel build src/*.html --out-dir dist-firefox",
+    "build:chrome": "NODE_ENV=chrome parcel build src/*.html --out-dir dist-chrome",
+    "build:all": "npm run format && npm run lint && npm run test && npm run build:firefox && npm run build:chrome",
     "format": "npx prettier --write .",
     "lint": "npx eslint . --fix --ext .ts,.js",
     "test": "npx jest --collect-coverage",
-    "zip": "zip -FSrj open-multiple-urls-$npm_package_version.zip dist"
+    "zip:firefox": "mkdir -p dist-zip && zip -FSrj dist-zip/open-multiple-urls-$npm_package_version-firefox.zip dist-firefox",
+    "zip:chrome": "mkdir -p dist-zip && zip -FSrj dist-zip/open-multiple-urls-$npm_package_version-chrome.zip dist-chrome",
+    "zip:all": "npm run zip:firefox && npm run zip:chrome"
   },
   "keywords": [],
   "author": "https://github.com/htrinter/",
@@ -30,7 +34,17 @@
   "dependencies": {},
   "staticFiles": {
     "staticPath": [
-      "src/static"
+      {
+        "staticPath": "src/static"
+      },
+      {
+        "staticPath": "src/manifest/chrome/manifest.json",
+        "env": "chrome"
+      },
+      {
+        "staticPath": "src/manifest/firefox/manifest.json",
+        "env": "firefox"
+      }
     ],
     "watcherGlob": "**"
   }
