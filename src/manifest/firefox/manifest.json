@@ -13,5 +13,6 @@
     "default_icon": "icon19.png",
     "default_popup": "browseraction.html"
   },
-  "permissions": ["tabs", "storage"]
+  "permissions": ["tabs", "storage"],
+  "incognito": "spanning"
 }
