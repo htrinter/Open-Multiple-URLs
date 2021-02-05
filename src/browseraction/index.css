@@ -34,7 +34,7 @@ label.checkbox {
   -webkit-user-select: none;
 }
 
-input[type="checkbox"] {
+input[type='checkbox'] {
   flex: none;
   margin-right: 5px;
 }
