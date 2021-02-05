@@ -35,4 +35,5 @@ Have a look at the `package.json` for all run scripts.
 
 ## Permissions
 
-This extension requires the "Tabs" permission in order to open new tabs. The permission appears as "Access your browsing activity" because URLs of tabs are accessible, although this access is only used to set the URL of tabs opened by the extension.
+- "Tabs" permission in order to open new tabs. The permission appears as "Access your browsing activity" because URLs of tabs are accessible, although this access is only used to set the URL of tabs opened by the extension.
+- "Storage" permission in order to save settings and user input.
