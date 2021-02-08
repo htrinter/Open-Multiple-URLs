@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.5.1
+
+- Changed
+  - Enable split mode for Chrome, in order to fully support incognito mode
+- Fixed
+  - Fix issues with unsaved changes on extract
+
 ## v1.5
 
 - Changed
