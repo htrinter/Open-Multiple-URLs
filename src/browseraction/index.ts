@@ -5,10 +5,14 @@ import { getUIDef } from './ui';
 
 export {};
 
-document.addEventListener('DOMContentLoaded', init);
+async function saveUrlList(): Promise<void> {
+  const ui = getUIDef();
+  if (ui.preserveCheckbox.checked) {
+    await storeValue<string>(StorageKey.urlList, ui.txtArea.value);
+  }
+}
 
 export async function init(): Promise<void> {
-  // get ui
   const ui = getUIDef();
 
   // restore options
@@ -20,6 +24,7 @@ export async function init(): Promise<void> {
 
   // add button events
   ui.openButton.addEventListener('click', () => {
+    saveUrlList();
     loadSites(
       ui.txtArea.value,
       ui.lazyLoadCheckbox.checked,
@@ -28,17 +33,11 @@ export async function init(): Promise<void> {
   });
   ui.extractButton.addEventListener('click', () => {
     ui.txtArea.value = extractURLs(ui.txtArea.value);
+    saveUrlList();
   });
 
   // add options events
-  ui.txtArea.addEventListener('change', (event) => {
-    if (ui.preserveCheckbox.checked) {
-      storeValue<string>(
-        StorageKey.urlList,
-        (<HTMLInputElement>event.target).value
-      );
-    }
-  });
+  ui.txtArea.addEventListener('change', saveUrlList);
   ui.lazyLoadCheckbox.addEventListener('change', (event) =>
     storeValue<boolean>(
       StorageKey.lazyload,
@@ -60,3 +59,5 @@ export async function init(): Promise<void> {
   // select text in form field
   ui.txtArea.select();
 }
+
+document.addEventListener('DOMContentLoaded', init);

@@ -28,6 +28,6 @@ export async function getStoredOptions(): Promise<StoredOptions> {
   };
 }
 
-export function storeValue<T>(key: StorageKey, value: T): void {
-  browser.storage.local.set({ [key]: value });
+export async function storeValue<T>(key: StorageKey, value: T): Promise<void> {
+  await browser.storage.local.set({ [key]: value });
 }
