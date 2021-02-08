@@ -4,6 +4,7 @@
 
 - Changed
   - Enable split mode for Chrome, in order to fully support incognito mode
+  - Upgrade some dependencies
 - Fixed
   - Fix issues with unsaved changes on extract
 
