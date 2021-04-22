@@ -1,6 +1,6 @@
 {
   "name": "Open Multiple URLs",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "manifest_version": 2,
   "description": "Opens a list of URLs",
   "homepage_url": "https://github.com/htrinter/Open-Multiple-URLs",
@@ -13,6 +13,6 @@
     "default_icon": "icon19.png",
     "default_popup": "browseraction.html"
   },
-  "permissions": ["tabs", "storage"],
+  "permissions": ["storage"],
   "incognito": "split"
 }

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.2
+
+- Changed
+  - Remove unnecessary "tabs" permission
+
 ## v1.5.1
 
 - Changed
