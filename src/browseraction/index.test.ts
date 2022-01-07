@@ -198,5 +198,12 @@ describe('test browser action', () => {
     expect(
       uiDef.tabCountLabel.textContent.indexOf('will open 3 new tabs') !== -1
     ).toBeTruthy();
+
+    uiDef.txtArea.value = 'https://test.de\n'.repeat(5001);
+    uiDef.txtArea.dispatchEvent(new Event('input'));
+    expect(
+      uiDef.tabCountLabel.textContent.indexOf('will open > 5000 new tabs') !==
+        -1
+    ).toBeTruthy();
   });
 });
