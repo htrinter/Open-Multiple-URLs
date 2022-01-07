@@ -8,7 +8,10 @@ const BODY_HTML =
   '<main><section> <label for="urls">List of URLs / Text to extract URLs from:</label> <textarea id="urls" wrap="soft" tabindex="1"></textarea> </section> <section> <button id="extract" tabindex="6">Extract URLs from text</button> <button id="open" tabindex="2">Open URLs</button><span id="tabcount"></span></section> <section> <label class="checkbox" ><input type="checkbox" id="lazyLoad" tabindex="3"/> Do not load tabs until selected</label > <label class="checkbox" ><input type="checkbox" id="random" tabindex="4"/> Load in random order</label > </section> <section> <label class="checkbox" ><input type="checkbox" id="preserve" tabindex="5"/> Preserve input</label > </section> </main>';
 
 let mockStore = {};
-jest.mock('./load');
+jest.mock('./load', () => ({
+  ...jest.requireActual('./load'),
+  loadSites: jest.fn(),
+}));
 jest.mock('./extract');
 jest.mock('webextension-polyfill-ts', () => ({
   browser: {
@@ -166,5 +169,34 @@ describe('test browser action', () => {
     uiDef.extractButton.click();
 
     expect(extractURLs).toHaveBeenCalled();
+  });
+
+  test('display tab count', async () => {
+    await init();
+
+    const uiDef = getUIDef();
+
+    expect(
+      uiDef.tabCountLabel.textContent.indexOf('will open') === -1
+    ).toBeTruthy();
+
+    uiDef.txtArea.value = 'https://test.de';
+    uiDef.txtArea.dispatchEvent(new Event('input'));
+    expect(
+      uiDef.tabCountLabel.textContent.indexOf('will open 1 new tab') !== -1
+    ).toBeTruthy();
+
+    uiDef.txtArea.value = 'https://test.de\nhttps://spiegel.de';
+    uiDef.txtArea.dispatchEvent(new Event('input'));
+    expect(
+      uiDef.tabCountLabel.textContent.indexOf('will open 2 new tabs') !== -1
+    ).toBeTruthy();
+
+    uiDef.txtArea.value =
+      'https://test.de\n\nhttps://spiegel.de\n    \nhttps://zeit.de\n\n   \n ';
+    uiDef.txtArea.dispatchEvent(new Event('input'));
+    expect(
+      uiDef.tabCountLabel.textContent.indexOf('will open 3 new tabs') !== -1
+    ).toBeTruthy();
   });
 });
