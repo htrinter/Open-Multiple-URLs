@@ -15,6 +15,7 @@ function shuffle(a) {
   return a;
 }
 
+export const URL_LINE_SPLIT_REGEX = /\r\n?|\n/g;
 /**
  * Loads sites in new background tabs
  * @param text Text containing one URL per line
@@ -27,7 +28,7 @@ export function loadSites(
   random: boolean
 ): void {
   const urlschemes = ['http', 'https', 'file', 'view-source'];
-  let urls = text.split(/\r\n?|\n/g);
+  let urls = text.split(URL_LINE_SPLIT_REGEX);
 
   if (random) {
     urls = shuffle(urls);

@@ -5,7 +5,7 @@ import { getStoredOptions, StorageKey, storeValue } from './storage';
 import { getUIDef } from './ui';
 
 const BODY_HTML =
-  '<main><section> <label for="urls">List of URLs / Text to extract URLs from:</label> <textarea id="urls" wrap="soft" tabindex="1"></textarea> </section> <section> <button id="extract" tabindex="6">Extract URLs from text</button> <button id="open" tabindex="2">Open URLs</button> </section> <section> <label class="checkbox" ><input type="checkbox" id="lazyLoad" tabindex="3"/> Do not load tabs until selected</label > <label class="checkbox" ><input type="checkbox" id="random" tabindex="4"/> Load in random order</label > </section> <section> <label class="checkbox" ><input type="checkbox" id="preserve" tabindex="5"/> Preserve input</label > </section> </main>';
+  '<main><section> <label for="urls">List of URLs / Text to extract URLs from:</label> <textarea id="urls" wrap="soft" tabindex="1"></textarea> </section> <section> <button id="extract" tabindex="6">Extract URLs from text</button> <button id="open" tabindex="2">Open URLs</button><span id="tabcount"></span></section> <section> <label class="checkbox" ><input type="checkbox" id="lazyLoad" tabindex="3"/> Do not load tabs until selected</label > <label class="checkbox" ><input type="checkbox" id="random" tabindex="4"/> Load in random order</label > </section> <section> <label class="checkbox" ><input type="checkbox" id="preserve" tabindex="5"/> Preserve input</label > </section> </main>';
 
 let mockStore = {};
 jest.mock('./load');
@@ -58,7 +58,7 @@ describe('test browser action', () => {
 
     let uiDef = getUIDef();
     uiDef.txtArea.value = 'foobar';
-    uiDef.txtArea.dispatchEvent(new Event('change'));
+    uiDef.txtArea.dispatchEvent(new Event('input'));
     uiDef.lazyLoadCheckbox.click();
     uiDef.randomCheckbox.click();
     uiDef.preserveCheckbox.click();
@@ -104,14 +104,14 @@ describe('test browser action', () => {
     const uiDef = getUIDef();
 
     uiDef.txtArea.value = 'foobar';
-    uiDef.txtArea.dispatchEvent(new Event('change'));
+    uiDef.txtArea.dispatchEvent(new Event('input'));
     expect((await getStoredOptions()).txt).toBe('');
 
     uiDef.preserveCheckbox.click();
     expect((await getStoredOptions()).txt).toBe('foobar');
 
     uiDef.txtArea.value = 'boofar';
-    uiDef.txtArea.dispatchEvent(new Event('change'));
+    uiDef.txtArea.dispatchEvent(new Event('input'));
     expect((await getStoredOptions()).txt).toBe('boofar');
 
     uiDef.preserveCheckbox.click();

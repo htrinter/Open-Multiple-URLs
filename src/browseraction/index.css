@@ -27,6 +27,20 @@ button {
   cursor: pointer;
 }
 
+#tabcount {
+  padding-left: 5px;
+}
+
+#tabcount abbr {
+  cursor: default;
+  text-decoration: none;
+  border-bottom: none;
+}
+
+#tabcount abbr span {
+  border-bottom: 1px dotted #000;
+}
+
 label.checkbox {
   display: flex;
   align-items: center;
