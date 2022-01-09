@@ -2,14 +2,22 @@ import { extractURLs } from './extract';
 import { loadSites, URL_LINE_SPLIT_REGEX } from './load';
 import { getStoredOptions, StorageKey, storeValue } from './storage';
 import { getUIDef, UIDef } from './ui';
+import { debounce } from 'ts-debounce';
 
 export {};
+
+export const SAVE_URL_LIST_DEBOUNCE_TIME_MS = 100;
+export const UPDATE_TAB_COUNT_DEBOUNCE_TIME_MS = 50;
 
 const saveUrlList = async (ui: UIDef): Promise<void> => {
   if (ui.preserveCheckbox.checked) {
     await storeValue<string>(StorageKey.urlList, ui.txtArea.value);
   }
 };
+const debouncedSaveUrlList = debounce(
+  saveUrlList,
+  SAVE_URL_LIST_DEBOUNCE_TIME_MS
+);
 
 const updateTabCount = (ui: UIDef) => {
   let tabCount = '0';
@@ -30,6 +38,10 @@ const updateTabCount = (ui: UIDef) => {
           tabCount === '1' ? 'tab' : 'tabs'
         }</span></abbr>`;
 };
+const debouncedUpdateTabCount = debounce(
+  updateTabCount,
+  UPDATE_TAB_COUNT_DEBOUNCE_TIME_MS
+);
 
 export const init = async (): Promise<void> => {
   const ui = getUIDef();
@@ -43,8 +55,8 @@ export const init = async (): Promise<void> => {
 
   // add text input events
   ui.txtArea.addEventListener('input', () => {
-    saveUrlList(ui);
-    updateTabCount(ui);
+    debouncedSaveUrlList(ui);
+    debouncedUpdateTabCount(ui);
   });
 
   // add button events

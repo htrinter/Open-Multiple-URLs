@@ -1,4 +1,8 @@
-import { init } from '.';
+import {
+  init,
+  SAVE_URL_LIST_DEBOUNCE_TIME_MS,
+  UPDATE_TAB_COUNT_DEBOUNCE_TIME_MS,
+} from '.';
 import { extractURLs } from './extract';
 import { loadSites } from './load';
 import { getStoredOptions, StorageKey, storeValue } from './storage';
@@ -27,6 +31,10 @@ jest.mock('webextension-polyfill-ts', () => ({
     },
   },
 }));
+
+const sleep = async (timeInMs: number) => {
+  await new Promise((r) => setTimeout(r, timeInMs));
+};
 
 describe('test browser action', () => {
   beforeEach(async () => {
@@ -115,6 +123,8 @@ describe('test browser action', () => {
 
     uiDef.txtArea.value = 'boofar';
     uiDef.txtArea.dispatchEvent(new Event('input'));
+    expect((await getStoredOptions()).txt).toBe('foobar');
+    await sleep(SAVE_URL_LIST_DEBOUNCE_TIME_MS);
     expect((await getStoredOptions()).txt).toBe('boofar');
 
     uiDef.preserveCheckbox.click();
@@ -172,38 +182,45 @@ describe('test browser action', () => {
   });
 
   test('display tab count', async () => {
+    const uiDef = getUIDef();
+    const hasNoTabCount = () => {
+      return uiDef.tabCountLabel.textContent.indexOf('will open') === -1;
+    };
+    const hasTabCount = (tabNo: string) => {
+      return (
+        uiDef.tabCountLabel.textContent.indexOf(
+          `will open ${tabNo} new ${tabNo === '1' ? 'tab' : 'tabs'}`
+        ) !== -1
+      );
+    };
+
     await init();
 
-    const uiDef = getUIDef();
-
-    expect(
-      uiDef.tabCountLabel.textContent.indexOf('will open') === -1
-    ).toBeTruthy();
+    expect(hasNoTabCount()).toBeTruthy();
 
     uiDef.txtArea.value = 'https://test.de';
     uiDef.txtArea.dispatchEvent(new Event('input'));
-    expect(
-      uiDef.tabCountLabel.textContent.indexOf('will open 1 new tab') !== -1
-    ).toBeTruthy();
+    expect(hasNoTabCount()).toBeTruthy();
+    await sleep(UPDATE_TAB_COUNT_DEBOUNCE_TIME_MS);
+    expect(hasTabCount('1')).toBeTruthy();
 
     uiDef.txtArea.value = 'https://test.de\nhttps://spiegel.de';
     uiDef.txtArea.dispatchEvent(new Event('input'));
-    expect(
-      uiDef.tabCountLabel.textContent.indexOf('will open 2 new tabs') !== -1
-    ).toBeTruthy();
+    expect(hasTabCount('1')).toBeTruthy();
+    await sleep(UPDATE_TAB_COUNT_DEBOUNCE_TIME_MS);
+    expect(hasTabCount('2')).toBeTruthy();
 
     uiDef.txtArea.value =
       'https://test.de\n\nhttps://spiegel.de\n    \nhttps://zeit.de\n\n   \n ';
     uiDef.txtArea.dispatchEvent(new Event('input'));
-    expect(
-      uiDef.tabCountLabel.textContent.indexOf('will open 3 new tabs') !== -1
-    ).toBeTruthy();
+    expect(hasTabCount('2')).toBeTruthy();
+    await sleep(UPDATE_TAB_COUNT_DEBOUNCE_TIME_MS);
+    expect(hasTabCount('3')).toBeTruthy();
 
     uiDef.txtArea.value = 'https://test.de\n'.repeat(5001);
     uiDef.txtArea.dispatchEvent(new Event('input'));
-    expect(
-      uiDef.tabCountLabel.textContent.indexOf('will open > 5000 new tabs') !==
-        -1
-    ).toBeTruthy();
+    expect(hasTabCount('3')).toBeTruthy();
+    await sleep(UPDATE_TAB_COUNT_DEBOUNCE_TIME_MS);
+    expect(hasTabCount('> 5000')).toBeTruthy();
   });
 });
