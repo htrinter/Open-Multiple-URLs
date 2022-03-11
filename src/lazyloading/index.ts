@@ -11,7 +11,7 @@ export function init(): void {
   window.addEventListener(
     'focus',
     () => {
-      window.location.assign(window.location.hash.substr(1));
+      window.location.replace(window.location.hash.substr(1));
     },
     false
   );
