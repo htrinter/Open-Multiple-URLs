@@ -5,7 +5,7 @@ const url = 'https://example.de';
 test('redirect on focus', async () => {
   const mockLocation = {
     ...window.location,
-    assign: jest.fn(),
+    replace: jest.fn(),
     hash: '#' + url,
   };
   delete window.location;
@@ -14,9 +14,9 @@ test('redirect on focus', async () => {
   init();
 
   expect(document.title).toBe('[example.de]');
-  expect(window.location.assign).toHaveBeenCalledTimes(0);
+  expect(window.location.replace).toHaveBeenCalledTimes(0);
 
   window.dispatchEvent(new Event('focus'));
 
-  expect(window.location.assign).toHaveBeenLastCalledWith(url);
+  expect(window.location.replace).toHaveBeenLastCalledWith(url);
 });
