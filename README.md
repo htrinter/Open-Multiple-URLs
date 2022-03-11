@@ -4,6 +4,10 @@ Browser extension for Chrome and Firefox that opens a list of URLs and additiona
 
 Install the extension via [Chrome Web Store](https://chrome.google.com/webstore/detail/open-multiple-urls/oifijhaokejakekmnjmphonojcfkpbbh) or [Firefox Add-ons](https://addons.mozilla.org/de/firefox/addon/open-multiple-urls/).
 
+## Usage
+
+There should be an icon in the browser's toolbar. Chrome hides extension icons by default, so you have to "pin" it to the toolbar. Click the "Extensions" button in the toolbar to do that. Then click on the extension's icon, enter URLs and click the "open" button.
+
 ## Building the project
 
 The project is written in [TypeScript](https://www.typescriptlang.org/), uses [Parcel](https://parceljs.org/) for bundling, [Jest](https://jestjs.io/) for testing, [ESLint](https://eslint.org/) for linting and [Prettier](https://prettier.io/) for formatting. It requires [Node](https://nodejs.org/en/) Version >= 12 to build.
