@@ -1,5 +1,7 @@
 # Open Multiple URLs Browser Extension
 
+![test status](https://github.com/htrinter/Open-Multiple-URLs/actions/workflows/github-actions-test.yml/badge.svg)
+
 Browser extension for Chrome and Firefox that opens a list of URLs and additionally extracts URLs from text.
 
 Install the extension via [Chrome Web Store](https://chrome.google.com/webstore/detail/open-multiple-urls/oifijhaokejakekmnjmphonojcfkpbbh) or [Firefox Add-ons](https://addons.mozilla.org/de/firefox/addon/open-multiple-urls/).
