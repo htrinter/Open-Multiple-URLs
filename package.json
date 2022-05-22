@@ -5,8 +5,8 @@
   "scripts": {
     "dev:firefox": "NODE_ENV=firefox parcel watch src/*.html --out-dir dist-dev --no-hmr",
     "dev:chrome": "NODE_ENV=chrome parcel watch src/*.html --out-dir dist-dev --no-hmr",
-    "build:firefox": "NODE_ENV=firefox parcel build src/*.html --out-dir dist-firefox",
-    "build:chrome": "NODE_ENV=chrome parcel build src/*.html --out-dir dist-chrome",
+    "build:firefox": "rimraf dist-firefox && NODE_ENV=firefox parcel build src/*.html --out-dir dist-firefox",
+    "build:chrome": "rimraf dist-chrome && NODE_ENV=chrome parcel build src/*.html --out-dir dist-chrome",
     "build:all": "npm run format && npm run lint && npm run test && npm run build:firefox && npm run build:chrome",
     "format": "npx prettier --write .",
     "format:check": "npx prettier --check .",
@@ -34,6 +34,7 @@
     "webextension-polyfill-ts": "^0.24.0"
   },
   "dependencies": {
+    "rimraf": "^3.0.2",
     "ts-debounce": "^4.0.0"
   },
   "staticFiles": {
