@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.3
+
+- Added
+  - Indicator for amount of tabs to be opened
+- Changed
+  - Refreshed design with improved element sizes, margins and paddings
+  - Lazy loading: Use replace instead of assign for URL navigation, in order to avoid unecessary history entries
+
 ## 1.5.2
 
 - Changed
