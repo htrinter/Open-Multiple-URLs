@@ -51,7 +51,6 @@ export const init = async (): Promise<void> => {
   ui.txtArea.value = options.txt;
   ui.lazyLoadCheckbox.checked = options.lazyload;
   ui.randomCheckbox.checked = options.random;
-  ui.reverseCheckbox.checked = options.reverse;
   ui.preserveCheckbox.checked = options.preserve;
 
   // add text input events
@@ -66,8 +65,7 @@ export const init = async (): Promise<void> => {
     loadSites(
       ui.txtArea.value,
       ui.lazyLoadCheckbox.checked,
-      ui.randomCheckbox.checked,
-      ui.reverseCheckbox.checked
+      ui.randomCheckbox.checked
     );
   });
   ui.extractButton.addEventListener('click', () => {
@@ -86,12 +84,6 @@ export const init = async (): Promise<void> => {
   ui.randomCheckbox.addEventListener('change', (event) =>
     storeValue<boolean>(
       StorageKey.random,
-      (<HTMLInputElement>event.target).checked
-    )
-  );
-  ui.reverseCheckbox.addEventListener('change', (event) =>
-    storeValue<boolean>(
-      StorageKey.reverse,
       (<HTMLInputElement>event.target).checked
     )
   );
