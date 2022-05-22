@@ -25,10 +25,15 @@ export const URL_LINE_SPLIT_REGEX = /\r\n?|\n/g;
 export function loadSites(
   text: string,
   lazyloading: boolean,
-  random: boolean
+  random: boolean,
+  reverse: boolean
 ): void {
   const urlschemes = ['http', 'https', 'file', 'view-source'];
   let urls = text.split(URL_LINE_SPLIT_REGEX);
+
+  if (reverse) {
+    urls = urls.reverse();
+  }
 
   if (random) {
     urls = shuffle(urls);

@@ -7,9 +7,9 @@ import { extractURLs } from './extract';
 import { loadSites } from './load';
 import { getStoredOptions, StorageKey, storeValue } from './storage';
 import { getUIDef } from './ui';
+import * as fs from 'fs';
 
-const BODY_HTML =
-  '<main><section> <label for="urls">List of URLs / Text to extract URLs from:</label> <textarea id="urls" wrap="soft" tabindex="1"></textarea> </section> <section> <button id="extract" tabindex="6">Extract URLs from text</button> <button id="open" tabindex="2">Open URLs</button><span id="tabcount"></span></section> <section> <label class="checkbox" ><input type="checkbox" id="lazyLoad" tabindex="3"/> Do not load tabs until selected</label > <label class="checkbox" ><input type="checkbox" id="random" tabindex="4"/> Load in random order</label > </section> <section> <label class="checkbox" ><input type="checkbox" id="preserve" tabindex="5"/> Preserve input</label > </section> </main>';
+const BODY_HTML = fs.readFileSync('./src/browseraction.html', 'utf8');
 
 let mockStore = {};
 jest.mock('./load', () => ({
@@ -49,6 +49,7 @@ describe('test browser action', () => {
     expect(uiDef.txtArea).toBeTruthy();
     expect(uiDef.lazyLoadCheckbox).toBeTruthy();
     expect(uiDef.randomCheckbox).toBeTruthy();
+    expect(uiDef.reverseCheckbox).toBeTruthy();
     expect(uiDef.preserveCheckbox).toBeTruthy();
     expect(uiDef.openButton).toBeTruthy();
     expect(uiDef.extractButton).toBeTruthy();
@@ -61,6 +62,7 @@ describe('test browser action', () => {
     expect(uiDef.txtArea.value).toBe('');
     expect(uiDef.lazyLoadCheckbox.checked).toBe(false);
     expect(uiDef.randomCheckbox.checked).toBe(false);
+    expect(uiDef.reverseCheckbox.checked).toBe(false);
     expect(uiDef.preserveCheckbox.checked).toBe(false);
   });
 
@@ -72,12 +74,14 @@ describe('test browser action', () => {
     uiDef.txtArea.dispatchEvent(new Event('input'));
     uiDef.lazyLoadCheckbox.click();
     uiDef.randomCheckbox.click();
+    uiDef.reverseCheckbox.click();
     uiDef.preserveCheckbox.click();
 
     uiDef = getUIDef();
     expect(uiDef.txtArea.value).toBe('foobar');
     expect(uiDef.lazyLoadCheckbox.checked).toBe(true);
     expect(uiDef.randomCheckbox.checked).toBe(true);
+    expect(uiDef.reverseCheckbox.checked).toBe(true);
     expect(uiDef.preserveCheckbox.checked).toBe(true);
 
     document.body.innerHTML = BODY_HTML;
@@ -86,6 +90,7 @@ describe('test browser action', () => {
     expect(uiDef.txtArea.value).toBe('');
     expect(uiDef.lazyLoadCheckbox.checked).toBe(false);
     expect(uiDef.randomCheckbox.checked).toBe(false);
+    expect(uiDef.reverseCheckbox.checked).toBe(false);
     expect(uiDef.preserveCheckbox.checked).toBe(false);
 
     await init();
@@ -93,6 +98,7 @@ describe('test browser action', () => {
     uiDef = getUIDef();
     expect(uiDef.txtArea.value).toBe('foobar');
     expect(uiDef.lazyLoadCheckbox.checked).toBe(true);
+    expect(uiDef.randomCheckbox.checked).toBe(true);
     expect(uiDef.randomCheckbox.checked).toBe(true);
     expect(uiDef.preserveCheckbox.checked).toBe(true);
   });
