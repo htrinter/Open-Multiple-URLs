@@ -9,7 +9,7 @@ import { getStoredOptions, StorageKey, storeValue } from './storage';
 import { getUIDef } from './ui';
 import * as fs from 'fs';
 
-const BODY_HTML = fs.readFileSync('./src/browseraction.html', 'utf8');
+const BODY_HTML = fs.readFileSync('./src/browseraction.html', 'utf-8');
 
 let mockStore = {};
 jest.mock('./load', () => ({
@@ -190,13 +190,16 @@ describe('test browser action', () => {
   test('display tab count', async () => {
     const uiDef = getUIDef();
     const hasNoTabCount = () => {
-      return uiDef.tabCountLabel.textContent.indexOf('will open') === -1;
+      return uiDef.tabCount.style.visibility === 'hidden';
     };
     const hasTabCount = (tabNo: string) => {
       return (
-        uiDef.tabCountLabel.textContent.indexOf(
-          `will open ${tabNo} new ${tabNo === '1' ? 'tab' : 'tabs'}`
-        ) !== -1
+        uiDef.tabCount.style.visibility === 'visible' &&
+        uiDef.tabCount.textContent
+          .replace(/\s+/g, ' ')
+          .indexOf(
+            `will open ${tabNo} new ${tabNo === '1' ? 'tab' : 'tabs'}`
+          ) !== -1
       );
     };
 

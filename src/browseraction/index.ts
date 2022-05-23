@@ -31,12 +31,9 @@ const updateTabCount = (ui: UIDef) => {
     }
   }
 
-  ui.tabCountLabel.innerHTML =
-    tabCount === '0'
-      ? ''
-      : ` <abbr title="Opening too many tabs at once may lead to long wait times or crash your browser.">&#9432; <span>will open ${tabCount} new ${
-          tabCount === '1' ? 'tab' : 'tabs'
-        }</span></abbr>`;
+  ui.tabCountNumber.textContent = tabCount;
+  ui.tabCountTabLabel.textContent = tabCount === '1' ? 'tab' : 'tabs';
+  ui.tabCount.style.visibility = tabCount === '0' ? 'hidden' : 'visible';
 };
 const debouncedUpdateTabCount = debounce(
   updateTabCount,

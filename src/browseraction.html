@@ -17,7 +17,17 @@
         <button id="open" tabindex="2">
           <strong>Open URLs</strong>
         </button>
-        <span id="tabcount"></span>
+        <span id="tabcount">
+          <abbr
+            title="Opening too many tabs at once may lead to long wait times or crash your browser."
+          >
+            &#9432;
+            <span
+              >will open <span id="tabcount-number">0</span> new
+              <span id="tabcount-tab-label">tabs</span></span
+            >
+          </abbr>
+        </span>
       </section>
 
       <hr />

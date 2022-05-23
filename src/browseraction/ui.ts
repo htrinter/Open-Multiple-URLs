@@ -6,7 +6,9 @@ export interface UIDef {
   preserveCheckbox: HTMLInputElement;
   openButton: HTMLInputElement;
   extractButton: HTMLInputElement;
-  tabCountLabel: HTMLSpanElement;
+  tabCount: HTMLSpanElement;
+  tabCountNumber: HTMLSpanElement;
+  tabCountTabLabel: HTMLSpanElement;
 }
 
 export function getUIDef(): UIDef {
@@ -18,6 +20,12 @@ export function getUIDef(): UIDef {
     preserveCheckbox: document.getElementById('preserve') as HTMLInputElement,
     openButton: document.getElementById('open') as HTMLInputElement,
     extractButton: document.getElementById('extract') as HTMLInputElement,
-    tabCountLabel: document.getElementById('tabcount') as HTMLSpanElement,
+    tabCount: document.getElementById('tabcount') as HTMLSpanElement,
+    tabCountNumber: document.getElementById(
+      'tabcount-number'
+    ) as HTMLSpanElement,
+    tabCountTabLabel: document.getElementById(
+      'tabcount-tab-label'
+    ) as HTMLSpanElement,
   };
 }
