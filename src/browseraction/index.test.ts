@@ -7,9 +7,9 @@ import { extractURLs } from './extract';
 import { loadSites } from './load';
 import { getStoredOptions, StorageKey, storeValue } from './storage';
 import { getUIDef } from './ui';
+import * as fs from 'fs';
 
-const BODY_HTML =
-  '<main><section> <label for="urls">List of URLs / Text to extract URLs from:</label> <textarea id="urls" wrap="soft" tabindex="1"></textarea> </section> <section> <button id="extract" tabindex="6">Extract URLs from text</button> <button id="open" tabindex="2">Open URLs</button><span id="tabcount"></span></section> <section> <label class="checkbox" ><input type="checkbox" id="lazyLoad" tabindex="3"/> Do not load tabs until selected</label > <label class="checkbox" ><input type="checkbox" id="random" tabindex="4"/> Load in random order</label > </section> <section> <label class="checkbox" ><input type="checkbox" id="preserve" tabindex="5"/> Preserve input</label > </section> </main>';
+const BODY_HTML = fs.readFileSync('./src/browseraction.html', 'utf-8');
 
 let mockStore = {};
 jest.mock('./load', () => ({
@@ -184,13 +184,16 @@ describe('test browser action', () => {
   test('display tab count', async () => {
     const uiDef = getUIDef();
     const hasNoTabCount = () => {
-      return uiDef.tabCountLabel.textContent.indexOf('will open') === -1;
+      return uiDef.tabCount.style.visibility === 'hidden';
     };
     const hasTabCount = (tabNo: string) => {
       return (
-        uiDef.tabCountLabel.textContent.indexOf(
-          `will open ${tabNo} new ${tabNo === '1' ? 'tab' : 'tabs'}`
-        ) !== -1
+        uiDef.tabCount.style.visibility === 'visible' &&
+        uiDef.tabCount.textContent
+          .replace(/\s+/g, ' ')
+          .indexOf(
+            `will open ${tabNo} new ${tabNo === '1' ? 'tab' : 'tabs'}`
+          ) !== -1
       );
     };
 
