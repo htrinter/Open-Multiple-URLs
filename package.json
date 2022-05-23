@@ -1,6 +1,6 @@
 {
   "name": "open-multiple-urls",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "Browser extension that opens a list of URLs",
   "scripts": {
     "dev:firefox": "NODE_ENV=firefox parcel watch src/*.html --out-dir dist-dev --no-hmr",

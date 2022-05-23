@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.5
+
+- Added
+  - Option that opens tabs in reverse order
+
 ## 1.5.4
 
 - Changed
