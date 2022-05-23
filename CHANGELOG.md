@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.4
+
+- Changed
+  - Remove unsafe assignment of innerHTML
+
 ## 1.5.3
 
 - Added
