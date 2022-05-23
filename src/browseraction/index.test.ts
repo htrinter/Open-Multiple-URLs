@@ -17,17 +17,15 @@ jest.mock('./load', () => ({
   loadSites: jest.fn(),
 }));
 jest.mock('./extract');
-jest.mock('webextension-polyfill-ts', () => ({
-  browser: {
-    tabs: { create: jest.fn() },
-    extension: { getURL: (val: string) => val },
-    storage: {
-      local: {
-        get: (key: string) => {
-          return { [key]: mockStore[key] };
-        },
-        set: (val: any) => (mockStore = { ...mockStore, ...val }), // eslint-disable-line @typescript-eslint/no-explicit-any
+jest.mock('webextension-polyfill', () => ({
+  tabs: { create: jest.fn() },
+  extension: { getURL: (val: string) => val },
+  storage: {
+    local: {
+      get: (key: string) => {
+        return { [key]: mockStore[key] };
       },
+      set: (val: any) => (mockStore = { ...mockStore, ...val }), // eslint-disable-line @typescript-eslint/no-explicit-any
     },
   },
 }));

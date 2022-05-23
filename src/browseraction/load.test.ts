@@ -1,11 +1,9 @@
-import { browser } from 'webextension-polyfill-ts';
+import browser from 'webextension-polyfill';
 import { loadSites } from './load';
 
-jest.mock('webextension-polyfill-ts', () => ({
-  browser: {
-    tabs: { create: jest.fn() },
-    extension: { getURL: (val: string) => val },
-  },
+jest.mock('webextension-polyfill', () => ({
+  tabs: { create: jest.fn() },
+  extension: { getURL: (val: string) => val },
 }));
 
 const url1 = 'https://test.de';
