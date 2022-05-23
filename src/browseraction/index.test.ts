@@ -19,7 +19,7 @@ jest.mock('./load', () => ({
 jest.mock('./extract');
 jest.mock('webextension-polyfill', () => ({
   tabs: { create: jest.fn() },
-  extension: { getURL: (val: string) => val },
+  runtime: { getURL: (val: string) => val },
   storage: {
     local: {
       get: (key: string) => {

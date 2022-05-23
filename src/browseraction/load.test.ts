@@ -3,7 +3,7 @@ import { loadSites } from './load';
 
 jest.mock('webextension-polyfill', () => ({
   tabs: { create: jest.fn() },
-  extension: { getURL: (val: string) => val },
+  runtime: { getURL: (val: string) => val },
 }));
 
 const url1 = 'https://test.de';

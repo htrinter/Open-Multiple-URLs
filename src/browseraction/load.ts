@@ -51,7 +51,7 @@ export function loadSites(
         theurl.split(':')[0] !== 'file'
       ) {
         browser.tabs.create({
-          url: browser.extension.getURL('lazyloading.html#') + theurl,
+          url: browser.runtime.getURL('lazyloading.html#') + theurl,
           active: false,
         });
       } else {
