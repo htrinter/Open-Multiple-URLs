@@ -3,7 +3,9 @@
 ## 1.5.5
 
 - Added
-  - Option that opens tabs in reverse order
+  - Option to open tabs in reverse order
+- Changed
+  - Chrome: Update manifest version
 
 ## 1.5.4
 
