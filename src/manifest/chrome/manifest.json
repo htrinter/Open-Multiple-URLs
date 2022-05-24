@@ -1,7 +1,7 @@
 {
   "name": "Open Multiple URLs",
   "version": "1.5.5",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "description": "Opens a list of URLs",
   "homepage_url": "https://github.com/htrinter/Open-Multiple-URLs",
   "icons": {
@@ -9,7 +9,7 @@
     "48": "icon48.png",
     "128": "icon128.png"
   },
-  "browser_action": {
+  "action": {
     "default_icon": "icon19.png",
     "default_popup": "browseraction.html"
   },
