@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.6
+
+- Fixed
+  - Fix regression in Chrome: No shortcut for popup activation, caused by migration to manifest v3
+
 ## 1.5.5
 
 - Added
