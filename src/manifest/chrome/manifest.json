@@ -13,6 +13,11 @@
     "default_icon": "icon19.png",
     "default_popup": "browseraction.html"
   },
+  "commands": {
+    "_execute_action": {
+      "default": "CTRL+M"
+    }
+  },
   "permissions": ["storage"],
   "incognito": "split"
 }
