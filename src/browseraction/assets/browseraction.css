@@ -2,10 +2,7 @@ body {
   padding: 5px;
   font-family: sans-serif;
   font-size: 13px;
-}
-
-main {
-  width: 600px;
+  min-width: 600px;
 }
 
 section {
@@ -19,7 +16,8 @@ label[for='urls'] {
 
 textarea {
   width: calc(100% - 6px);
-  height: 300px;
+  min-height: 300px;
+  flex-grow: 1;
 
   font-family: monospace;
 
@@ -45,7 +43,7 @@ button {
   border-bottom: none;
 }
 
-#tabcount abbr span {
+#tabcount > abbr > span {
   border-bottom: 1px dotted #000;
 }
 
