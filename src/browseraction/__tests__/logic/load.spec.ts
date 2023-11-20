@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { loadSites } from '@/browseraction/components/logic/load'
 
 vi.mock('webextension-polyfill', () => ({
-  default: { tabs: { create: vi.fn() }, runtime: { getURL: (val) => val } }
+  default: { tabs: { create: vi.fn() }, runtime: { getURL: (val: string) => val } }
 }))
 
 const url1 = 'https://test.de'
