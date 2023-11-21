@@ -36,7 +36,7 @@ export default {
       )
     },
     setUrlListInputData() {
-      store.urlList = extractURLs(store.urlList)
+      store.setUrlList(extractURLs(store.urlList))
     }
   },
   computed: {
