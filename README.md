@@ -29,6 +29,7 @@ Then use one of the following build commands:
 | `npm run zip:firefox`   | build and package for Firefox       | `dist-zip`                      |
 | `npm run zip:chrome`    | build and package for Chrome                         | `dist-zip`                      |
 | `npm run zip:all`       | build and package for all browsers   | `dist-zip`     |
+
 See [instructions for Chrome](https://developer.chrome.com/extensions/getstarted#manifest) and [instructions for Firefox](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/) on how to load an unpacked extension.
 
 Have a look at the `package.json` for all run scripts.
