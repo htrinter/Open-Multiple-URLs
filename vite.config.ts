@@ -39,8 +39,8 @@ export default defineConfig({
     cssMinify: false,
     rollupOptions: {
       input: {
-        BrowserAction: "./browseraction.html",
-        LazyLoading: "./lazyloading.html",
+        BrowserAction: "./src/browseraction.html",
+        LazyLoading: "./src/lazyloading.html",
       },
       output: {
         manualChunks(id) {
