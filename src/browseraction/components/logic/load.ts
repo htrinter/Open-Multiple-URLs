@@ -15,22 +15,23 @@ const shuffle = (a: string[]) => {
   return a
 }
 
-export const URL_LINE_SPLIT_REGEX = /\r\n?|\n/g
 /**
  * Loads sites in new background tabs
  * @param text Text containing one URL per line
  * @param lazyloading Lazy-load tabs
  * @param random Open tabs in random order
  * @param reverse Open tabs in reverse order
+ * @param deduplicate Ignores duplicate URLs on open
  */
 export const loadSites = (
   text: string,
   lazyloading: boolean,
   random: boolean,
-  reverse: boolean
+  reverse: boolean,
+  deduplicate: boolean
 ): void => {
   const urlschemes = ['http', 'https', 'file', 'view-source']
-  let urls = text.split(URL_LINE_SPLIT_REGEX)
+  let urls = getURLsFromText(text, deduplicate)
 
   if (reverse) {
     urls = urls.reverse()
@@ -65,16 +66,22 @@ export const loadSites = (
   }
 }
 
-export const getTabCount = (text: string) => {
+export const getTabCount = (text: string, deduplicate: boolean) => {
   let tabCount = '0'
   if (text) {
-    const lines = text.split(URL_LINE_SPLIT_REGEX).filter((line) => line !== '')
-    if (lines.length <= 5000) {
+    const urls = getURLsFromText(text, deduplicate)
+    if (urls.length <= 5000) {
       // limit for performance reasons
-      tabCount = String(lines.filter((line: string) => line.trim() !== '').length)
+      tabCount = String(urls.length)
     } else {
       tabCount = '> 5000'
     }
   }
   return tabCount
+}
+
+export const getURLsFromText = (text: string, deduplicate: boolean): string[] => {
+  const urlLineSplitRegex = /\r\n?|\n/g
+  const urls = text.split(urlLineSplitRegex).filter((line) => line.trim() !== '')
+  return deduplicate ? Array.from(new Set(urls)) : urls
 }

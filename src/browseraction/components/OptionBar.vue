@@ -34,6 +34,16 @@ import { store } from '@/browseraction/components/store/store'
       />
       Load in reverse order</label
     >
+    <label class="checkbox"
+      ><input
+        type="checkbox"
+        id="deduplicate"
+        tabindex="5"
+        :checked="store.deduplicateURLsChecked"
+        @change="checkDeduplicateURLs"
+      />
+      Ignore duplicate URLs</label
+    >
   </section>
   <section>
     <label class="checkbox"
@@ -70,6 +80,11 @@ export default {
     checkPreserveInput(event: Event) {
       this.$nextTick(() => {
         store.setPreserveInputChecked((event?.target as HTMLInputElement).checked)
+      })
+    },
+    checkDeduplicateURLs(event: Event) {
+      this.$nextTick(() => {
+        store.setDeduplicateURLsChecked((event?.target as HTMLInputElement).checked)
       })
     }
   }

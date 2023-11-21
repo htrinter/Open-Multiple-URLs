@@ -32,7 +32,8 @@ export default {
         store.urlList,
         store.lazyLoadingChecked,
         store.loadInRandomOrderChecked,
-        store.loadInReverseOrderChecked
+        store.loadInReverseOrderChecked,
+        store.deduplicateURLsChecked
       )
     },
     setUrlListInputData() {
@@ -41,7 +42,7 @@ export default {
   },
   computed: {
     tabCount: function () {
-      return getTabCount(store.urlList)
+      return getTabCount(store.urlList, store.deduplicateURLsChecked)
     }
   }
 }

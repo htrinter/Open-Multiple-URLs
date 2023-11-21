@@ -3,5 +3,6 @@ export enum BrowserStorageKey {
   lazyload = 'lazyload',
   random = 'random',
   reverse = 'reverse',
-  preserve = 'preserve'
+  preserve = 'preserve',
+  deduplicate = 'deduplicate'
 }

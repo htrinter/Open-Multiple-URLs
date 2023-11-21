@@ -13,13 +13,15 @@ Promise.all([
   browser.storage.local.get(BrowserStorageKey.lazyload),
   browser.storage.local.get(BrowserStorageKey.random),
   browser.storage.local.get(BrowserStorageKey.reverse),
-  browser.storage.local.get(BrowserStorageKey.preserve)
+  browser.storage.local.get(BrowserStorageKey.preserve),
+  browser.storage.local.get(BrowserStorageKey.deduplicate)
 ]).then((data) => {
   store.urlList = data[0][BrowserStorageKey.urlList] ?? ''
   store.lazyLoadingChecked = data[1][BrowserStorageKey.lazyload] ?? false
   store.loadInRandomOrderChecked = data[2][BrowserStorageKey.random] ?? false
   store.loadInReverseOrderChecked = data[3][BrowserStorageKey.reverse] ?? false
   store.preserveInputChecked = data[4][BrowserStorageKey.preserve] ?? false
+  store.deduplicateURLsChecked = data[5][BrowserStorageKey.deduplicate] ?? false
 
   isStoredValuesLoaded.value = true
 })

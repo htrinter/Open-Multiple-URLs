@@ -8,6 +8,7 @@ export const store = reactive({
   loadInRandomOrderChecked: false,
   loadInReverseOrderChecked: false,
   preserveInputChecked: false,
+  deduplicateURLsChecked: false,
   setUrlList(value: string) {
     this.urlList = value
     if (store.preserveInputChecked) {
@@ -30,5 +31,9 @@ export const store = reactive({
     this.preserveInputChecked = value
     browser.storage.local.set({ [BrowserStorageKey.preserve]: value })
     browser.storage.local.set({ [BrowserStorageKey.urlList]: value ? store.urlList : '' })
+  },
+  setDeduplicateURLsChecked(value: boolean) {
+    this.deduplicateURLsChecked = value
+    browser.storage.local.set({ [BrowserStorageKey.deduplicate]: value })
   }
 })
