@@ -9,6 +9,7 @@ import { store } from '@/browseraction/components/store/store'
       id="urls"
       wrap="soft"
       tabindex="1"
+      autofocus
       :value="store.urlList"
       @input="handleUrlListInput"
     ></textarea>
