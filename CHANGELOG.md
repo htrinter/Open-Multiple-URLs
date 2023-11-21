@@ -2,6 +2,8 @@
 
 ## 2.0.0
 
+- Added
+  - Option to ignore duplicate URLs on open
 - Changed
   - Complete rewrite in Vue.js
 
