@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.0
+
+- Changed
+  - Complete rewrite in Vue.js
+
 ## 1.5.6
 
 - Fixed
