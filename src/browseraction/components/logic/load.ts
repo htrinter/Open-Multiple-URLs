@@ -68,7 +68,7 @@ export const loadSites = (
 export const getTabCount = (text: string) => {
   let tabCount = '0'
   if (text) {
-    const lines = text.split(URL_LINE_SPLIT_REGEX)
+    const lines = text.split(URL_LINE_SPLIT_REGEX).filter((line) => line !== '')
     if (lines.length <= 5000) {
       // limit for performance reasons
       tabCount = String(lines.filter((line: string) => line.trim() !== '').length)

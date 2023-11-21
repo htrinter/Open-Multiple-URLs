@@ -9,7 +9,13 @@ export default {
   methods: {
     init: () => {
       document.title =
-        '[' + window.location.hash.substring(1).replace('http://', '').replace('https://', '') + ']'
+        '[' +
+        window.location.hash
+          .substring(1)
+          .replace('http://', '')
+          .replace('https://', '')
+          .replace(/\/$/, '') +
+        ']'
 
       // load site on focus
       window.addEventListener(
