@@ -44,7 +44,7 @@ describe('load tabs', () => {
   it('loads tabs in random order', async () => {
     loadSites(urlList, false, true, false)
 
-    expect(browser.tabs.create).toHaveBeenCalled(2)
+    expect(browser.tabs.create).toHaveBeenCalledTimes(2)
   })
 
   it('loads tabs in reverse order', async () => {

@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
-import { flushPromises, mount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import App from '../LazyLoading.vue'
-import type { URL } from 'node:url'
 
 describe('lazy loading', () => {
   describe('set title', () => {
@@ -26,7 +25,7 @@ describe('lazy loading', () => {
 
   it('navigates on focus', async () => {
     const originalLocation = window.location
-    delete window.location
+    delete (window as any).location
     window.location = {
       ...originalLocation,
       replace: vi.fn()
