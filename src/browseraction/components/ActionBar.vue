@@ -1,6 +1,7 @@
 <template>
   <section id="action-bar">
     <button id="extract" tabindex="6" @click="setUrlListInputData">Extract URLs from text</button>
+    <button id="clipper" tabindex="6" @click="invokePageClipper">Clipper</button>
     <button id="open" tabindex="2" @click="openURLs">
       <strong>Open URLs</strong>
     </button>
@@ -24,6 +25,8 @@
 import { getTabCount, loadSites } from '@/browseraction/components/logic/load'
 import { extractURLs } from '@/browseraction/components/logic/extract'
 import { store } from '@/browseraction/components/store/store'
+import browser from 'webextension-polyfill'
+import { version } from '../../../package.json'
 
 export default {
   methods: {
@@ -38,6 +41,16 @@ export default {
     },
     setUrlListInputData() {
       store.setUrlList(extractURLs(store.urlList))
+    },
+    async invokePageClipper() {
+      const currentTab = await browser.tabs.query({ active: true, currentWindow: true })
+      const currentTabId = currentTab[0]?.id
+      if (currentTabId !== undefined) {
+        await browser.scripting.executeScript({
+          target: { tabId: currentTabId, allFrames: true },
+          files: [`assets/ClipperContentScript-${version}.js`]
+        })
+      }
     }
   },
   computed: {

@@ -66,6 +66,11 @@ input[type='checkbox'] {
   margin-right: 5px;
 }
 
-#extract {
+#extract,
+#clipper {
   float: right;
+}
+
+#clipper {
+  margin-right: 10px;
 }

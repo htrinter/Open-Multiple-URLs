@@ -3,6 +3,7 @@ import { fileURLToPath, URL } from "node:url"
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import {viteStaticCopy} from "vite-plugin-static-copy";
+import { version } from './package.json';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -41,14 +42,18 @@ export default defineConfig({
       input: {
         BrowserAction: "./browseraction.html",
         LazyLoading: "./lazyloading.html",
+        ClipperContentScript: "./src/clipper/content-script.ts"
       },
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
             return "vendor";
           }
+        },
+        entryFileNames() {
+          return `assets/[name]-${version}.js`;
         }
-      }
+      },
     }
   }
 })

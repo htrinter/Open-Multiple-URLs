@@ -18,6 +18,7 @@
       "default": "CTRL+M"
     }
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "activeTab", "scripting"],
+  "optional_permissions": [],
   "incognito": "split"
 }
