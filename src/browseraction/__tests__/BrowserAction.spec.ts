@@ -35,6 +35,7 @@ describe('browser action', () => {
     expect(wrapper.text()).toContain('Load in random order')
     expect(wrapper.text()).toContain('Load in reverse order')
     expect(wrapper.text()).toContain('Preserve input')
+    expect(wrapper.text()).toContain('Ignore duplicate URLs')
   })
 
   describe('features', () => {
@@ -95,33 +96,77 @@ describe('browser action', () => {
       expect(
         (wrapper.find('input[type="checkbox"]#preserve').element as HTMLInputElement).checked
       ).toBeFalsy()
+      expect(
+        (wrapper.find('input[type="checkbox"]#deduplicate').element as HTMLInputElement).checked
+      ).toBeFalsy()
     })
 
     const renderWithStoredValuesTestCases = [
       {
         storeKey: BrowserStorageKey.urlList,
         value: 'foobar',
-        expectedStates: { lazyLoad: false, random: false, reverse: false, preserve: false }
+        expectedStates: {
+          lazyLoad: false,
+          random: false,
+          reverse: false,
+          preserve: false,
+          deduplicate: false
+        }
       },
       {
         storeKey: BrowserStorageKey.lazyload,
         value: 'true',
-        expectedStates: { lazyLoad: true, random: false, reverse: false, preserve: false }
+        expectedStates: {
+          lazyLoad: true,
+          random: false,
+          reverse: false,
+          preserve: false,
+          deduplicate: false
+        }
       },
       {
         storeKey: BrowserStorageKey.random,
         value: 'true',
-        expectedStates: { lazyLoad: false, random: true, reverse: false, preserve: false }
+        expectedStates: {
+          lazyLoad: false,
+          random: true,
+          reverse: false,
+          preserve: false,
+          deduplicate: false
+        }
       },
       {
         storeKey: BrowserStorageKey.reverse,
         value: 'true',
-        expectedStates: { lazyLoad: false, random: false, reverse: true, preserve: false }
+        expectedStates: {
+          lazyLoad: false,
+          random: false,
+          reverse: true,
+          preserve: false,
+          deduplicate: false
+        }
       },
       {
         storeKey: BrowserStorageKey.preserve,
         value: 'true',
-        expectedStates: { lazyLoad: false, random: false, reverse: false, preserve: true }
+        expectedStates: {
+          lazyLoad: false,
+          random: false,
+          reverse: false,
+          preserve: true,
+          deduplicate: false
+        }
+      },
+      {
+        storeKey: BrowserStorageKey.deduplicate,
+        value: 'true',
+        expectedStates: {
+          lazyLoad: false,
+          random: false,
+          reverse: false,
+          preserve: false,
+          deduplicate: true
+        }
       }
     ]
     it.each(renderWithStoredValuesTestCases)(
@@ -150,6 +195,9 @@ describe('browser action', () => {
         expect(
           (wrapper.find('input[type="checkbox"]#preserve').element as HTMLInputElement).checked
         ).toBe(expectedStates.preserve)
+        expect(
+          (wrapper.find('input[type="checkbox"]#deduplicate').element as HTMLInputElement).checked
+        ).toBe(expectedStates.deduplicate)
       }
     )
   })
@@ -172,7 +220,8 @@ describe('browser action', () => {
       { checkboxId: 'lazyLoad', storeKey: BrowserStorageKey.lazyload },
       { checkboxId: 'random', storeKey: BrowserStorageKey.random },
       { checkboxId: 'reverse', storeKey: BrowserStorageKey.reverse },
-      { checkboxId: 'preserve', storeKey: BrowserStorageKey.preserve }
+      { checkboxId: 'preserve', storeKey: BrowserStorageKey.preserve },
+      { checkboxId: 'deduplicate', storeKey: BrowserStorageKey.deduplicate }
     ]
     it.each(storeCheckStateTestCases)(
       'stores $checkboxId check state',
