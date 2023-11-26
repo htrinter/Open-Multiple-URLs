@@ -1,4 +1,4 @@
-name: Build release
+name: Release workflow
 on:
   workflow_call:
     inputs:
