@@ -16,7 +16,7 @@ describe('load tabs', () => {
   });
 
   test('load tabs in sequence', async () => {
-    loadSites(urlList, false, false, false, false);
+    loadSites(urlList, false, false, false);
 
     expect(browser.tabs.create).toHaveBeenNthCalledWith(1, {
       url: url1,
@@ -29,7 +29,7 @@ describe('load tabs', () => {
   });
 
   test('lazyload tabs in sequence', async () => {
-    loadSites(urlList, true, false, false, false);
+    loadSites(urlList, true, false, false);
 
     expect(browser.tabs.create).toHaveBeenNthCalledWith(1, {
       url: 'lazyloading.html#' + url1,
@@ -42,7 +42,7 @@ describe('load tabs', () => {
   });
 
   test('load tabs in random order', async () => {
-    loadSites(urlList, false, true, false, false);
+    loadSites(urlList, false, true, false);
 
     expect(browser.tabs.create).toHaveBeenCalledWith({
       url: url1,
@@ -55,7 +55,7 @@ describe('load tabs', () => {
   });
 
   test('lazyload tabs in random order', async () => {
-    loadSites(urlList, true, true, false, false);
+    loadSites(urlList, true, true, false);
 
     expect(browser.tabs.create).toHaveBeenCalledWith({
       url: 'lazyloading.html#' + url1,
@@ -68,7 +68,7 @@ describe('load tabs', () => {
   });
 
   test('load tabs in reverse order', async () => {
-    loadSites(urlList, false, false, true, false);
+    loadSites(urlList, false, false, true);
 
     expect(browser.tabs.create).toHaveBeenCalledWith({
       url: url2,
@@ -81,7 +81,7 @@ describe('load tabs', () => {
   });
 
   test('lazyload tabs in reverse order', async () => {
-    loadSites(urlList, true, false, true, false);
+    loadSites(urlList, true, false, true);
 
     expect(browser.tabs.create).toHaveBeenCalledWith({
       url: 'lazyloading.html#' + url2,
@@ -89,40 +89,12 @@ describe('load tabs', () => {
     });
     expect(browser.tabs.create).toHaveBeenCalledWith({
       url: 'lazyloading.html#' + url1,
-      active: false,
-    });
-  });
-
-  test('load tabs with duplicate URLs', async () => {
-    loadSites(urlList + '\n' + urlList, false, true, false, true);
-
-    expect(browser.tabs.create).toHaveBeenCalledTimes(2);
-    expect(browser.tabs.create).toHaveBeenCalledWith({
-      url: url1,
-      active: false,
-    });
-    expect(browser.tabs.create).toHaveBeenCalledWith({
-      url: url2,
-      active: false,
-    });
-  });
-
-  test('lazyload tabs with duplicate URLs', async () => {
-    loadSites(urlList + '\n' + urlList, true, true, false, true);
-
-    expect(browser.tabs.create).toHaveBeenCalledTimes(2);
-    expect(browser.tabs.create).toHaveBeenCalledWith({
-      url: 'lazyloading.html#' + url1,
-      active: false,
-    });
-    expect(browser.tabs.create).toHaveBeenCalledWith({
-      url: 'lazyloading.html#' + url2,
       active: false,
     });
   });
 
   test('prepend http protocol if no protocol given', async () => {
-    loadSites('test.de', false, false, false, false);
+    loadSites('test.de', false, false, false);
 
     expect(browser.tabs.create).toHaveBeenNthCalledWith(1, {
       url: 'http://test.de',
@@ -133,7 +105,6 @@ describe('load tabs', () => {
   test('ignore lines containing only whitespace', async () => {
     loadSites(
       'http://test.de/f bar\n     \n' + url2 + '\n\n \t \n   ',
-      false,
       false,
       false,
       false
@@ -153,7 +124,6 @@ describe('load tabs', () => {
   test('handle different protocols', async () => {
     loadSites(
       'test.de\nhttp://test.de\nhttps://test.de\nfile://test.de\nview-source://test.de',
-      false,
       false,
       false,
       false

@@ -48,7 +48,6 @@ describe('test browser action', () => {
     expect(uiDef.lazyLoadCheckbox).toBeTruthy();
     expect(uiDef.randomCheckbox).toBeTruthy();
     expect(uiDef.reverseCheckbox).toBeTruthy();
-    expect(uiDef.ignoreDuplicatesCheckbox).toBeTruthy();
     expect(uiDef.preserveCheckbox).toBeTruthy();
     expect(uiDef.openButton).toBeTruthy();
     expect(uiDef.extractButton).toBeTruthy();
@@ -62,7 +61,6 @@ describe('test browser action', () => {
     expect(uiDef.lazyLoadCheckbox.checked).toBe(false);
     expect(uiDef.randomCheckbox.checked).toBe(false);
     expect(uiDef.reverseCheckbox.checked).toBe(false);
-    expect(uiDef.ignoreDuplicatesCheckbox.checked).toBe(false);
     expect(uiDef.preserveCheckbox.checked).toBe(false);
   });
 
@@ -75,7 +73,6 @@ describe('test browser action', () => {
     uiDef.lazyLoadCheckbox.click();
     uiDef.randomCheckbox.click();
     uiDef.reverseCheckbox.click();
-    uiDef.ignoreDuplicatesCheckbox.click();
     uiDef.preserveCheckbox.click();
 
     uiDef = getUIDef();
@@ -83,7 +80,6 @@ describe('test browser action', () => {
     expect(uiDef.lazyLoadCheckbox.checked).toBe(true);
     expect(uiDef.randomCheckbox.checked).toBe(true);
     expect(uiDef.reverseCheckbox.checked).toBe(true);
-    expect(uiDef.ignoreDuplicatesCheckbox.checked).toBe(true);
     expect(uiDef.preserveCheckbox.checked).toBe(true);
 
     document.body.innerHTML = BODY_HTML;
@@ -93,7 +89,6 @@ describe('test browser action', () => {
     expect(uiDef.lazyLoadCheckbox.checked).toBe(false);
     expect(uiDef.randomCheckbox.checked).toBe(false);
     expect(uiDef.reverseCheckbox.checked).toBe(false);
-    expect(uiDef.ignoreDuplicatesCheckbox.checked).toBe(false);
     expect(uiDef.preserveCheckbox.checked).toBe(false);
 
     await init();
@@ -102,8 +97,7 @@ describe('test browser action', () => {
     expect(uiDef.txtArea.value).toBe('foobar');
     expect(uiDef.lazyLoadCheckbox.checked).toBe(true);
     expect(uiDef.randomCheckbox.checked).toBe(true);
-    expect(uiDef.reverseCheckbox.checked).toBe(true);
-    expect(uiDef.ignoreDuplicatesCheckbox.checked).toBe(true);
+    expect(uiDef.randomCheckbox.checked).toBe(true);
     expect(uiDef.preserveCheckbox.checked).toBe(true);
   });
 
@@ -116,7 +110,6 @@ describe('test browser action', () => {
     expect(uiDef.txtArea.value).toBe('https://test.de');
     expect(uiDef.lazyLoadCheckbox.checked).toBe(false);
     expect(uiDef.randomCheckbox.checked).toBe(false);
-    expect(uiDef.ignoreDuplicatesCheckbox.checked).toBe(false);
     expect(uiDef.preserveCheckbox.checked).toBe(true);
   });
 
@@ -151,31 +144,26 @@ describe('test browser action', () => {
     expect(options.txt).toBe('');
     expect(options.lazyload).toBe(false);
     expect(options.random).toBe(false);
-    expect(options.ignoreDuplicates).toBe(false);
     expect(options.preserve).toBe(false);
 
     uiDef.lazyLoadCheckbox.click();
     uiDef.randomCheckbox.click();
-    uiDef.ignoreDuplicatesCheckbox.click();
     uiDef.preserveCheckbox.click();
 
     options = await getStoredOptions();
     expect(options.txt).toBe('');
     expect(options.lazyload).toBe(true);
     expect(options.random).toBe(true);
-    expect(options.ignoreDuplicates).toBe(true);
     expect(options.preserve).toBe(true);
 
     uiDef.lazyLoadCheckbox.click();
     uiDef.randomCheckbox.click();
-    uiDef.ignoreDuplicatesCheckbox.click();
     uiDef.preserveCheckbox.click();
 
     options = await getStoredOptions();
     expect(options.txt).toBe('');
     expect(options.lazyload).toBe(false);
     expect(options.random).toBe(false);
-    expect(options.ignoreDuplicates).toBe(false);
     expect(options.preserve).toBe(false);
   });
 
@@ -241,13 +229,5 @@ describe('test browser action', () => {
     expect(hasTabCount('3')).toBeTruthy();
     await sleep(UPDATE_TAB_COUNT_DEBOUNCE_TIME_MS);
     expect(hasTabCount('> 5000')).toBeTruthy();
-
-    uiDef.txtArea.value =
-      'https://test.de\n'.repeat(123).concat('\n\nhttps://spiegel.de\n    \nhttps://zeit.de\n\n   \n ');
-    uiDef.txtArea.dispatchEvent(new Event('input'));
-    expect(hasTabCount('> 5000')).toBeTruthy();
-    uiDef.ignoreDuplicatesCheckbox.checked = true;
-    await sleep(UPDATE_TAB_COUNT_DEBOUNCE_TIME_MS);
-    expect(hasTabCount('3')).toBeTruthy();
   });
 });
