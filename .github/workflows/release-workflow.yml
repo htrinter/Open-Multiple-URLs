@@ -29,10 +29,10 @@ jobs:
         run: npm run package:all
       - name: Get package version
         id: package_version
-        run: echo "::set-output name=version::$(node -p "require('./package.json').version")"
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
       - name: Extract changelog for package version
         id: changelog
-        run: echo "::set-output name=text::$(sed -n '/## ${{ steps.package_version.outputs.version }}/,/##/{//!p}' CHANGELOG.md)"
+        run: echo "text=$(sed -n '/## ${{ steps.package_version.outputs.version }}/,/##/{//!p}' CHANGELOG.md)" >> $GITHUB_OUTPUT
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
