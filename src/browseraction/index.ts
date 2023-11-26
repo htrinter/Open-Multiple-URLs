@@ -21,20 +21,11 @@ const debouncedSaveUrlList = debounce(
 
 const updateTabCount = (ui: UIDef) => {
   let tabCount = '0';
-  let tabCountIgnored = '0';
   if (ui.txtArea.value) {
-    let lines = ui.txtArea.value
-      .split(URL_LINE_SPLIT_REGEX)
-      .filter((line) => line.trim() !== '')
-      .map((line) => line.trim());
-    if (ui.ignoreDuplicatesCheckbox.checked) {
-      const tabCountOriginal = lines.length;
-      lines = lines.reduce((uniqueLines, line) => uniqueLines.includes(line) ? uniqueLines : [...uniqueLines, line], []);
-      tabCountIgnored = String(tabCountOriginal - lines.length);
-    }
+    const lines = ui.txtArea.value.split(URL_LINE_SPLIT_REGEX);
     if (lines.length <= 5000) {
       // limit for performance reasons
-      tabCount = String(lines.length);
+      tabCount = String(lines.filter((line) => line.trim() !== '').length);
     } else {
       tabCount = '> 5000';
     }
@@ -43,9 +34,6 @@ const updateTabCount = (ui: UIDef) => {
   ui.tabCountNumber.textContent = tabCount;
   ui.tabCountTabLabel.textContent = tabCount === '1' ? 'tab' : 'tabs';
   ui.tabCount.style.visibility = tabCount === '0' ? 'hidden' : 'visible';
-
-  ui.tabCountIgnoredNumber.textContent = tabCountIgnored;
-  ui.tabCountIgnored.style.visibility = tabCountIgnored === '0' ? 'hidden' : 'visible';
 };
 const debouncedUpdateTabCount = debounce(
   updateTabCount,
@@ -61,7 +49,6 @@ export const init = async (): Promise<void> => {
   ui.lazyLoadCheckbox.checked = options.lazyload;
   ui.randomCheckbox.checked = options.random;
   ui.reverseCheckbox.checked = options.reverse;
-  ui.ignoreDuplicatesCheckbox.checked = options.ignoreDuplicates;
   ui.preserveCheckbox.checked = options.preserve;
 
   // add text input events
@@ -77,8 +64,7 @@ export const init = async (): Promise<void> => {
       ui.txtArea.value,
       ui.lazyLoadCheckbox.checked,
       ui.randomCheckbox.checked,
-      ui.reverseCheckbox.checked,
-      ui.ignoreDuplicatesCheckbox.checked,
+      ui.reverseCheckbox.checked
     );
   });
   ui.extractButton.addEventListener('click', () => {
@@ -106,13 +92,6 @@ export const init = async (): Promise<void> => {
       (<HTMLInputElement>event.target).checked
     )
   );
-  ui.ignoreDuplicatesCheckbox.addEventListener('change', (event) => {
-    debouncedUpdateTabCount(ui);
-    storeValue<boolean>(
-      StorageKey.ignoreDuplicates,
-      (<HTMLInputElement>event.target).checked
-    );
-  });
   ui.preserveCheckbox.addEventListener('change', (event) => {
     const isChecked = (<HTMLInputElement>event.target).checked;
     storeValue<boolean>(StorageKey.preserve, isChecked);

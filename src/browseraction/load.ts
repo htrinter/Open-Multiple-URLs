@@ -26,8 +26,7 @@ export function loadSites(
   text: string,
   lazyloading: boolean,
   random: boolean,
-  reverse: boolean,
-  ignoreDuplicates: boolean
+  reverse: boolean
 ): void {
   const urlschemes = ['http', 'https', 'file', 'view-source'];
   let urls = text.split(URL_LINE_SPLIT_REGEX);
@@ -38,10 +37,6 @@ export function loadSites(
 
   if (random) {
     urls = shuffle(urls);
-  }
-
-  if (ignoreDuplicates) {
-    urls = urls.reduce((uniqueUrls, url) => uniqueUrls.includes(url) ? uniqueUrls : [...uniqueUrls, url], []);
   }
 
   for (let i = 0; i < urls.length; i++) {

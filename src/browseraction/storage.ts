@@ -5,7 +5,6 @@ export enum StorageKey {
   lazyload = 'lazyload',
   random = 'random',
   reverse = 'reverse',
-  ignoreDuplicates = 'ignoreDuplicates',
   preserve = 'preserve',
 }
 
@@ -14,7 +13,6 @@ export interface StoredOptions {
   [StorageKey.lazyload]: boolean;
   [StorageKey.random]: boolean;
   [StorageKey.reverse]: boolean;
-  [StorageKey.ignoreDuplicates]: boolean;
   [StorageKey.preserve]: boolean;
 }
 
@@ -23,7 +21,6 @@ export async function getStoredOptions(): Promise<StoredOptions> {
   const lazyloadVal = await browser.storage.local.get(StorageKey.lazyload);
   const randomVal = await browser.storage.local.get(StorageKey.random);
   const reverseVal = await browser.storage.local.get(StorageKey.reverse);
-  const ignoreDuplicatesVal = await browser.storage.local.get(StorageKey.ignoreDuplicates);
   const preserveVal = await browser.storage.local.get(StorageKey.preserve);
 
   return {
@@ -31,7 +28,6 @@ export async function getStoredOptions(): Promise<StoredOptions> {
     lazyload: lazyloadVal?.lazyload || false,
     random: randomVal?.random || false,
     reverse: reverseVal?.reverse || false,
-    ignoreDuplicates: ignoreDuplicatesVal?.ignoreDuplicates || false,
     preserve: txtVal?.txt || preserveVal?.preserve || false,
   };
 }
