@@ -10,5 +10,6 @@ jobs:
       node-version: '18'
   call-release-workflow:
     uses:  ./.github/workflows/release-workflow.yml
+    needs: call-test-workflow
     with:
       node-version: '18'
