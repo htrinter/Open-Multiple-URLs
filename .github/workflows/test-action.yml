@@ -4,4 +4,4 @@ jobs:
   call-test-workflow:
     uses: ./.github/workflows/test-workflow.yml
     with:
-      node-version: '18'
+      node-version: ${{ vars.NODE_VERSION }}
