@@ -3,14 +3,12 @@ on:
   push:
     tags:
       - 'testv*'
-env:
-  NODE_VERSION: '18'
 jobs:
   call-test-workflow:
     uses: ./.github/workflows/test-workflow.yml
     with:
-      node-version: ${{ env.NODE_VERSION }}
+      node-version: '18'
   call-release-workflow:
     uses:  ./.github/workflows/release-workflow.yml
     with:
-      node-version: ${{ env.NODE_VERSION }}
+      node-version: '18'
