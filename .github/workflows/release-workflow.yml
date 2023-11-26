@@ -1,4 +1,4 @@
-name: Build release
+name: Release workflow
 on:
   workflow_call:
     inputs:
@@ -27,6 +27,11 @@ jobs:
         run: npm run build:all
       - name: Package
         run: npm run package:all
+      - name: Get package version
+        id: package_version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      - name: Extract changelog for package version
+        run: sed -n '/## ${{ steps.package_version.outputs.version }}/,/##/{//!p}' CHANGELOG.md > CHANGELOG_RELEASE.md
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -35,11 +40,9 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
+          body_path: CHANGELOG_RELEASE.md
           draft: false
           prerelease: false
-      - name: Get package version
-        id: package_version
-        run: echo "::set-output name=version::$(node -p "require('./package.json').version")"
       - name: Upload Firefox release assets
         uses: actions/upload-release-asset@v1
         env:
