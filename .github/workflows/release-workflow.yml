@@ -27,6 +27,12 @@ jobs:
         run: npm run build:all
       - name: Package
         run: npm run package:all
+      - name: Get package version
+        id: package_version
+        run: echo "::set-output name=version::$(node -p "require('./package.json').version")"
+      - name: Extract changelog for package version
+        id: changelog
+        run: echo "::set-output name=text::$(sed -n '/## ${{ steps.package_version.outputs.version }}/,/##/{//!p}' CHANGELOG.md)"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -35,11 +41,9 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
+          body: ${{ steps.changelog.outputs.text }}
           draft: false
           prerelease: false
-      - name: Get package version
-        id: package_version
-        run: echo "::set-output name=version::$(node -p "require('./package.json').version")"
       - name: Upload Firefox release assets
         uses: actions/upload-release-asset@v1
         env:
