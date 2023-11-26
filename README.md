@@ -12,22 +12,25 @@ There should be an icon in the browser's toolbar. Chrome hides extension icons b
 
 ## Building the project
 
-The project is written in [TypeScript](https://www.typescriptlang.org/), uses [Parcel](https://parceljs.org/) for bundling, [Jest](https://jestjs.io/) for testing, [ESLint](https://eslint.org/) for linting and [Prettier](https://prettier.io/) for formatting. It requires [Node](https://nodejs.org/en/) Version >= 12 to build.
+The project is written in [Vue.js](https://vuejs.org/) using [TypeScript](https://www.typescriptlang.org/), utilizes [Vite](https://vitejs.dev/) for bundling, [Vitest](https://vitest.dev/) for testing, [ESLint](https://eslint.org/) for linting and [Prettier](https://prettier.io/) for formatting. It requires [Node](https://nodejs.org/en/) Version >= 18 to build.
 
 Due to incompatible manifest.json definitions, there are separate builds for Firefox and Chrome.
 
 First: Install packages via `npm install`.<br>
 Then use one of the following build commands:
 
-| Command                 | Description                                                  | Output dir                      |
-| :---------------------- | :----------------------------------------------------------- | :------------------------------ |
-| `npm run build:firefox` | static production build for Firefox                          | `dist-firefox`                  |
-| `npm run build:chrome`  | static production build for Chrome                           | `dist-chrome`                   |
-| `npm run dev:firefox`   | live build (watch-mode) for Firefox                          | `dist-dev`                      |
-| `npm run dev:chrome`    | live build (watch-mode) for Chrome                           | `dist-dev`                      |
-| `npm run build:all`     | format, lint, test and build for production for all browsers | `dist-firefox`<br>`dist-chrome` |
+| Command                 | Description                         | Output dir                      |
+|:------------------------|:------------------------------------|:--------------------------------|
+| `npm run dev:firefox`   | live build (watch-mode) for Firefox | `dist-firefox`                  |
+| `npm run dev:chrome`    | live build (watch-mode) for Chrome  | `dist-chrome`                   |
+| `npm run build:firefox` | production build for Firefox        | `dist-firefox`                  |
+| `npm run build:chrome`  | production build for Chrome         | `dist-chrome`                   |
+| `npm run build:all`     | production build for all browsers   | `dist-firefox`<br>`dist-chrome` |
+| `npm run zip:firefox`   | build and package for Firefox       | `dist-zip`                      |
+| `npm run zip:chrome`    | build and package for Chrome                         | `dist-zip`                      |
+| `npm run zip:all`       | build and package for all browsers   | `dist-zip`     |
 
-See [instructions for Chrome](https://developer.chrome.com/extensions/getstarted#manifest) and [instructions for Firefox](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/) on how to load an unpacked extension.
+See [instructions for Chrome](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked) and [instructions for Firefox](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/) on how to load an unpacked extension.
 
 Have a look at the `package.json` for all run scripts.
 
