@@ -31,11 +31,7 @@ jobs:
         id: package_version
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
       - name: Extract changelog for package version
-        id: changelog
-        run: |
-          echo 'text<<EOF' >> $GITHUB_OUTPUT
-          sed -n '/## ${{ steps.package_version.outputs.version }}/,/##/{//!p}' CHANGELOG.md
-          echo 'EOF' >> $GITHUB_OUTPUT
+        run: sed -n '/## ${{ steps.package_version.outputs.version }}/,/##/{//!p}' CHANGELOG.md > CHANGELOG_RELEASE.md
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -44,8 +40,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: |
-            ${{ steps.changelog.outputs.text }}
+          body_path: CHANGELOG_RELEASE.md
           draft: true
           prerelease: false
       - name: Upload Firefox release assets
