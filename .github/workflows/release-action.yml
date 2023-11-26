@@ -4,12 +4,12 @@ on:
     tags:
       - 'testv*'
 jobs:
-  call-test-workflow:
+  test-workflow:
     uses: ./.github/workflows/test-workflow.yml
     with:
       node-version: ${{ vars.NODE_VERSION }}
-  call-release-workflow:
+  release-workflow:
     uses:  ./.github/workflows/release-workflow.yml
-    needs: call-test-workflow
+    needs: test-workflow
     with:
       node-version: ${{ vars.NODE_VERSION }}
