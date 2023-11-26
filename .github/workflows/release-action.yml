@@ -1,0 +1,16 @@
+name: Build release
+on:
+  push:
+    tags:
+      - 'v*'
+env:
+  NODE_VERSION: '18'
+jobs:
+  call-test-workflow:
+    uses: ./.github/workflows/test-workflow.yml
+    with:
+      node-version: ${{ env.NODE_VERSION }}
+  call-release-workflow:
+    uses:  ./.github/workflows/release-workflow.yml
+    with:
+      node-version: ${{ env.NODE_VERSION }}
