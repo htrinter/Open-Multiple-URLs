@@ -2,7 +2,7 @@ name: Build release
 on:
   push:
     tags:
-      - 'testv*'
+      - 'v*'
 jobs:
   test-workflow:
     uses: ./.github/workflows/test-workflow.yml
