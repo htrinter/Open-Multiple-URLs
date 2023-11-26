@@ -32,7 +32,10 @@ jobs:
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
       - name: Extract changelog for package version
         id: changelog
-        run: echo "text=$(sed -n '/## ${{ steps.package_version.outputs.version }}/,/##/{//!p}' CHANGELOG.md)" >> $GITHUB_OUTPUT
+        run: |
+          echo 'text<<EOF' >> $GITHUB_OUTPUT
+          sed -n '/## ${{ steps.package_version.outputs.version }}/,/##/{//!p}' CHANGELOG.md
+          echo 'EOF' >> $GITHUB_OUTPUT
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
