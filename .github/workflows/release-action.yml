@@ -7,9 +7,9 @@ jobs:
   call-test-workflow:
     uses: ./.github/workflows/test-workflow.yml
     with:
-      node-version: '18'
+      node-version: ${{ vars.NODE_VERSION }}
   call-release-workflow:
     uses:  ./.github/workflows/release-workflow.yml
     needs: call-test-workflow
     with:
-      node-version: '18'
+      node-version: ${{ vars.NODE_VERSION }}
