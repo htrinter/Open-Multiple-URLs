@@ -1,0 +1,60 @@
+name: Build release
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: true
+        type: string
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ inputs.node-version }}
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --ignore-scripts
+      - name: Build
+        run: npm run build:all
+      - name: Package
+        run: npm run package:all
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Get package version
+        id: package_version
+        run: echo "::set-output name=version::$(node -p "require('./package.json').version")"
+      - name: Upload Firefox release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist-package/open-multiple-urls-${{ steps.package_version.outputs.version }}-firefox.zip
+          asset_name: open-multiple-urls-${{ steps.package_version.outputs.version }}-firefox.zip
+          asset_content_type: application/zip
+      - name: Upload Chrome release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist-package/open-multiple-urls-${{ steps.package_version.outputs.version }}-chrome.zip
+          asset_name: open-multiple-urls-${{ steps.package_version.outputs.version }}-chrome.zip
+          asset_content_type: application/zip

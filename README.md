@@ -19,16 +19,16 @@ Due to incompatible manifest.json definitions, there are separate builds for Fir
 First: Install packages via `npm install`.<br>
 Then use one of the following build commands:
 
-| Command                 | Description                         | Output dir                      |
-|:------------------------|:------------------------------------|:--------------------------------|
-| `npm run dev:firefox`   | live build (watch-mode) for Firefox | `dist-firefox`                  |
-| `npm run dev:chrome`    | live build (watch-mode) for Chrome  | `dist-chrome`                   |
-| `npm run build:firefox` | production build for Firefox        | `dist-firefox`                  |
-| `npm run build:chrome`  | production build for Chrome         | `dist-chrome`                   |
-| `npm run build:all`     | production build for all browsers   | `dist-firefox`<br>`dist-chrome` |
-| `npm run zip:firefox`   | build and package for Firefox       | `dist-zip`                      |
-| `npm run zip:chrome`    | build and package for Chrome                         | `dist-zip`                      |
-| `npm run zip:all`       | build and package for all browsers   | `dist-zip`     |
+| Command                   | Description                         | Output dir                      |
+|:--------------------------|:------------------------------------|:--------------------------------|
+| `npm run dev:firefox`     | live build (watch-mode) for Firefox | `dist-firefox`                  |
+| `npm run dev:chrome`      | live build (watch-mode) for Chrome  | `dist-chrome`                   |
+| `npm run build:firefox`   | production build for Firefox        | `dist-firefox`                  |
+| `npm run build:chrome`    | production build for Chrome         | `dist-chrome`                   |
+| `npm run build:all`       | production build for all browsers   | `dist-firefox`<br>`dist-chrome` |
+| `npm run package:firefox` | package for Firefox       | `dist-package`                      |
+| `npm run package:chrome`      | package for Chrome                         | `dist-package`                      |
+| `npm run package:all`         | package for all browsers   | `dist-package`     |
 
 See [instructions for Chrome](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked) and [instructions for Firefox](https://extensionworkshop.com/documentation/develop/temporary-installation-in-firefox/) on how to load an unpacked extension.
 
