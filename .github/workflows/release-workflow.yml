@@ -44,7 +44,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: ${{ steps.changelog.outputs.text }}
+          body: "test body"
           draft: true
           prerelease: false
       - name: Upload Firefox release assets
