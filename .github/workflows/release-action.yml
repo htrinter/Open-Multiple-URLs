@@ -2,7 +2,7 @@ name: Build release
 on:
   push:
     tags:
-      - 'v*'
+      - 'testv*'
 env:
   NODE_VERSION: '18'
 jobs:
