@@ -1,7 +1,9 @@
 name: Run tests
 on: [push, pull_request]
+env:
+  NODE_VERSION: '18'
 jobs:
   call-test-workflow:
     uses: ./.github/workflows/test-workflow.yml
     with:
-      node-version: '18'
+      node-version: '$NODE_VERSION'
