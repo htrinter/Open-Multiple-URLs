@@ -1,0 +1,15 @@
+name: Build release
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  test-workflow:
+    uses: ./.github/workflows/test-workflow.yml
+    with:
+      node-version: ${{ vars.NODE_VERSION }}
+  release-workflow:
+    uses:  ./.github/workflows/release-workflow.yml
+    needs: test-workflow
+    with:
+      node-version: ${{ vars.NODE_VERSION }}

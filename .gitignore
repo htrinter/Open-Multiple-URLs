@@ -14,6 +14,7 @@ dist-ssr
 dist-chrome
 dist-firefox
 dist-zip
+dist-package
 coverage
 *.local
 
