@@ -1,7 +1,14 @@
 if (!document.body.hasAttribute('omu-clipper-initialized')) {
   console.log('initialize clipper')
-  const collectedUrls: string[] = []
+  let collectedUrls: string[] = []
   let selectedElement: HTMLElement | null = null
+
+  const setCollectedCount = () => {
+    const collectedCountEl = document.querySelector('#collected-count')
+    if (collectedCountEl) {
+      collectedCountEl.innerHTML = String(collectedUrls.length)
+    }
+  }
 
   const addUrlsToCollection = (element: HTMLElement) => {
     const wrapper = document.createElement('div')
@@ -25,14 +32,17 @@ if (!document.body.hasAttribute('omu-clipper-initialized')) {
         collectedUrls.push(url)
       }
     })
-        const collectedCountEl = document.querySelector('#collected-count')
-    if (collectedCountEl) {
-      collectedCountEl.innerHTML = String(collectedUrls.length)
-    }
+
+    setCollectedCount()
   }
 
   const copyCollectionToClipboard = () => {
     navigator.clipboard.writeText(collectedUrls.join('\n'))
+  }
+
+  const clearCollection = () => {
+    collectedUrls = []
+    setCollectedCount()
   }
 
   const handleMouseOver = (event: MouseEvent) => {
@@ -94,21 +104,24 @@ if (!document.body.hasAttribute('omu-clipper-initialized')) {
   })
 
   document.body.innerHTML += `
-    <div id="opmurls-overlay" class="opmurls" style="z-index: 10000000; position: fixed; top: 10px; left: 10px; right: 10px; background: rgba(0, 0, 0, 0.9); color: #fff; border-radius: 10px; font-family: sans-serif;">
+    <div id="opmurls-overlay" class="opmurls" style="z-index: 237237424034324; position: fixed; top: 10px; left: 10px; right: 10px; background: rgba(0, 0, 0, 0.9); color: #fff; border-radius: 10px; font-family: sans-serif;">
         <div class="opmurls" style="padding: 20px; float:right">
             <span class="opmurls" style="display: inline-block; margin-right:15px;"><span class="opmurls" id="collected-count">0</span> URLs</span>
             <strong class="opmurls" id="copytoclipboard" style="display: inline-block; margin-right:15px; cursor: pointer; text-decoration: underline;">Copy to Clipboard</strong>
-            <strong class="opmurls" style="display: inline-block; margin-right:15px; cursor: pointer; text-decoration: underline;">View</strong>
-            <strong class="opmurls" style="display: inline-block; cursor: pointer; text-decoration: underline;">Clear</strong>
+            <strong class="opmurls" id="clear" style="display: inline-block; cursor: pointer; text-decoration: underline;">Clear</strong>
         </div>
         <div class="opmurls" style="padding: 20px;">
-            Select an element and click on it to extract links. Press <strong>escape</strong> to finish.
+            Select an element and click on it to extract links. Press <strong>escape</strong> to cancel.
         </div>
     </div>
   `
   document.querySelector('.opmurls #copytoclipboard')?.addEventListener('click', () => {
     copyCollectionToClipboard()
     alert('URLs copied to clipboard.')
+  })
+
+  document.querySelector('.opmurls #clear')?.addEventListener('click', () => {
+    clearCollection()
   })
 
   document.body.setAttribute('omu-clipper-initialized', '')
