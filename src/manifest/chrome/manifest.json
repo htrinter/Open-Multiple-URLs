@@ -1,6 +1,6 @@
 {
   "name": "Open Multiple URLs",
-  "version": "1.6.0",
+  "version": "__VERSION__",
   "manifest_version": 3,
   "description": "Opens a list of URLs",
   "homepage_url": "https://github.com/htrinter/Open-Multiple-URLs",
