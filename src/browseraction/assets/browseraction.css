@@ -2,7 +2,7 @@ body {
   padding: 5px;
   font-family: sans-serif;
   font-size: 13px;
-  min-width: 600px;
+  width: 600px;
 }
 
 section {
@@ -73,4 +73,21 @@ input[type='checkbox'] {
 
 #clipper {
   margin-right: 10px;
+}
+
+#permissions-notification {
+  padding: 15px;
+  background-color: #cce5ff;
+  color: #004085;
+  border: 1px solid #b8daff;
+  border-radius: 5px;
+}
+
+#permissions-notification #grant-permissions,
+#permissions-notification #cancel-grant-permissions {
+  float: right;
+}
+
+#permissions-notification #cancel-grant-permissions {
+  margin-left: 10px;
 }

@@ -88,6 +88,8 @@ if (!document.body.hasAttribute('omu-clipper-initialized')) {
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
+      copyCollectionToClipboard()
+
       console.log('unload clipper')
 
       document.removeEventListener('mouseover', handleMouseOver, true)
@@ -107,11 +109,10 @@ if (!document.body.hasAttribute('omu-clipper-initialized')) {
     <div id="opmurls-overlay" class="opmurls" style="z-index: 237237424034324; position: fixed; top: 10px; left: 10px; right: 10px; background: rgba(0, 0, 0, 0.9); color: #fff; border-radius: 10px; font-family: sans-serif;">
         <div class="opmurls" style="padding: 20px; float:right">
             <span class="opmurls" style="display: inline-block; margin-right:15px;"><span class="opmurls" id="collected-count">0</span> URLs</span>
-            <strong class="opmurls" id="copytoclipboard" style="display: inline-block; margin-right:15px; cursor: pointer; text-decoration: underline;">Copy to Clipboard</strong>
             <strong class="opmurls" id="clear" style="display: inline-block; cursor: pointer; text-decoration: underline;">Clear</strong>
         </div>
         <div class="opmurls" style="padding: 20px;">
-            Select an element and click on it to extract links. Press <strong>escape</strong> to cancel.
+            Select an element and click on it to extract links. Press <strong>escape</strong> to finish and copy to clipboard.
         </div>
     </div>
   `
