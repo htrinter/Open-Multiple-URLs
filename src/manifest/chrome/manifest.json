@@ -18,8 +18,8 @@
       "default": "CTRL+M"
     }
   },
-  "permissions": ["storage"],
-  "optional_permissions": ["activeTab", "scripting"],
-  "optional_host_permissions": ["*://*/*"],
+  "permissions": ["storage", "activeTab"],
+  "optional_permissions": ["scripting"],
+  "optional_host_permissions": ["<all_urls>"],
   "incognito": "split"
 }

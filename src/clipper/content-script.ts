@@ -100,7 +100,7 @@ if (!document.body.hasAttribute('omu-clipper-initialized')) {
         selectedElement.style.outline = ''
       }
 
-      document.querySelector("#opmurls-overlay")?.remove()
+      document.querySelector('#opmurls-overlay')?.remove()
       document.body.removeAttribute('omu-clipper-initialized')
     }
   })

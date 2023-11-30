@@ -81,11 +81,19 @@ input[type='checkbox'] {
   color: #004085;
   border: 1px solid #b8daff;
   border-radius: 5px;
+  line-height: 1.6em;
 }
 
-#permissions-notification #grant-permissions,
-#permissions-notification #cancel-grant-permissions {
-  float: right;
+#permissions-notification div {
+  margin-bottom: 10px;
+}
+
+#permissions-notification div:last-of-type {
+  margin-bottom: 0;
+}
+
+#permissions-notification span.url {
+  background: #ddefff;
 }
 
 #permissions-notification #cancel-grant-permissions {

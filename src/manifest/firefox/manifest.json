@@ -13,8 +13,8 @@
     "default_icon": "icon19.png",
     "default_popup": "browseraction.html"
   },
-  "permissions": ["storage"],
-  "optional_permissions": ["activeTab", "scripting"],
-  "host_permissions": ["*://*/*"],
+  "permissions": ["storage", "activeTab"],
+  "optional_permissions": ["scripting"],
+  "host_permissions": ["<all_urls>"],
   "incognito": "spanning"
 }
