@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.1 SNAPSHOT
+
+- Added
+  - Dark mode
+
 ## 1.6.0
 
 - Added
