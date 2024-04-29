@@ -21,8 +21,10 @@
   </section>
   <section id="permissions-notification" v-if="showPermissionsNotification">
     <div>
-      The page clipper works by enabling you to select areas of a web page to extract links from. To do this, the extension
-      requires permission to access page contents of <span class="url">{{ currentPermissionTabHost }}</span>.
+      The page clipper works by enabling you to select areas of a web page to extract links from. To
+      do this, the extension requires permission to access page contents of
+      <span class="url">{{ currentPermissionTabHost }}</span
+      >.
     </div>
     <div>
       <button id="grant-permissions" @click="requestPageClipperPermissions()">
@@ -33,12 +35,7 @@
       </button>
     </div>
     <div>
-      <label class="checkbox"
-      ><input
-          type="checkbox"
-      />
-        Do not show this explanation again</label
-      >
+      <label class="checkbox"><input type="checkbox" /> Do not show this explanation again</label>
     </div>
   </section>
 </template>
@@ -87,9 +84,7 @@ export default {
 
       let hasPermissions = false
       try {
-        hasPermissions = await browser.permissions.contains(
-            this.buildClipperPermissionsObject()
-        )
+        hasPermissions = await browser.permissions.contains(this.buildClipperPermissionsObject())
       } catch (e) {
         console.error(e)
         alert(NO_CLIP_MESSAGE)

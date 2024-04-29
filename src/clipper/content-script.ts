@@ -1,7 +1,8 @@
 if (!document.body.hasAttribute('omu-clipper-initialized')) {
   console.log('initialize clipper')
   let collectedUrls: string[] = []
-  let selectedElement: HTMLElement | null = null
+  let hoveredElement: HTMLElement | null = null
+  const selectedElements: HTMLElement[] = []
 
   const setCollectedCount = () => {
     const collectedCountEl = document.querySelector('#collected-count')
@@ -10,29 +11,47 @@ if (!document.body.hasAttribute('omu-clipper-initialized')) {
     }
   }
 
-  const addUrlsToCollection = (element: HTMLElement) => {
+  const extractLinksFromElement = (selectedElement: HTMLElement): string[] => {
+    const inspectedElement =
+      selectedElement.parentElement?.tagName.toLowerCase() === 'a'
+        ? selectedElement.parentElement.cloneNode(true)
+        : selectedElement.cloneNode(true)
+
     const wrapper = document.createElement('div')
-    wrapper.appendChild(element.cloneNode(true))
+    wrapper.appendChild(inspectedElement)
 
-    Array.from(wrapper.querySelectorAll('a')).forEach((link) => {
-      const href = link.getAttribute('href')
-      if (href) {
-        const prependProtocol = !href.startsWith(window.location.protocol)
-        const prependHost = prependProtocol && !href.startsWith(window.location.host)
-        const prependPath = prependHost && !href.startsWith('/')
+    return Array.from(wrapper.querySelectorAll('a'))
+      .map((link) => {
+        const href = link.getAttribute('href')
+        if (href) {
+          const prependProtocol = !href.startsWith(window.location.protocol)
+          const prependHost = prependProtocol && !href.startsWith(window.location.host)
+          const prependPath = prependHost && !href.startsWith('/')
 
-        const url = `${prependProtocol ? `${window.location.protocol}//` : ''}${
-          prependHost ? window.location.host : ''
-        }${
-          prependPath
-            ? `${window.location.pathname}${!window.location.pathname.endsWith('/') ? '/' : ''}`
-            : ''
-        }${href}`
+          return `${prependProtocol ? `${window.location.protocol}//` : ''}${
+            prependHost ? window.location.host : ''
+          }${
+            prependPath
+              ? `${window.location.pathname}${!window.location.pathname.endsWith('/') ? '/' : ''}`
+              : ''
+          }${href}`
+        }
+      })
+      .filter((u) => u !== undefined) as string[]
+  }
 
-        collectedUrls.push(url)
-      }
+  const addUrlsToCollection = (element: HTMLElement) => {
+    const urls = extractLinksFromElement(element)
+    collectedUrls.push(...urls)
+    setCollectedCount()
+  }
+
+  const removeUrlsFromCollection = (element: HTMLElement) => {
+    const urls = extractLinksFromElement(element)
+    urls.forEach((url) => {
+      delete collectedUrls[collectedUrls.indexOf(url)]
     })
-
+    collectedUrls = collectedUrls.filter((u) => u)
     setCollectedCount()
   }
 
@@ -40,33 +59,28 @@ if (!document.body.hasAttribute('omu-clipper-initialized')) {
     navigator.clipboard.writeText(collectedUrls.join('\n'))
   }
 
-  const clearCollection = () => {
-    collectedUrls = []
-    setCollectedCount()
-  }
-
   const handleMouseOver = (event: MouseEvent) => {
     if (
-      selectedElement !== event.target &&
+      hoveredElement !== event.target &&
       !(event.target as HTMLElement).classList.contains('opmurls')
     ) {
-      if (selectedElement) {
-        selectedElement.style.outline = ''
+      if (hoveredElement) {
+        hoveredElement.style.outline = ''
       }
-      selectedElement = event.target as HTMLElement
-      selectedElement.style.outline = '4px solid red'
+      hoveredElement = event.target as HTMLElement
+      hoveredElement.style.outline = '4px solid blue'
     }
     event.stopPropagation()
   }
 
   const handleMouseOut = (event: MouseEvent) => {
     if (
-      selectedElement &&
-      selectedElement === event.target &&
+      hoveredElement &&
+      hoveredElement === event.target &&
       !(event.target as HTMLElement).classList.contains('opmurls')
     ) {
-      selectedElement.style.outline = ''
-      selectedElement = null
+      hoveredElement.style.outline = ''
+      hoveredElement = null
     }
     event.stopPropagation()
   }
@@ -75,7 +89,16 @@ if (!document.body.hasAttribute('omu-clipper-initialized')) {
     const clickedElement = event.target as HTMLElement
     if (clickedElement && !clickedElement.classList.contains('opmurls')) {
       console.log('element chosen', clickedElement)
-      addUrlsToCollection(clickedElement)
+
+      if (selectedElements.includes(clickedElement)) {
+        removeUrlsFromCollection(clickedElement)
+        delete selectedElements[selectedElements.indexOf(clickedElement)]
+        clickedElement.style.border = 'none'
+      } else {
+        addUrlsToCollection(clickedElement)
+        selectedElements.push(clickedElement)
+        clickedElement.style.border = '5px solid green'
+      }
 
       event.preventDefault()
       event.stopPropagation()
@@ -96,8 +119,8 @@ if (!document.body.hasAttribute('omu-clipper-initialized')) {
       document.removeEventListener('mouseout', handleMouseOut, true)
       document.removeEventListener('click', handleClick, true)
 
-      if (selectedElement) {
-        selectedElement.style.outline = ''
+      if (hoveredElement) {
+        hoveredElement.style.outline = ''
       }
 
       document.querySelector('#opmurls-overlay')?.remove()
@@ -109,20 +132,16 @@ if (!document.body.hasAttribute('omu-clipper-initialized')) {
     <div id="opmurls-overlay" class="opmurls" style="z-index: 237237424034324; position: fixed; top: 10px; left: 10px; right: 10px; background: rgba(0, 0, 0, 0.9); color: #fff; border-radius: 10px; font-family: sans-serif;">
         <div class="opmurls" style="padding: 20px; float:right">
             <span class="opmurls" style="display: inline-block; margin-right:15px;"><span class="opmurls" id="collected-count">0</span> URLs</span>
-            <strong class="opmurls" id="clear" style="display: inline-block; cursor: pointer; text-decoration: underline;">Clear</strong>
+            <strong class="opmurls" id="copytoclipboard" style="display: inline-block; cursor: pointer; text-decoration: underline;">Copy to clipboard</strong>
         </div>
         <div class="opmurls" style="padding: 20px;">
-            Select an element and click on it to extract links. Press <strong>escape</strong> to finish and copy to clipboard.
+            Select elements by clicking on them to extract links. Click again for deselect. Press <strong>escape</strong> to finish and copy to clipboard.
         </div>
     </div>
   `
   document.querySelector('.opmurls #copytoclipboard')?.addEventListener('click', () => {
     copyCollectionToClipboard()
     alert('URLs copied to clipboard.')
-  })
-
-  document.querySelector('.opmurls #clear')?.addEventListener('click', () => {
-    clearCollection()
   })
 
   document.body.setAttribute('omu-clipper-initialized', '')
