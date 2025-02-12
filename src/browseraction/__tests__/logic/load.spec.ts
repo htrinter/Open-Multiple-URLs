@@ -1,12 +1,7 @@
 import browser from 'webextension-polyfill'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import {
-  getTabCount,
-  getURLsFromText,
-  loadSites,
-  NEW_TAB_GROUP_ID,
-  NO_TAB_GROUP_ID
-} from '@/browseraction/components/logic/load'
+import { getTabCount, getURLsFromText, loadSites } from '@/browseraction/components/logic/load'
+import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from '@/browseraction/components/logic/tabgroups'
 
 const MOCK_TAB_GROUP_ID = 42
 

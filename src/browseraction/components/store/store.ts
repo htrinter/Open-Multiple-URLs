@@ -1,12 +1,7 @@
 import { reactive } from 'vue'
 import browser from 'webextension-polyfill'
 import { BrowserStorageKey } from '@/browseraction/components/store/browser-storage'
-import { NO_TAB_GROUP_ID } from '../logic/load'
-
-export interface TabGroup {
-  id: number
-  title: string
-}
+import { NO_TAB_GROUP_ID, type TabGroup } from '../logic/tabgroups'
 
 export const store = reactive({
   urlList: '',

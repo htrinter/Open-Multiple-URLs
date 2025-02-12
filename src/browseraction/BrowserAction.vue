@@ -6,7 +6,7 @@ import { BrowserStorageKey } from '@/browseraction/components/store/browser-stor
 import browser from 'webextension-polyfill'
 import { store } from '@/browseraction/components/store/store'
 import { ref } from 'vue'
-import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from './components/logic/load'
+import { NO_TAB_GROUP_ID, loadTabGroups } from './components/logic/tabgroups'
 
 const isStoredValuesLoaded = ref(false)
 Promise.all([
@@ -16,7 +16,7 @@ Promise.all([
   browser.storage.local.get(BrowserStorageKey.reverse),
   browser.storage.local.get(BrowserStorageKey.preserve),
   browser.storage.local.get(BrowserStorageKey.deduplicate),
-  browser.tabGroups?.query({}) || Promise.resolve([]),
+  loadTabGroups(),
   browser.storage.local.get(BrowserStorageKey.selectedTabGroupId)
 ]).then((data) => {
   store.urlList = String(data[0][BrowserStorageKey.urlList] ?? '')
@@ -26,14 +26,7 @@ Promise.all([
   store.preserveInputChecked = Boolean(data[4][BrowserStorageKey.preserve]) ?? false
   store.deduplicateURLsChecked = Boolean(data[5][BrowserStorageKey.deduplicate]) ?? false
   store.hasTabGroupSupport = Boolean(browser.tabGroups) ?? false
-  store.tabGroups = [
-    { id: NO_TAB_GROUP_ID, title: 'No Tab Group' },
-    { id: NEW_TAB_GROUP_ID, title: 'New Tab Group' },
-    ...data[6].map((group) => ({
-      id: group.id,
-      title: `${group.title}${group.title ? ' ' : ''}(${group.color})`
-    }))
-  ]
+  store.tabGroups = data[6]
   store.selectedTabGroupId =
     store.tabGroups.find(
       (group) => group.id === Number(data[7][BrowserStorageKey.selectedTabGroupId])

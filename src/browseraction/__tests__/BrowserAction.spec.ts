@@ -2,7 +2,7 @@ import { describe, it, beforeEach, vi, expect } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import App from '../BrowserAction.vue'
 import { BrowserStorageKey } from '../components/store/browser-storage'
-import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from '../components/logic/load'
+import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from '../components/logic/tabgroups'
 
 const MOCK_TAB_GROUP_ID = 123
 const MOCK_TAB_GROUP_TITLE = 'Mock Tab Group'

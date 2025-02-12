@@ -1,7 +1,5 @@
 import browser from 'webextension-polyfill'
-
-export const NO_TAB_GROUP_ID = -1
-export const NEW_TAB_GROUP_ID = -2
+import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from './tabgroups'
 
 /**
  * Shuffles array in place.

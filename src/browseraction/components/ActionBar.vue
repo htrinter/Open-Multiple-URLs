@@ -32,6 +32,7 @@
 import { getTabCount, loadSites } from '@/browseraction/components/logic/load'
 import { extractURLs } from '@/browseraction/components/logic/extract'
 import { store } from '@/browseraction/components/store/store'
+import { loadTabGroups } from './logic/tabgroups'
 
 export default {
   data() {
@@ -48,7 +49,11 @@ export default {
         store.loadInReverseOrderChecked,
         store.deduplicateURLsChecked,
         this.selectedTabGroupId
-      )
+      ).then(() => {
+        loadTabGroups().then((tabGroups) => {
+          store.tabGroups = tabGroups
+        })
+      })
     },
     setUrlListInputData() {
       store.setUrlList(extractURLs(store.urlList))
