@@ -1,14 +1,20 @@
 import browser from 'webextension-polyfill'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { getTabCount, getURLsFromText, loadSites, NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from '@/browseraction/components/logic/load'
+import {
+  getTabCount,
+  getURLsFromText,
+  loadSites,
+  NEW_TAB_GROUP_ID,
+  NO_TAB_GROUP_ID
+} from '@/browseraction/components/logic/load'
 
 const MOCK_TAB_GROUP_ID = 42
 
 vi.mock('webextension-polyfill', () => ({
   default: {
-    tabs: { 
-      create: vi.fn(), 
-      group: vi.fn() 
+    tabs: {
+      create: vi.fn(),
+      group: vi.fn()
     },
     runtime: { getURL: (val: string) => val }
   }
@@ -73,7 +79,14 @@ describe('load tabs', () => {
   })
 
   it('loads tabs and deduplicate', async () => {
-    await loadSites(`${urlList}\n${urlList}\n${urlList}\n${urlList}`, false, false, false, true, null)
+    await loadSites(
+      `${urlList}\n${urlList}\n${urlList}\n${urlList}`,
+      false,
+      false,
+      false,
+      true,
+      null
+    )
 
     expect(browser.tabs.create).toHaveBeenNthCalledWith(1, {
       url: url1,

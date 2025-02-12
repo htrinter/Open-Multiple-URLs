@@ -4,25 +4,28 @@
     <button id="open" tabindex="2" @click="openURLs">
       <strong>Open URLs</strong>
     </button>
-    <select id="tabGroupSelection" v-if="tabGroupsSupported" v-model="selectedTabGroupId" @change="setTabGroupSelection">
+    <select
+      id="tabGroupSelection"
+      v-if="tabGroupsSupported"
+      v-model="selectedTabGroupId"
+      @change="setTabGroupSelection"
+    >
       <option v-for="group in tabGroups" :key="group.id" :value="group.id">
         {{ group.title }}
       </option>
     </select>
   </section>
   <span id="tabcount" v-if="tabCount !== '0'">
-      <abbr
-        title="Opening too many tabs at once may lead to long wait times or crash your browser."
-      >
-        &#9432;
-        <span>
-          will open
-          <span id="tabcount-number">{{ tabCount }}</span>
-          new
-          <span id="tabcount-tab-label">tab<span v-if="tabCount !== '1'">s</span></span>
-        </span>
-      </abbr>
-    </span>
+    <abbr title="Opening too many tabs at once may lead to long wait times or crash your browser.">
+      &#9432;
+      <span>
+        will open
+        <span id="tabcount-number">{{ tabCount }}</span>
+        new
+        <span id="tabcount-tab-label">tab<span v-if="tabCount !== '1'">s</span></span>
+      </span>
+    </abbr>
+  </span>
 </template>
 
 <script lang="ts">
@@ -50,11 +53,11 @@ export default {
     setUrlListInputData() {
       store.setUrlList(extractURLs(store.urlList))
     },
-    setTabGroupSelection(event: Event) {
+    setTabGroupSelection() {
       this.$nextTick(() => {
         store.setSelectedTabGroupId(this.selectedTabGroupId)
       })
-    },
+    }
   },
   computed: {
     tabCount: function () {

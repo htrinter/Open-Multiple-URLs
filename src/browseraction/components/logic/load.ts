@@ -53,17 +53,13 @@ export const loadSites = async (
         url = 'http://' + url
       }
 
-      if (
-        lazyloading &&
-        url.split(':')[0] !== 'view-source' &&
-        url.split(':')[0] !== 'file'
-      ) {
+      if (lazyloading && url.split(':')[0] !== 'view-source' && url.split(':')[0] !== 'file') {
         url = browser.runtime.getURL('lazyloading.html#') + url
       }
 
       const createdTab = browser.tabs.create({
         url: url,
-        active:false,
+        active: false
       })
       createdTabs.push(createdTab)
     }
@@ -73,11 +69,10 @@ export const loadSites = async (
     await Promise.all(createdTabs).then((tabs) => {
       browser.tabs.group?.({
         tabIds: tabs.map((tab) => tab?.id || -1),
-        groupId: selectedTabGroupId === NEW_TAB_GROUP_ID ? undefined : selectedTabGroupId,
+        groupId: selectedTabGroupId === NEW_TAB_GROUP_ID ? undefined : selectedTabGroupId
       })
     })
   }
-
 }
 
 export const getTabCount = (text: string, deduplicate: boolean) => {

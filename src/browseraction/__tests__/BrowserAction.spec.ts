@@ -9,7 +9,7 @@ const MOCK_TAB_GROUP_TITLE = 'Mock Tab Group'
 
 let mockStore: Record<string, string> = {}
 let tabCreateMockCallCount = 0
-let tabGroupMockCalls : any[] = []
+let tabGroupMockCalls: any[] = []
 beforeEach(() => {
   mockStore = {}
   tabCreateMockCallCount = 0
@@ -17,14 +17,16 @@ beforeEach(() => {
 
   vi.mock('webextension-polyfill', () => ({
     default: {
-      tabs: { 
+      tabs: {
         create: () => {
           tabCreateMockCallCount++
           return Promise.resolve({ id: 41 + tabCreateMockCallCount })
         },
         group: (props: any) => tabGroupMockCalls.push(props)
       },
-      tabGroups: { query: () => Promise.resolve([{id : MOCK_TAB_GROUP_ID, title :  MOCK_TAB_GROUP_TITLE}]) },
+      tabGroups: {
+        query: () => Promise.resolve([{ id: MOCK_TAB_GROUP_ID, title: MOCK_TAB_GROUP_TITLE }])
+      },
       runtime: { getURL: (val: string) => val },
       storage: {
         local: {
@@ -90,9 +92,7 @@ describe('browser action', () => {
       await wrapper
         .find('textarea#urls')
         .setValue('https://github.com\nhttps://github.com/htrinter/')
-      await wrapper
-        .find('select#tabGroupSelection')
-        .setValue(NEW_TAB_GROUP_ID)
+      await wrapper.find('select#tabGroupSelection').setValue(NEW_TAB_GROUP_ID)
 
       expect(tabCreateMockCallCount).toBe(0)
       expect(tabGroupMockCalls).toHaveLength(0)
@@ -114,9 +114,7 @@ describe('browser action', () => {
       await wrapper
         .find('textarea#urls')
         .setValue('https://github.com\nhttps://github.com/htrinter/')
-      await wrapper
-        .find('select#tabGroupSelection')
-        .setValue(MOCK_TAB_GROUP_ID)
+      await wrapper.find('select#tabGroupSelection').setValue(MOCK_TAB_GROUP_ID)
 
       expect(tabCreateMockCallCount).toBe(0)
       expect(tabGroupMockCalls).toHaveLength(0)
@@ -169,9 +167,9 @@ describe('browser action', () => {
       expect(
         (wrapper.find('input[type="checkbox"]#deduplicate').element as HTMLInputElement).checked
       ).toBeFalsy()
-      expect(
-        (wrapper.find('select#tabGroupSelection').element as HTMLInputElement).value
-      ).toBe(String(NO_TAB_GROUP_ID))
+      expect((wrapper.find('select#tabGroupSelection').element as HTMLInputElement).value).toBe(
+        String(NO_TAB_GROUP_ID)
+      )
     })
 
     const renderWithStoredValuesTestCases = [
@@ -289,9 +287,9 @@ describe('browser action', () => {
         expect(
           (wrapper.find('input[type="checkbox"]#deduplicate').element as HTMLInputElement).checked
         ).toBe(expectedStates.deduplicate)
-        expect(
-          (wrapper.find('select#tabGroupSelection').element as HTMLInputElement).value
-        ).toBe(String(expectedStates.selectedTabGroupId))
+        expect((wrapper.find('select#tabGroupSelection').element as HTMLInputElement).value).toBe(
+          String(expectedStates.selectedTabGroupId)
+        )
       }
     )
   })
@@ -345,7 +343,7 @@ describe('browser action', () => {
     const storeTabGroupStateTestCases = [
       { selectedTabGroupId: NO_TAB_GROUP_ID },
       { selectedTabGroupId: NEW_TAB_GROUP_ID },
-      { selectedTabGroupId: MOCK_TAB_GROUP_ID },
+      { selectedTabGroupId: MOCK_TAB_GROUP_ID }
     ]
     it.each(storeTabGroupStateTestCases)(
       'stores $selectedTabGroupId tab group select state',
@@ -355,7 +353,7 @@ describe('browser action', () => {
         const wrapper = mount(App, { attachTo: document.body })
         await flushPromises()
 
-        const select = wrapper.find("select#tabGroupSelection")
+        const select = wrapper.find('select#tabGroupSelection')
 
         expect(mockStore[storeKey]).toBeFalsy()
 

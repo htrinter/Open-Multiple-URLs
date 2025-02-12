@@ -19,7 +19,7 @@ Promise.all([
   browser.tabGroups?.query({}) || Promise.resolve([]),
   browser.storage.local.get(BrowserStorageKey.selectedTabGroupId)
 ]).then((data) => {
-  store.urlList = String(data[0][BrowserStorageKey.urlList] ?? "")
+  store.urlList = String(data[0][BrowserStorageKey.urlList] ?? '')
   store.lazyLoadingChecked = Boolean(data[1][BrowserStorageKey.lazyload]) ?? false
   store.loadInRandomOrderChecked = Boolean(data[2][BrowserStorageKey.random]) ?? false
   store.loadInReverseOrderChecked = Boolean(data[3][BrowserStorageKey.reverse]) ?? false
@@ -27,11 +27,17 @@ Promise.all([
   store.deduplicateURLsChecked = Boolean(data[5][BrowserStorageKey.deduplicate]) ?? false
   store.hasTabGroupSupport = Boolean(browser.tabGroups) ?? false
   store.tabGroups = [
-    { id: NO_TAB_GROUP_ID, title: "No Tab Group" },
-    { id: NEW_TAB_GROUP_ID, title: "New Tab Group" },
-    ...data[6].map((group) => ({ id: group.id, title: `${group.title}${group.title ? " " : ""}(${group.color})`}))
+    { id: NO_TAB_GROUP_ID, title: 'No Tab Group' },
+    { id: NEW_TAB_GROUP_ID, title: 'New Tab Group' },
+    ...data[6].map((group) => ({
+      id: group.id,
+      title: `${group.title}${group.title ? ' ' : ''}(${group.color})`
+    }))
   ]
-  store.selectedTabGroupId = store.tabGroups.find((group) => group.id === Number(data[7][BrowserStorageKey.selectedTabGroupId]))?.id ?? NO_TAB_GROUP_ID
+  store.selectedTabGroupId =
+    store.tabGroups.find(
+      (group) => group.id === Number(data[7][BrowserStorageKey.selectedTabGroupId])
+    )?.id ?? NO_TAB_GROUP_ID
 
   isStoredValuesLoaded.value = true
 })

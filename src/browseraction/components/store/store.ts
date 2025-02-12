@@ -3,7 +3,6 @@ import browser from 'webextension-polyfill'
 import { BrowserStorageKey } from '@/browseraction/components/store/browser-storage'
 import { NO_TAB_GROUP_ID } from '../logic/load'
 
-
 export interface TabGroup {
   id: number
   title: string
