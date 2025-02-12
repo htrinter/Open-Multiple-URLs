@@ -1,5 +1,6 @@
 import browser from 'webextension-polyfill'
 import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from './tabgroups'
+import { SCHEMA_CONFIG } from './urlschema'
 
 /**
  * Shuffles array in place.
@@ -32,7 +33,7 @@ export const loadSites = async (
   deduplicate: boolean,
   selectedTabGroupId: number | null | undefined
 ): Promise<void> => {
-  const urlschemes = ['http', 'https', 'file', 'view-source']
+  const urlschemes = SCHEMA_CONFIG.map((schema) => schema.schema)
   let urls = getURLsFromText(text, deduplicate)
 
   if (reverse) {

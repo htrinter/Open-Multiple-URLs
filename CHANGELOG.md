@@ -5,6 +5,8 @@
 - Added
   - Tab group support for Chrome
   - Dark mode
+- Changed
+  - Improved automatic schema prefixing
 
 ## 1.6.0
 
