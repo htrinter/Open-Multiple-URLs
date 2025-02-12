@@ -1,6 +1,4 @@
-import browser from 'webextension-polyfill'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { getTabCount, getURLsFromText, loadSites } from '@/browseraction/components/logic/load'
 import {
   loadTabGroups,
   NEW_TAB_GROUP_ID,
