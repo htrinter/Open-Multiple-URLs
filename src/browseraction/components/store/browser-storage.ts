@@ -4,5 +4,6 @@ export enum BrowserStorageKey {
   random = 'random',
   reverse = 'reverse',
   preserve = 'preserve',
-  deduplicate = 'deduplicate'
+  deduplicate = 'deduplicate',
+  selectedTabGroupId = 'selectedTabGroupId'
 }

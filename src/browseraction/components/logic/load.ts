@@ -1,5 +1,8 @@
 import browser from 'webextension-polyfill'
 
+export const NO_TAB_GROUP_ID = -1
+export const NEW_TAB_GROUP_ID = -2
+
 /**
  * Shuffles array in place.
  * @param {Array} a items An array containing the items.
@@ -23,13 +26,14 @@ const shuffle = (a: string[]) => {
  * @param reverse Open tabs in reverse order
  * @param deduplicate Ignores duplicate URLs on open
  */
-export const loadSites = (
+export const loadSites = async (
   text: string,
   lazyloading: boolean,
   random: boolean,
   reverse: boolean,
-  deduplicate: boolean
-): void => {
+  deduplicate: boolean,
+  selectedTabGroupId: number | null | undefined
+): Promise<void> => {
   const urlschemes = ['http', 'https', 'file', 'view-source']
   let urls = getURLsFromText(text, deduplicate)
 
@@ -41,29 +45,39 @@ export const loadSites = (
     urls = shuffle(urls)
   }
 
+  const createdTabs: Promise<browser.Tabs.Tab>[] = []
   for (let i = 0; i < urls.length; i++) {
-    let theurl = urls[i].trim()
-    if (theurl !== '') {
-      if (urlschemes.indexOf(theurl.split(':')[0]) === -1) {
-        theurl = 'http://' + theurl
+    let url = urls[i].trim()
+    if (url !== '') {
+      if (urlschemes.indexOf(url.split(':')[0]) === -1) {
+        url = 'http://' + url
       }
+
       if (
         lazyloading &&
-        theurl.split(':')[0] !== 'view-source' &&
-        theurl.split(':')[0] !== 'file'
+        url.split(':')[0] !== 'view-source' &&
+        url.split(':')[0] !== 'file'
       ) {
-        browser.tabs.create({
-          url: browser.runtime.getURL('lazyloading.html#') + theurl,
-          active: false
-        })
-      } else {
-        browser.tabs.create({
-          url: theurl,
-          active: false
-        })
+        url = browser.runtime.getURL('lazyloading.html#') + url
       }
+
+      const createdTab = browser.tabs.create({
+        url: url,
+        active:false,
+      })
+      createdTabs.push(createdTab)
     }
   }
+
+  if (selectedTabGroupId != null && selectedTabGroupId !== NO_TAB_GROUP_ID) {
+    await Promise.all(createdTabs).then((tabs) => {
+      browser.tabs.group?.({
+        tabIds: tabs.map((tab) => tab?.id || -1),
+        groupId: selectedTabGroupId === NEW_TAB_GROUP_ID ? undefined : selectedTabGroupId,
+      })
+    })
+  }
+
 }
 
 export const getTabCount = (text: string, deduplicate: boolean) => {

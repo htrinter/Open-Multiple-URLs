@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Added
+  - Tab group support for Chrome
   - Dark mode
 
 ## 1.6.0

@@ -4,7 +4,13 @@
     <button id="open" tabindex="2" @click="openURLs">
       <strong>Open URLs</strong>
     </button>
-    <span id="tabcount" v-if="tabCount !== '0'">
+    <select id="tabGroupSelection" v-if="tabGroupsSupported" v-model="selectedTabGroupId" @change="setTabGroupSelection">
+      <option v-for="group in tabGroups" :key="group.id" :value="group.id">
+        {{ group.title }}
+      </option>
+    </select>
+  </section>
+  <span id="tabcount" v-if="tabCount !== '0'">
       <abbr
         title="Opening too many tabs at once may lead to long wait times or crash your browser."
       >
@@ -17,7 +23,6 @@
         </span>
       </abbr>
     </span>
-  </section>
 </template>
 
 <script lang="ts">
@@ -26,6 +31,11 @@ import { extractURLs } from '@/browseraction/components/logic/extract'
 import { store } from '@/browseraction/components/store/store'
 
 export default {
+  data() {
+    return {
+      selectedTabGroupId: store.selectedTabGroupId
+    }
+  },
   methods: {
     openURLs() {
       loadSites(
@@ -33,16 +43,28 @@ export default {
         store.lazyLoadingChecked,
         store.loadInRandomOrderChecked,
         store.loadInReverseOrderChecked,
-        store.deduplicateURLsChecked
+        store.deduplicateURLsChecked,
+        this.selectedTabGroupId
       )
     },
     setUrlListInputData() {
       store.setUrlList(extractURLs(store.urlList))
-    }
+    },
+    setTabGroupSelection(event: Event) {
+      this.$nextTick(() => {
+        store.setSelectedTabGroupId(this.selectedTabGroupId)
+      })
+    },
   },
   computed: {
     tabCount: function () {
       return getTabCount(store.urlList, store.deduplicateURLsChecked)
+    },
+    tabGroupsSupported: function () {
+      return store.hasTabGroupSupport
+    },
+    tabGroups: function () {
+      return store.tabGroups
     }
   }
 }
