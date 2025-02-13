@@ -1,48 +1,27 @@
-export interface UrlSchemaConfig {
-  schema: string
-  canLazyLoad: boolean
-}
-
-export const SCHEMA_CONFIG: UrlSchemaConfig[] = [
-  {
-    schema: 'http',
-    canLazyLoad: true
-  },
-  {
-    schema: 'https',
-    canLazyLoad: true
-  },
-  {
-    schema: 'file',
-    canLazyLoad: true
-  },
-  {
-    schema: 'view-source',
-    canLazyLoad: true
-  },
-  {
-    schema: 'moz-extension',
-    canLazyLoad: false
-  },
-  {
-    schema: 'chrome',
-    canLazyLoad: false
-  },
-  {
-    schema: 'chrome-extension',
-    canLazyLoad: false
-  },
-  { schema: 'edge', canLazyLoad: false },
-  {
-    schema: 'extension',
-    canLazyLoad: false
-  }
+// The following schemas cannot be lazy loaded because of browser restrictions
+const NO_LAZY_LOAD_SCHEMES = [
+  'file',
+  'view-source',
+  'moz-extension',
+  'chrome',
+  'chrome-extension',
+  'edge',
+  'extension'
 ]
 
 export const getSchema = (url: string): string => {
-  return url.split(':')[0]
+  return hasValidSchema(url) ? new URL(url).protocol.replace(':', '') : ''
 }
 
-export const getSchemaConfig = (url: string): UrlSchemaConfig | undefined => {
-  return SCHEMA_CONFIG.find((schemaConfig) => schemaConfig.schema === getSchema(url))
+export const hasValidSchema = (url: string): boolean => {
+  try {
+    new URL(url)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+export const canLazyLoad = (url: string): boolean => {
+  return NO_LAZY_LOAD_SCHEMES.indexOf(getSchema(url)) === -1
 }

@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill'
 import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from './tabgroups'
-import { SCHEMA_CONFIG } from './urlschema'
+import { canLazyLoad, hasValidSchema } from './urlschema'
 
 /**
  * Shuffles array in place.
@@ -33,7 +33,6 @@ export const loadSites = async (
   deduplicate: boolean,
   selectedTabGroupId: number | null | undefined
 ): Promise<void> => {
-  const urlschemes = SCHEMA_CONFIG.map((schema) => schema.schema)
   let urls = getURLsFromText(text, deduplicate)
 
   if (reverse) {
@@ -48,11 +47,11 @@ export const loadSites = async (
   for (let i = 0; i < urls.length; i++) {
     let url = urls[i].trim()
     if (url !== '') {
-      if (urlschemes.indexOf(url.split(':')[0]) === -1) {
-        url = 'http://' + url
+      if (!hasValidSchema(url)) {
+        url = 'https://' + url
       }
 
-      if (lazyloading && url.split(':')[0] !== 'view-source' && url.split(':')[0] !== 'file') {
+      if (lazyloading && canLazyLoad(url)) {
         url = browser.runtime.getURL('lazyloading.html#') + url
       }
 
