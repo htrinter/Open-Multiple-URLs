@@ -2,15 +2,31 @@ import { describe, it, beforeEach, vi, expect } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import App from '../BrowserAction.vue'
 import { BrowserStorageKey } from '../components/store/browser-storage'
+import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from '../components/logic/tabgroups'
+
+const MOCK_TAB_GROUP_ID = 123
+const MOCK_TAB_GROUP_TITLE = 'Mock Tab Group'
 
 let mockStore: Record<string, string> = {}
-let tabCreateMockCallCount: number = 0
+let tabCreateMockCallCount = 0
+let tabGroupMockCalls: any[] = []
 beforeEach(() => {
   mockStore = {}
   tabCreateMockCallCount = 0
+  tabGroupMockCalls = []
+
   vi.mock('webextension-polyfill', () => ({
     default: {
-      tabs: { create: () => tabCreateMockCallCount++ },
+      tabs: {
+        create: () => {
+          tabCreateMockCallCount++
+          return Promise.resolve({ id: 41 + tabCreateMockCallCount })
+        },
+        group: (props: any) => tabGroupMockCalls.push(props)
+      },
+      tabGroups: {
+        query: () => Promise.resolve([{ id: MOCK_TAB_GROUP_ID, title: MOCK_TAB_GROUP_TITLE }])
+      },
       runtime: { getURL: (val: string) => val },
       storage: {
         local: {
@@ -30,6 +46,9 @@ describe('browser action', () => {
     await flushPromises()
     expect(wrapper.text()).toContain('List of URLs / Text to extract URLs from:')
     expect(wrapper.text()).toContain('Open URLs')
+    expect(wrapper.text()).toContain('No Tab Group')
+    expect(wrapper.text()).toContain('New Tab Group')
+    expect(wrapper.text()).toContain(MOCK_TAB_GROUP_TITLE)
     expect(wrapper.text()).toContain('Extract URLs from text')
     expect(wrapper.text()).toContain('Do not load tabs until selected')
     expect(wrapper.text()).toContain('Load in random order')
@@ -56,9 +75,58 @@ describe('browser action', () => {
       await wrapper
         .find('textarea#urls')
         .setValue('https://github.com\nhttps://github.com/htrinter/')
+
       expect(tabCreateMockCallCount).toBe(0)
+      expect(tabGroupMockCalls).toHaveLength(0)
+
       await wrapper.find('button#open').trigger('click')
+
       expect(tabCreateMockCallCount).toBe(2)
+      expect(tabGroupMockCalls).toHaveLength(0)
+    })
+
+    it('opens urls in new tabs in new tab group', async () => {
+      const wrapper = mount(App)
+      await flushPromises()
+
+      await wrapper
+        .find('textarea#urls')
+        .setValue('https://github.com\nhttps://github.com/htrinter/')
+      await wrapper.find('select#tabGroupSelection').setValue(NEW_TAB_GROUP_ID)
+
+      expect(tabCreateMockCallCount).toBe(0)
+      expect(tabGroupMockCalls).toHaveLength(0)
+
+      await wrapper.find('button#open').trigger('click')
+
+      expect(tabCreateMockCallCount).toBe(2)
+      expect(tabGroupMockCalls).toHaveLength(1)
+      expect(tabGroupMockCalls[0]).toEqual({
+        tabIds: [42, 43],
+        groupId: undefined
+      })
+    })
+
+    it('opens urls in new tabs in existing tab group', async () => {
+      const wrapper = mount(App)
+      await flushPromises()
+
+      await wrapper
+        .find('textarea#urls')
+        .setValue('https://github.com\nhttps://github.com/htrinter/')
+      await wrapper.find('select#tabGroupSelection').setValue(MOCK_TAB_GROUP_ID)
+
+      expect(tabCreateMockCallCount).toBe(0)
+      expect(tabGroupMockCalls).toHaveLength(0)
+
+      await wrapper.find('button#open').trigger('click')
+
+      expect(tabCreateMockCallCount).toBe(2)
+      expect(tabGroupMockCalls).toHaveLength(1)
+      expect(tabGroupMockCalls[0]).toEqual({
+        tabIds: [42, 43],
+        groupId: MOCK_TAB_GROUP_ID
+      })
     })
 
     it('displays tab count', async () => {
@@ -66,16 +134,31 @@ describe('browser action', () => {
       await flushPromises()
       const urlInput = wrapper.find('textarea#urls')
 
-      expect(wrapper.text()).not.toContain('will open')
-
       await urlInput.setValue('1')
-      expect(wrapper.text()).toContain('will open 1 new tab')
+      expect(wrapper.text()).toContain('Open URLs (1)')
 
       await urlInput.setValue('1\n2\n3\n4')
-      expect(wrapper.text()).toContain('will open 4 new tabs')
+      expect(wrapper.text()).toContain('Open URLs (4)')
+    })
 
-      await urlInput.setValue('\n\n')
-      expect(wrapper.text()).not.toContain('will open')
+    it('displays tab count warning', async () => {
+      const warning = '⚠'
+
+      const wrapper = mount(App)
+      await flushPromises()
+      const urlInput = wrapper.find('textarea#urls')
+
+      await urlInput.setValue('')
+      expect(wrapper.text()).not.toContain(warning)
+
+      await urlInput.setValue('1')
+      expect(wrapper.text()).not.toContain(warning)
+
+      await urlInput.setValue('1\n'.repeat(24))
+      expect(wrapper.text()).not.toContain(warning)
+
+      await urlInput.setValue('1\n'.repeat(25))
+      expect(wrapper.text()).toContain(warning)
     })
   })
 
@@ -99,6 +182,9 @@ describe('browser action', () => {
       expect(
         (wrapper.find('input[type="checkbox"]#deduplicate').element as HTMLInputElement).checked
       ).toBeFalsy()
+      expect((wrapper.find('select#tabGroupSelection').element as HTMLInputElement).value).toBe(
+        String(NO_TAB_GROUP_ID)
+      )
     })
 
     const renderWithStoredValuesTestCases = [
@@ -110,7 +196,8 @@ describe('browser action', () => {
           random: false,
           reverse: false,
           preserve: false,
-          deduplicate: false
+          deduplicate: false,
+          selectedTabGroupId: NO_TAB_GROUP_ID
         }
       },
       {
@@ -121,7 +208,8 @@ describe('browser action', () => {
           random: false,
           reverse: false,
           preserve: false,
-          deduplicate: false
+          deduplicate: false,
+          selectedTabGroupId: NO_TAB_GROUP_ID
         }
       },
       {
@@ -132,7 +220,8 @@ describe('browser action', () => {
           random: true,
           reverse: false,
           preserve: false,
-          deduplicate: false
+          deduplicate: false,
+          selectedTabGroupId: NO_TAB_GROUP_ID
         }
       },
       {
@@ -143,7 +232,8 @@ describe('browser action', () => {
           random: false,
           reverse: true,
           preserve: false,
-          deduplicate: false
+          deduplicate: false,
+          selectedTabGroupId: NO_TAB_GROUP_ID
         }
       },
       {
@@ -154,7 +244,8 @@ describe('browser action', () => {
           random: false,
           reverse: false,
           preserve: true,
-          deduplicate: false
+          deduplicate: false,
+          selectedTabGroupId: NO_TAB_GROUP_ID
         }
       },
       {
@@ -165,7 +256,20 @@ describe('browser action', () => {
           random: false,
           reverse: false,
           preserve: false,
-          deduplicate: true
+          deduplicate: true,
+          selectedTabGroupId: NO_TAB_GROUP_ID
+        }
+      },
+      {
+        storeKey: BrowserStorageKey.selectedTabGroupId,
+        value: String(MOCK_TAB_GROUP_ID),
+        expectedStates: {
+          lazyLoad: false,
+          random: false,
+          reverse: false,
+          preserve: false,
+          deduplicate: false,
+          selectedTabGroupId: MOCK_TAB_GROUP_ID
         }
       }
     ]
@@ -198,6 +302,9 @@ describe('browser action', () => {
         expect(
           (wrapper.find('input[type="checkbox"]#deduplicate').element as HTMLInputElement).checked
         ).toBe(expectedStates.deduplicate)
+        expect((wrapper.find('select#tabGroupSelection').element as HTMLInputElement).value).toBe(
+          String(expectedStates.selectedTabGroupId)
+        )
       }
     )
   })
@@ -245,6 +352,29 @@ describe('browser action', () => {
         await checkbox.trigger('click')
         expect((checkbox.element as HTMLInputElement).checked).toBeTruthy()
         expect(mockStore[storeKey]).toBeTruthy()
+      }
+    )
+
+    const storeTabGroupStateTestCases = [
+      { selectedTabGroupId: NO_TAB_GROUP_ID },
+      { selectedTabGroupId: NEW_TAB_GROUP_ID },
+      { selectedTabGroupId: MOCK_TAB_GROUP_ID }
+    ]
+    it.each(storeTabGroupStateTestCases)(
+      'stores $selectedTabGroupId tab group select state',
+      async ({ selectedTabGroupId }) => {
+        const storeKey = BrowserStorageKey.selectedTabGroupId
+
+        const wrapper = mount(App, { attachTo: document.body })
+        await flushPromises()
+
+        const select = wrapper.find('select#tabGroupSelection')
+
+        expect(mockStore[storeKey]).toBeFalsy()
+
+        await select.setValue(selectedTabGroupId)
+        expect((select.element as HTMLSelectElement).value).toBe(String(selectedTabGroupId))
+        expect(mockStore[storeKey]).toBe(selectedTabGroupId)
       }
     )
   })

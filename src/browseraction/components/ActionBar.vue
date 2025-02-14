@@ -2,20 +2,29 @@
   <section id="action-bar">
     <button id="extract" tabindex="6" @click="setUrlListInputData">Extract URLs from text</button>
     <button id="open" tabindex="2" @click="openURLs">
-      <strong>Open URLs</strong>
+      <strong>
+        Open URLs <span v-if="tabCount > 0">({{ tabCount }})</span>
+      </strong>
     </button>
-    <span id="tabcount" v-if="tabCount !== '0'">
-      <abbr
-        title="Opening too many tabs at once may lead to long wait times or crash your browser."
-      >
-        &#9432;
-        <span>
-          will open
-          <span id="tabcount-number">{{ tabCount }}</span>
-          new
-          <span id="tabcount-tab-label">tab<span v-if="tabCount !== '1'">s</span></span>
-        </span>
-      </abbr>
+    <select
+      id="tabGroupSelection"
+      v-if="tabGroupsSupported"
+      v-model="selectedTabGroupId"
+      @change="setTabGroupSelection"
+    >
+      <option v-for="group in tabGroups" :key="group.id" :value="group.id">
+        {{ group.title }}
+      </option>
+    </select>
+    <span
+      id="tabcount"
+      v-if="tabCount >= 25"
+      aria-label="Opening many URLs at once may lead to long wait times or crash your browser."
+      data-microtip-position="bottom"
+      data-microtip-size="medium"
+      role="tooltip"
+    >
+      &#9888;
     </span>
   </section>
 </template>
@@ -24,8 +33,14 @@
 import { getTabCount, loadSites } from '@/browseraction/components/logic/load'
 import { extractURLs } from '@/browseraction/components/logic/extract'
 import { store } from '@/browseraction/components/store/store'
+import { loadTabGroups } from './logic/tabgroups'
 
 export default {
+  data() {
+    return {
+      selectedTabGroupId: store.selectedTabGroupId
+    }
+  },
   methods: {
     openURLs() {
       loadSites(
@@ -33,16 +48,32 @@ export default {
         store.lazyLoadingChecked,
         store.loadInRandomOrderChecked,
         store.loadInReverseOrderChecked,
-        store.deduplicateURLsChecked
-      )
+        store.deduplicateURLsChecked,
+        this.selectedTabGroupId
+      ).then(() => {
+        loadTabGroups().then((tabGroups) => {
+          store.tabGroups = tabGroups
+        })
+      })
     },
     setUrlListInputData() {
       store.setUrlList(extractURLs(store.urlList))
+    },
+    setTabGroupSelection() {
+      this.$nextTick(() => {
+        store.setSelectedTabGroupId(this.selectedTabGroupId)
+      })
     }
   },
   computed: {
     tabCount: function () {
       return getTabCount(store.urlList, store.deduplicateURLsChecked)
+    },
+    tabGroupsSupported: function () {
+      return store.hasTabGroupSupport
+    },
+    tabGroups: function () {
+      return store.tabGroups
     }
   }
 }

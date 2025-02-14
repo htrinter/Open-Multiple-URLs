@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 import browser from 'webextension-polyfill'
 import { BrowserStorageKey } from '@/browseraction/components/store/browser-storage'
+import { NO_TAB_GROUP_ID, type TabGroup } from '../logic/tabgroups'
 
 export const store = reactive({
   urlList: '',
@@ -9,6 +10,9 @@ export const store = reactive({
   loadInReverseOrderChecked: false,
   preserveInputChecked: false,
   deduplicateURLsChecked: false,
+  hasTabGroupSupport: false,
+  tabGroups: [] as TabGroup[],
+  selectedTabGroupId: NO_TAB_GROUP_ID,
   setUrlList(value: string) {
     this.urlList = value
     if (store.preserveInputChecked) {
@@ -35,5 +39,9 @@ export const store = reactive({
   setDeduplicateURLsChecked(value: boolean) {
     this.deduplicateURLsChecked = value
     browser.storage.local.set({ [BrowserStorageKey.deduplicate]: value })
+  },
+  setSelectedTabGroupId(value: number) {
+    this.selectedTabGroupId = Number(value)
+    browser.storage.local.set({ [BrowserStorageKey.selectedTabGroupId]: value })
   }
 })

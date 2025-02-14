@@ -3,7 +3,10 @@
 ## Unreleased
 
 - Added
+  - Tab group support for Chrome
   - Dark mode
+- Changed
+  - Display format of tab count and tab count warning for clarity
 
 ## 1.6.0
 
