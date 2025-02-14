@@ -19,7 +19,7 @@
     <span
       id="tabcount"
       v-if="tabCount >= 25"
-      aria-label="Opening many tabs at once may lead to long wait times or crash your browser."
+      aria-label="Opening many URLs at once may lead to long wait times or crash your browser."
       data-microtip-position="bottom"
       data-microtip-size="medium"
       role="tooltip"
