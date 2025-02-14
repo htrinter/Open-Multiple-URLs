@@ -6,6 +6,7 @@
   - Tab group support for Chrome
   - Dark mode
 - Changed
+  - Display format of tab count and tab count warning for clarity
   - Improved schema detection
   - Added schemas to no-lazy-load rule
 

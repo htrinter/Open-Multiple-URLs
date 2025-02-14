@@ -73,17 +73,7 @@ export const loadSites = async (
 }
 
 export const getTabCount = (text: string, deduplicate: boolean) => {
-  let tabCount = '0'
-  if (text) {
-    const urls = getURLsFromText(text, deduplicate)
-    if (urls.length <= 5000) {
-      // limit for performance reasons
-      tabCount = String(urls.length)
-    } else {
-      tabCount = '> 5000'
-    }
-  }
-  return tabCount
+  return text ? getURLsFromText(text, deduplicate).length : 0
 }
 
 export const getURLsFromText = (text: string, deduplicate: boolean): string[] => {

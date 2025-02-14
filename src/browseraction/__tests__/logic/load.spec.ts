@@ -104,12 +104,12 @@ describe('load tabs', () => {
   })
 
   it('determines tab count correctly', () => {
-    expect(getTabCount('', false)).toBe('0')
-    expect(getTabCount(url1, false)).toBe('1')
-    expect(getTabCount(urlList, false)).toBe('2')
-    expect(getTabCount(`url1\n`.repeat(5000), false)).toBe('5000')
-    expect(getTabCount(`url1\n`.repeat(5001), false)).toBe('> 5000')
-    expect(getTabCount(`${urlList}\n`.repeat(100), true)).toBe('2')
+    expect(getTabCount('', false)).toBe(0)
+    expect(getTabCount(url1, false)).toBe(1)
+    expect(getTabCount(urlList, false)).toBe(2)
+    expect(getTabCount(`url1\n`.repeat(5000), false)).toBe(5000)
+    expect(getTabCount(`url1\n`.repeat(5001), false)).toBe(5001)
+    expect(getTabCount(`${urlList}\n`.repeat(100), true)).toBe(2)
   })
 
   it('gets urls from text', () => {

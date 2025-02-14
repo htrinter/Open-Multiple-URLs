@@ -134,16 +134,31 @@ describe('browser action', () => {
       await flushPromises()
       const urlInput = wrapper.find('textarea#urls')
 
-      expect(wrapper.text()).not.toContain('will open')
-
       await urlInput.setValue('1')
-      expect(wrapper.text()).toContain('will open 1 new tab')
+      expect(wrapper.text()).toContain('Open URLs (1)')
 
       await urlInput.setValue('1\n2\n3\n4')
-      expect(wrapper.text()).toContain('will open 4 new tabs')
+      expect(wrapper.text()).toContain('Open URLs (4)')
+    })
 
-      await urlInput.setValue('\n\n')
-      expect(wrapper.text()).not.toContain('will open')
+    it('displays tab count warning', async () => {
+      const warning = '⚠'
+
+      const wrapper = mount(App)
+      await flushPromises()
+      const urlInput = wrapper.find('textarea#urls')
+
+      await urlInput.setValue('')
+      expect(wrapper.text()).not.toContain(warning)
+
+      await urlInput.setValue('1')
+      expect(wrapper.text()).not.toContain(warning)
+
+      await urlInput.setValue('1\n'.repeat(24))
+      expect(wrapper.text()).not.toContain(warning)
+
+      await urlInput.setValue('1\n'.repeat(25))
+      expect(wrapper.text()).toContain(warning)
     })
   })
 
