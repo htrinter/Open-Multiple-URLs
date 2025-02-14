@@ -98,7 +98,7 @@ describe('load tabs', () => {
     await loadSites('test.de', false, false, true, false, null)
 
     expect(browser.tabs.create).toHaveBeenNthCalledWith(1, {
-      url: 'http://test.de',
+      url: 'https://test.de',
       active: false
     })
   })
