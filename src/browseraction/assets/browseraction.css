@@ -38,6 +38,16 @@ select#tabGroupSelection {
   padding: 4px 8px;
 }
 
+#tabcount.tabcount-grp {
+  display: block;
+  margin-top: 6px;
+}
+
+#tabcount.tabcount-nogrp {
+  display: inline;
+  margin-left: 6px;
+}
+
 #tabcount abbr {
   cursor: default;
   text-decoration: none;

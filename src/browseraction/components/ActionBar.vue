@@ -14,18 +14,24 @@
         {{ group.title }}
       </option>
     </select>
+    <div
+      id="tabcount"
+      :class="tabGroupsSupported ? 'tabcount-grp' : 'tabcount-nogrp'"
+      v-if="tabCount !== '0'"
+    >
+      <abbr
+        title="Opening too many tabs at once may lead to long wait times or crash your browser."
+      >
+        &#9432;
+        <span>
+          will open
+          <span id="tabcount-number">{{ tabCount }}</span>
+          new
+          <span id="tabcount-tab-label">tab<span v-if="tabCount !== '1'">s</span></span>
+        </span>
+      </abbr>
+    </div>
   </section>
-  <span id="tabcount" v-if="tabCount !== '0'">
-    <abbr title="Opening too many tabs at once may lead to long wait times or crash your browser.">
-      &#9432;
-      <span>
-        will open
-        <span id="tabcount-number">{{ tabCount }}</span>
-        new
-        <span id="tabcount-tab-label">tab<span v-if="tabCount !== '1'">s</span></span>
-      </span>
-    </abbr>
-  </span>
 </template>
 
 <script lang="ts">
