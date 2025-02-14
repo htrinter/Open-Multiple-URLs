@@ -151,14 +151,14 @@ describe('load tabs', () => {
   })
 
   it('handles non-url as search query', async () => {
-    await loadSites(urlList+"\ntest", false, false, false, false, true, null)
+    await loadSites(urlList + '\ntest', false, false, false, false, true, null)
 
     expect(browser.tabs.create).toHaveBeenCalledTimes(3)
     expect(browser.search.query).toBeCalledWith({ text: 'test', tabId: -1 })
   })
 
   it('does not handle non-url as search query', async () => {
-    await loadSites(urlList+"\ntest", false, false, false, false, false, null)
+    await loadSites(urlList + '\ntest', false, false, false, false, false, null)
 
     expect(browser.tabs.create).toHaveBeenCalledTimes(3)
     expect(browser.search.query).not.toHaveBeenCalled()
