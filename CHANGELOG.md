@@ -6,7 +6,8 @@
   - Tab group support for Chrome
   - Dark mode
 - Changed
-  - Improved automatic schema prefixing
+  - Improved schema detection
+  - Added schemas to no-lazy-load rule
 
 ## 1.6.0
 
