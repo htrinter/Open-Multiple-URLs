@@ -46,7 +46,7 @@ export const loadSites = async (
 
   const createdTabs: browser.Tabs.Tab[] = []
   for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim()
+    const line = lines[i].trim()
     if (line === '') {
       continue
     }
