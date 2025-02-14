@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.2
+
+- Fix
+  - Issue with search queries not loading
+
 ## 1.7.1
 
 - Added

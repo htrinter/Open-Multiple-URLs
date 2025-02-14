@@ -64,7 +64,7 @@ export const loadSites = async (
     }
 
     const createdTab = await browser.tabs.create({
-      url: url,
+      url: isSearchQuery ? 'about:blank' : url,
       active: false
     })
     createdTabs.push(createdTab)
