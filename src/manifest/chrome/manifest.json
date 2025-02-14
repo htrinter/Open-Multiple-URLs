@@ -18,6 +18,6 @@
       "default": "CTRL+M"
     }
   },
-  "permissions": ["storage", "tabGroups"],
+  "permissions": ["storage", "tabGroups", "search"],
   "incognito": "split"
 }

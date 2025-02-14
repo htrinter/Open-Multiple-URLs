@@ -49,6 +49,7 @@ export default {
         store.loadInRandomOrderChecked,
         store.loadInReverseOrderChecked,
         store.deduplicateURLsChecked,
+        store.handleAsSearchQueryChecked,
         this.selectedTabGroupId
       ).then(() => {
         loadTabGroups().then((tabGroups) => {

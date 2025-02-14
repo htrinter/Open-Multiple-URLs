@@ -9,31 +9,29 @@ import { ref } from 'vue'
 import { NO_TAB_GROUP_ID, loadTabGroups } from './components/logic/tabgroups'
 
 const isStoredValuesLoaded = ref(false)
-Promise.all([
-  browser.storage.local.get(BrowserStorageKey.urlList),
-  browser.storage.local.get(BrowserStorageKey.lazyload),
-  browser.storage.local.get(BrowserStorageKey.random),
-  browser.storage.local.get(BrowserStorageKey.reverse),
-  browser.storage.local.get(BrowserStorageKey.preserve),
-  browser.storage.local.get(BrowserStorageKey.deduplicate),
-  loadTabGroups(),
-  browser.storage.local.get(BrowserStorageKey.selectedTabGroupId)
-]).then((data) => {
-  store.urlList = String(data[0][BrowserStorageKey.urlList] ?? '')
-  store.lazyLoadingChecked = Boolean(data[1][BrowserStorageKey.lazyload]) ?? false
-  store.loadInRandomOrderChecked = Boolean(data[2][BrowserStorageKey.random]) ?? false
-  store.loadInReverseOrderChecked = Boolean(data[3][BrowserStorageKey.reverse]) ?? false
-  store.preserveInputChecked = Boolean(data[4][BrowserStorageKey.preserve]) ?? false
-  store.deduplicateURLsChecked = Boolean(data[5][BrowserStorageKey.deduplicate]) ?? false
-  store.hasTabGroupSupport = Boolean(browser.tabGroups) ?? false
-  store.tabGroups = data[6]
-  store.selectedTabGroupId =
-    store.tabGroups.find(
-      (group) => group.id === Number(data[7][BrowserStorageKey.selectedTabGroupId])
-    )?.id ?? NO_TAB_GROUP_ID
+Promise.all([browser.storage.local.get(Object.values(BrowserStorageKey)), loadTabGroups()]).then(
+  (data) => {
+    // stored options
+    store.urlList = String(data[0][BrowserStorageKey.urlList] ?? '')
+    store.lazyLoadingChecked = Boolean(data[0][BrowserStorageKey.lazyload]) ?? false
+    store.loadInRandomOrderChecked = Boolean(data[0][BrowserStorageKey.random]) ?? false
+    store.loadInReverseOrderChecked = Boolean(data[0][BrowserStorageKey.reverse]) ?? false
+    store.preserveInputChecked = Boolean(data[0][BrowserStorageKey.preserve]) ?? false
+    store.deduplicateURLsChecked = Boolean(data[0][BrowserStorageKey.deduplicate]) ?? false
+    store.handleAsSearchQueryChecked =
+      Boolean(data[0][BrowserStorageKey.handleAsSearchQuery]) ?? false
 
-  isStoredValuesLoaded.value = true
-})
+    // tab groups
+    store.hasTabGroupSupport = Boolean(browser.tabGroups) ?? false
+    store.tabGroups = data[1]
+    store.selectedTabGroupId =
+      store.tabGroups.find(
+        (group) => group.id === Number(data[0][BrowserStorageKey.selectedTabGroupId])
+      )?.id ?? NO_TAB_GROUP_ID
+
+    isStoredValuesLoaded.value = true
+  }
+)
 </script>
 
 <template>
