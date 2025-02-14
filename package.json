@@ -20,6 +20,7 @@
     "format:check": "prettier --check src/"
   },
   "dependencies": {
+    "microtip": "^0.2.2",
     "vue": "^3.5.13",
     "webextension-polyfill": "^0.12.0"
   },

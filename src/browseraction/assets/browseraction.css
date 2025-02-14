@@ -1,3 +1,5 @@
+@import 'microtip/microtip';
+
 body {
   padding: 5px;
   font-family: sans-serif;
@@ -38,24 +40,9 @@ select#tabGroupSelection {
   padding: 4px 8px;
 }
 
-#tabcount.tabcount-grp {
-  display: block;
-  margin-top: 6px;
-}
-
-#tabcount.tabcount-nogrp {
-  display: inline;
-  margin-left: 6px;
-}
-
-#tabcount abbr {
+#tabcount {
   cursor: default;
-  text-decoration: none;
-  border-bottom: none;
-}
-
-#tabcount > abbr > span {
-  border-bottom: 1px dotted #000;
+  margin-left: 6px;
 }
 
 hr {

@@ -2,7 +2,9 @@
   <section id="action-bar">
     <button id="extract" tabindex="6" @click="setUrlListInputData">Extract URLs from text</button>
     <button id="open" tabindex="2" @click="openURLs">
-      <strong>Open URLs</strong>
+      <strong>
+        Open URLs <span v-if="tabCount > 0">({{ tabCount }})</span>
+      </strong>
     </button>
     <select
       id="tabGroupSelection"
@@ -14,23 +16,16 @@
         {{ group.title }}
       </option>
     </select>
-    <div
+    <span
       id="tabcount"
-      :class="tabGroupsSupported ? 'tabcount-grp' : 'tabcount-nogrp'"
-      v-if="tabCount !== '0'"
+      v-if="tabCount >= 25"
+      aria-label="Opening many tabs at once may lead to long wait times or crash your browser."
+      data-microtip-position="bottom"
+      data-microtip-size="medium"
+      role="tooltip"
     >
-      <abbr
-        title="Opening too many tabs at once may lead to long wait times or crash your browser."
-      >
-        &#9432;
-        <span>
-          will open
-          <span id="tabcount-number">{{ tabCount }}</span>
-          new
-          <span id="tabcount-tab-label">tab<span v-if="tabCount !== '1'">s</span></span>
-        </span>
-      </abbr>
-    </div>
+      &#9888;
+    </span>
   </section>
 </template>
 
