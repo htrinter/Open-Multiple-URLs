@@ -8,14 +8,27 @@
 export default {
   methods: {
     init: () => {
-      document.title =
-        '[' +
-        window.location.hash
-          .substring(1)
-          .replace('http://', '')
-          .replace('https://', '')
-          .replace(/\/$/, '') +
-        ']'
+      const url = window.location.hash.substring(1)
+
+      let docTitle = url
+      try {
+        const parsedUrl = new URL(url)
+
+        let hostname = parsedUrl.hostname
+        if (hostname.startsWith('www.')) {
+          hostname = hostname.substring(4)
+        }
+
+        let path = `${hostname}${parsedUrl.pathname}`
+        if (path.endsWith('/')) {
+          path = path.substring(0, path.length - 1)
+        }
+
+        docTitle = path
+      } catch (e) {
+        console.error(e)
+      }
+      document.title = `[${docTitle}]`
 
       // load site on focus
       window.addEventListener(
