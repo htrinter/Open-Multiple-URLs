@@ -1,50 +1,78 @@
 <script lang="ts" setup>
 import { store } from '@/browseraction/components/store/store'
+import { NO_LAZY_LOAD_SCHEMES } from './logic/urlschema'
 </script>
 
 <template>
-  <section id="option-bar">
-    <label class="checkbox"
-      ><input
-        type="checkbox"
-        id="lazyLoad"
-        tabindex="3"
-        :checked="store.lazyLoadingChecked"
-        @change="checkLazyLoading"
-      />
-      Do not load tabs until selected</label
-    >
-    <label class="checkbox"
-      ><input
-        type="checkbox"
-        id="random"
-        tabindex="4"
-        :checked="store.loadInRandomOrderChecked"
-        @change="checkLoadInRandomOrder"
-      />
-      Load in random order</label
-    >
-    <label class="checkbox"
-      ><input
-        type="checkbox"
-        id="reverse"
-        tabindex="4"
-        :checked="store.loadInReverseOrderChecked"
-        @change="checkLoadInReverseOrder"
-      />
-      Load in reverse order</label
-    >
-    <label class="checkbox"
-      ><input
-        type="checkbox"
-        id="deduplicate"
-        tabindex="5"
-        :checked="store.deduplicateURLsChecked"
-        @change="checkDeduplicateURLs"
-      />
-      Ignore duplicate URLs</label
-    >
+  <section id="option-bar-hwrapper">
+    <section>
+      <!-- Loading options -->
+      <label class="checkbox"
+        ><input
+          type="checkbox"
+          id="lazyLoad"
+          tabindex="3"
+          :checked="store.lazyLoadingChecked"
+          @change="checkLazyLoading"
+        />
+        Do not load tabs until selected &nbsp;<span
+          :aria-label="
+            'Search queries and the following URL schemes are not supported: ' +
+            NO_LAZY_LOAD_SCHEMES.join(', ')
+          "
+          data-microtip-position="bottom"
+          data-microtip-size="large"
+          role="tooltip"
+        >
+          ⓘ
+        </span>
+      </label>
+      <label class="checkbox"
+        ><input
+          type="checkbox"
+          id="random"
+          tabindex="4"
+          :checked="store.loadInRandomOrderChecked"
+          @change="checkLoadInRandomOrder"
+        />
+        Load in random order</label
+      >
+      <label class="checkbox"
+        ><input
+          type="checkbox"
+          id="reverse"
+          tabindex="4"
+          :checked="store.loadInReverseOrderChecked"
+          @change="checkLoadInReverseOrder"
+        />
+        Load in reverse order</label
+      >
+    </section>
+    <!-- URL handling options -->
+    <section>
+      <label class="checkbox"
+        ><input
+          type="checkbox"
+          id="deduplicate"
+          tabindex="5"
+          :checked="store.deduplicateURLsChecked"
+          @change="checkDeduplicateURLs"
+        />
+        Ignore duplicate URLs</label
+      >
+      <label class="checkbox"
+        ><input
+          type="checkbox"
+          id="searchquery"
+          tabindex="6"
+          :checked="store.handleAsSearchQueryChecked"
+          @change="checkHandleAsSearchQuery"
+        />
+        Handle Non-URLs as search queries</label
+      >
+    </section>
   </section>
+  <!-- Input handling options -->
   <section>
     <label class="checkbox"
       ><input
@@ -85,6 +113,11 @@ export default {
     checkDeduplicateURLs(event: Event) {
       this.$nextTick(() => {
         store.setDeduplicateURLsChecked((event?.target as HTMLInputElement).checked)
+      })
+    },
+    checkHandleAsSearchQuery(event: Event) {
+      this.$nextTick(() => {
+        store.setHandleAsSearchQueryChecked((event?.target as HTMLInputElement).checked)
       })
     }
   }

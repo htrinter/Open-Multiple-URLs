@@ -67,3 +67,13 @@ input[type='checkbox'] {
 #extract {
   float: right;
 }
+
+#option-bar-hwrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+#option-bar-hwrapper section {
+  flex: 1;
+}

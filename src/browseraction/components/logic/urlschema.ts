@@ -1,5 +1,5 @@
 // The following schemas cannot be lazy loaded because of browser restrictions
-const NO_LAZY_LOAD_SCHEMES = [
+export const NO_LAZY_LOAD_SCHEMES = [
   'file',
   'view-source',
   'moz-extension',

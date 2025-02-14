@@ -31,52 +31,62 @@ export const loadSites = async (
   random: boolean,
   reverse: boolean,
   deduplicate: boolean,
+  handleAsSearchQuery: boolean,
   selectedTabGroupId: number | null | undefined
 ): Promise<void> => {
-  let urls = getURLsFromText(text, deduplicate)
+  let lines = splitInputLines(text, deduplicate)
 
   if (reverse) {
-    urls = urls.reverse()
+    lines = lines.reverse()
   }
 
   if (random) {
-    urls = shuffle(urls)
+    lines = shuffle(lines)
   }
 
-  const createdTabs: Promise<browser.Tabs.Tab>[] = []
-  for (let i = 0; i < urls.length; i++) {
-    let url = urls[i].trim()
-    if (url !== '') {
-      if (!hasValidSchema(url)) {
-        url = 'https://' + url
-      }
+  const createdTabs: browser.Tabs.Tab[] = []
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i].trim()
+    if (line === '') {
+      continue
+    }
 
-      if (lazyloading && canLazyLoad(url)) {
-        url = browser.runtime.getURL('lazyloading.html#') + url
-      }
+    const hasSchema = hasValidSchema(line)
+    const isSearchQuery = !hasSchema && handleAsSearchQuery
 
-      const createdTab = browser.tabs.create({
-        url: url,
-        active: false
-      })
-      createdTabs.push(createdTab)
+    let url = line
+    if (!hasSchema && !isSearchQuery) {
+      url = 'https://' + url
+    }
+
+    if (lazyloading && canLazyLoad(url) && !isSearchQuery) {
+      url = browser.runtime.getURL('lazyloading.html#') + url
+    }
+
+    const createdTab = await browser.tabs.create({
+      url: url,
+      active: false
+    })
+    createdTabs.push(createdTab)
+
+    if (isSearchQuery) {
+      await browser.search.query({ text: url, tabId: createdTab.id })
     }
   }
 
   if (selectedTabGroupId != null && selectedTabGroupId !== NO_TAB_GROUP_ID) {
-    const tabs = await Promise.all(createdTabs)
     await browser.tabs.group?.({
-      tabIds: tabs.map((tab) => tab?.id || -1),
+      tabIds: createdTabs.map((tab) => tab?.id || -1),
       groupId: selectedTabGroupId === NEW_TAB_GROUP_ID ? undefined : selectedTabGroupId
     })
   }
 }
 
 export const getTabCount = (text: string, deduplicate: boolean) => {
-  return text ? getURLsFromText(text, deduplicate).length : 0
+  return text ? splitInputLines(text, deduplicate).length : 0
 }
 
-export const getURLsFromText = (text: string, deduplicate: boolean): string[] => {
+export const splitInputLines = (text: string, deduplicate: boolean): string[] => {
   const urlLineSplitRegex = /\r\n?|\n/g
   const urls = text.split(urlLineSplitRegex).filter((line) => line.trim() !== '')
   return deduplicate ? Array.from(new Set(urls)) : urls

@@ -3,16 +3,20 @@ import { flushPromises, mount } from '@vue/test-utils'
 import App from '../BrowserAction.vue'
 import { BrowserStorageKey } from '../components/store/browser-storage'
 import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from '../components/logic/tabgroups'
+import { search } from 'webextension-polyfill'
+import { mock } from 'node:test'
 
 const MOCK_TAB_GROUP_ID = 123
 const MOCK_TAB_GROUP_TITLE = 'Mock Tab Group'
 
 let mockStore: Record<string, string> = {}
 let tabCreateMockCallCount = 0
+let searchQueryMockCalls: any[] = []
 let tabGroupMockCalls: any[] = []
 beforeEach(() => {
   mockStore = {}
   tabCreateMockCallCount = 0
+  searchQueryMockCalls = []
   tabGroupMockCalls = []
 
   vi.mock('webextension-polyfill', () => ({
@@ -27,10 +31,16 @@ beforeEach(() => {
       tabGroups: {
         query: () => Promise.resolve([{ id: MOCK_TAB_GROUP_ID, title: MOCK_TAB_GROUP_TITLE }])
       },
+      search: {
+        query: (props: any) => searchQueryMockCalls.push(props)
+      },
       runtime: { getURL: (val: string) => val },
       storage: {
         local: {
-          get: (key: string) => {
+          get: (key: string | string[]) => {
+            if (Array.isArray(key)) {
+              return key.reduce((acc, k) => ({ ...acc, [k]: mockStore[k] }), {})
+            }
             return { [key]: mockStore[key] }
           },
           set: (val: any) => (mockStore = { ...mockStore, ...val }) // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -55,6 +65,7 @@ describe('browser action', () => {
     expect(wrapper.text()).toContain('Load in reverse order')
     expect(wrapper.text()).toContain('Preserve input')
     expect(wrapper.text()).toContain('Ignore duplicate URLs')
+    expect(wrapper.text()).toContain('Handle Non-URLs as search queries')
   })
 
   describe('features', () => {
@@ -83,7 +94,31 @@ describe('browser action', () => {
 
       expect(tabCreateMockCallCount).toBe(2)
       expect(tabGroupMockCalls).toHaveLength(0)
+      expect(searchQueryMockCalls).toHaveLength(0)
     })
+
+    it('handles non-urls as search queries', async () => {
+      mockStore = {
+        [BrowserStorageKey.handleAsSearchQuery]: String(true)
+      }
+
+      const wrapper = mount(App)
+      await flushPromises()
+
+      await wrapper
+        .find('textarea#urls')
+        .setValue('test')
+
+      await wrapper.find('button#open').trigger('click')
+
+      expect(tabCreateMockCallCount).toBe(1)
+      expect(searchQueryMockCalls).toHaveLength(1)
+      expect(searchQueryMockCalls[0]).toEqual({
+        text: 'test',
+        tabId: 42
+      })
+    })
+
 
     it('opens urls in new tabs in new tab group', async () => {
       const wrapper = mount(App)

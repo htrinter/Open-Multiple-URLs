@@ -10,6 +10,7 @@ export const store = reactive({
   loadInReverseOrderChecked: false,
   preserveInputChecked: false,
   deduplicateURLsChecked: false,
+  handleAsSearchQueryChecked: false,
   hasTabGroupSupport: false,
   tabGroups: [] as TabGroup[],
   selectedTabGroupId: NO_TAB_GROUP_ID,
@@ -43,5 +44,9 @@ export const store = reactive({
   setSelectedTabGroupId(value: number) {
     this.selectedTabGroupId = Number(value)
     browser.storage.local.set({ [BrowserStorageKey.selectedTabGroupId]: value })
+  },
+  setHandleAsSearchQueryChecked(value: boolean) {
+    this.handleAsSearchQueryChecked = value
+    browser.storage.local.set({ [BrowserStorageKey.handleAsSearchQuery]: value })
   }
 })
