@@ -95,6 +95,18 @@ describe('browser action', () => {
       expect(searchQueryMockCalls).toHaveLength(0)
     })
 
+    it('does not handle non-urls as search queries', async () => {
+      const wrapper = mount(App)
+      await flushPromises()
+
+      await wrapper.find('textarea#urls').setValue('test')
+
+      await wrapper.find('button#open').trigger('click')
+
+      expect(tabCreateMockCallCount).toBe(1)
+      expect(searchQueryMockCalls).toHaveLength(0)
+    })
+
     it('handles non-urls as search queries', async () => {
       mockStore = {
         [BrowserStorageKey.handleAsSearchQuery]: String(true)

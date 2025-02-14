@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.1
+
+- Added
+  - Option to handle Non-URLs as search queries
+
 ## 1.7.0
 
 - Added
