@@ -70,7 +70,7 @@ export const loadSites = async (
     createdTabs.push(createdTab)
 
     if (isSearchQuery) {
-      await browser.search.query({ text: url, tabId: createdTab.id })
+      await browser.search.query({ text: url, tabId: createdTab?.id || -1 })
     }
   }
 

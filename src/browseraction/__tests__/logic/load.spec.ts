@@ -11,6 +11,9 @@ vi.mock('webextension-polyfill', () => ({
       create: vi.fn(),
       group: vi.fn()
     },
+    search: {
+      query: vi.fn()
+    },
     runtime: { getURL: (val: string) => val }
   }
 }))
@@ -145,5 +148,19 @@ describe('load tabs', () => {
 
     expect(browser.tabs.create).toHaveBeenCalledTimes(2)
     expect(browser.tabs.group).toBeCalledWith({ tabIds: [-1, -1], groupId: MOCK_TAB_GROUP_ID })
+  })
+
+  it('handles non-url as search query', async () => {
+    await loadSites(urlList+"\ntest", false, false, false, false, true, null)
+
+    expect(browser.tabs.create).toHaveBeenCalledTimes(3)
+    expect(browser.search.query).toBeCalledWith({ text: 'test', tabId: -1 })
+  })
+
+  it('does not handle non-url as search query', async () => {
+    await loadSites(urlList+"\ntest", false, false, false, false, false, null)
+
+    expect(browser.tabs.create).toHaveBeenCalledTimes(3)
+    expect(browser.search.query).not.toHaveBeenCalled()
   })
 })
