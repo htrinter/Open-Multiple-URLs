@@ -1,6 +1,6 @@
 {
   "name": "open-multiple-urls",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "private": true,
   "scripts": {
     "build:chrome": "export TARGET=chrome && run-p type-check \"build {@}\" --",
