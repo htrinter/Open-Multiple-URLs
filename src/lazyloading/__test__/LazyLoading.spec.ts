@@ -21,6 +21,12 @@ describe('lazy loading', () => {
       mount(App)
       expect(document.title).toBe('[github.com/htrinter]')
     })
+
+    it('use full url of not parsable', () => {
+      window.location.hash = '#//www.github.com/htrinter/'
+      mount(App)
+      expect(document.title).toBe('[//www.github.com/htrinter/]')
+    })
   })
 
   it('navigates on focus', async () => {

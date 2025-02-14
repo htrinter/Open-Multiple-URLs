@@ -24,11 +24,11 @@ export default {
           path = path.substring(0, path.length - 1)
         }
 
-        docTitle = `[${path}]`
+        docTitle = path
       } catch (e) {
         console.error(e)
       }
-      document.title = docTitle
+      document.title = `[${docTitle}]`
 
       // load site on focus
       window.addEventListener(
