@@ -142,7 +142,7 @@ describe('browser action', () => {
     })
 
     it('displays tab count warning', async () => {
-      const warning = "⚠"
+      const warning = '⚠'
 
       const wrapper = mount(App)
       await flushPromises()
