@@ -7,8 +7,6 @@ let mockStore: Record<string, string> = {}
 let tabCreateMockCallCount = 0
 let searchQueryMockCalls: any[] = []
 
-const MOCK_TAB_GROUP_ID = 42
-
 beforeEach(() => {
   mockStore = {}
   tabCreateMockCallCount = 0
