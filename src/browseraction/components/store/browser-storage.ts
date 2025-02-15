@@ -6,5 +6,6 @@ export enum BrowserStorageKey {
   preserve = 'preserve',
   deduplicate = 'deduplicate',
   handleAsSearchQuery = 'handleAsSearchQuery',
-  selectedTabGroupId = 'selectedTabGroupId'
+  selectedTabGroupId = 'selectedTabGroupId',
+  selectedContainerId = 'selectedContainerId'
 }

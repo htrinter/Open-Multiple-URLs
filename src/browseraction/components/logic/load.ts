@@ -1,5 +1,6 @@
 import browser from 'webextension-polyfill'
 import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from './tabgroups'
+import { CONTAINER_COLORS, NEW_CONTAINER_ID, NO_CONTAINER_ID } from './containers'
 import { canLazyLoad, hasValidSchema } from './urlschema'
 
 /**
@@ -32,7 +33,8 @@ export const loadSites = async (
   reverse: boolean,
   deduplicate: boolean,
   handleAsSearchQuery: boolean,
-  selectedTabGroupId: number | null | undefined
+  selectedTabGroupId: number | null | undefined = undefined,
+  selectedContainerId: string | null | undefined = undefined
 ): Promise<void> => {
   let lines = splitInputLines(text, deduplicate)
 
@@ -63,9 +65,23 @@ export const loadSites = async (
       url = browser.runtime.getURL('lazyloading.html#') + url
     }
 
+    if (selectedContainerId === NEW_CONTAINER_ID) {
+      selectedContainerId = (
+        await browser.contextualIdentities.create({
+          name: 'OMU ' + new Date().toLocaleString(),
+          color: CONTAINER_COLORS[Math.floor(Math.random() * CONTAINER_COLORS.length)],
+          icon: 'circle'
+        })
+      ).cookieStoreId
+    }
+
     const createdTab = await browser.tabs.create({
       url: isSearchQuery ? 'about:blank' : url,
-      active: false
+      active: false,
+      cookieStoreId:
+        selectedContainerId != null && selectedContainerId !== NO_CONTAINER_ID
+          ? selectedContainerId
+          : undefined
     })
     createdTabs.push(createdTab)
 
