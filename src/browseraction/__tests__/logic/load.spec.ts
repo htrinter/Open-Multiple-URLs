@@ -2,8 +2,12 @@ import browser from 'webextension-polyfill'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { getTabCount, splitInputLines, loadSites } from '@/browseraction/components/logic/load'
 import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from '@/browseraction/components/logic/tabgroups'
+import { NEW_CONTAINER_ID, NO_CONTAINER_ID } from '@/browseraction/components/logic/containers'
 
 const MOCK_TAB_GROUP_ID = 42
+const MOCK_CONTAINER_ID = '123-container'
+
+const ciCreateMock = vi.fn()
 
 vi.mock('webextension-polyfill', () => ({
   default: {
@@ -13,6 +17,12 @@ vi.mock('webextension-polyfill', () => ({
     },
     search: {
       query: vi.fn()
+    },
+    contextualIdentities: {
+      create: () => {
+        ciCreateMock()
+        return { cookieStoreId: MOCK_CONTAINER_ID }
+      }
     },
     runtime: { getURL: (val: string) => val }
   }
@@ -148,6 +158,32 @@ describe('load tabs', () => {
 
     expect(browser.tabs.create).toHaveBeenCalledTimes(2)
     expect(browser.tabs.group).toBeCalledWith({ tabIds: [-1, -1], groupId: MOCK_TAB_GROUP_ID })
+  })
+
+  it('loads tabs without container', async () => {
+    await loadSites(urlList, false, false, false, false, false, undefined, NO_CONTAINER_ID)
+
+    expect(browser.tabs.create).toHaveBeenCalledTimes(2)
+    expect(ciCreateMock).not.toHaveBeenCalled()
+  })
+
+  it('loads tabs to new container', async () => {
+    await loadSites(urlList, false, false, false, false, false, undefined, NEW_CONTAINER_ID)
+
+    expect(browser.tabs.create).toHaveBeenCalledTimes(2)
+    expect(browser.tabs.create).toHaveBeenCalledWith({
+      url: url1,
+      active: false,
+      cookieStoreId: MOCK_CONTAINER_ID
+    })
+    expect(ciCreateMock).toHaveBeenCalled()
+  })
+
+  it('loads tabs to existing container', async () => {
+    await loadSites(urlList, false, false, false, false, false, undefined, MOCK_CONTAINER_ID)
+
+    expect(browser.tabs.create).toHaveBeenCalledTimes(2)
+    expect(ciCreateMock).not.toHaveBeenCalled()
   })
 
   it('handles non-url as search query', async () => {
