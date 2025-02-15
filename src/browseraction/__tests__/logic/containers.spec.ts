@@ -40,10 +40,10 @@ describe('loads containers', () => {
     vi.resetAllMocks()
   })
 
-  it('loads tab groups', async () => {
-    const tabGroups = await loadContainers()
+  it('loads tab containers', async () => {
+    const containers = await loadContainers()
 
-    expect(tabGroups).toEqual([
+    expect(containers).toEqual([
       { cookieStoreId: NO_CONTAINER_ID, title: NO_CONTAINER_TITLE },
       { cookieStoreId: NEW_CONTAINER_ID, title: NEW_CONTAINER_TITLE },
       { cookieStoreId: '1', title: 'Container 1 (red)' },
