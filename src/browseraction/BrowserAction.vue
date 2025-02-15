@@ -7,31 +7,42 @@ import browser from 'webextension-polyfill'
 import { store } from '@/browseraction/components/store/store'
 import { ref } from 'vue'
 import { NO_TAB_GROUP_ID, loadTabGroups } from './components/logic/tabgroups'
+import { NO_CONTAINER_ID, loadContainers, hasContainerSupport } from './components/logic/containers'
 
 const isStoredValuesLoaded = ref(false)
-Promise.all([browser.storage.local.get(Object.values(BrowserStorageKey)), loadTabGroups()]).then(
-  (data) => {
-    // stored options
-    store.urlList = String(data[0][BrowserStorageKey.urlList] ?? '')
-    store.lazyLoadingChecked = Boolean(data[0][BrowserStorageKey.lazyload]) ?? false
-    store.loadInRandomOrderChecked = Boolean(data[0][BrowserStorageKey.random]) ?? false
-    store.loadInReverseOrderChecked = Boolean(data[0][BrowserStorageKey.reverse]) ?? false
-    store.preserveInputChecked = Boolean(data[0][BrowserStorageKey.preserve]) ?? false
-    store.deduplicateURLsChecked = Boolean(data[0][BrowserStorageKey.deduplicate]) ?? false
-    store.handleAsSearchQueryChecked =
-      Boolean(data[0][BrowserStorageKey.handleAsSearchQuery]) ?? false
+Promise.all([
+  browser.storage.local.get(Object.values(BrowserStorageKey)),
+  loadTabGroups(),
+  hasContainerSupport(),
+  loadContainers()
+]).then((data) => {
+  // stored options
+  store.urlList = String(data[0][BrowserStorageKey.urlList] ?? '')
+  store.lazyLoadingChecked = Boolean(data[0][BrowserStorageKey.lazyload]) ?? false
+  store.loadInRandomOrderChecked = Boolean(data[0][BrowserStorageKey.random]) ?? false
+  store.loadInReverseOrderChecked = Boolean(data[0][BrowserStorageKey.reverse]) ?? false
+  store.preserveInputChecked = Boolean(data[0][BrowserStorageKey.preserve]) ?? false
+  store.deduplicateURLsChecked = Boolean(data[0][BrowserStorageKey.deduplicate]) ?? false
+  store.handleAsSearchQueryChecked =
+    Boolean(data[0][BrowserStorageKey.handleAsSearchQuery]) ?? false
 
-    // tab groups
-    store.hasTabGroupSupport = Boolean(browser.tabGroups) ?? false
-    store.tabGroups = data[1]
-    store.selectedTabGroupId =
-      store.tabGroups.find(
-        (group) => group.id === Number(data[0][BrowserStorageKey.selectedTabGroupId])
-      )?.id ?? NO_TAB_GROUP_ID
+  // tab groups (Chrome only)
+  store.hasTabGroupSupport = Boolean(browser.tabGroups) ?? false
+  store.tabGroups = data[1]
+  store.selectedTabGroupId =
+    store.tabGroups.find(
+      (group) => group.id === Number(data[0][BrowserStorageKey.selectedTabGroupId])
+    )?.id ?? NO_TAB_GROUP_ID
 
-    isStoredValuesLoaded.value = true
-  }
-)
+  // contextual identities (Firefox only)
+  store.hasContainerSupport = data[2]
+  store.containers = data[3]
+  store.selectedContainerId =
+    store.containers.find((c) => c.cookieStoreId === data[0][BrowserStorageKey.selectedContainerId])
+      ?.cookieStoreId ?? NO_CONTAINER_ID
+
+  isStoredValuesLoaded.value = true
+})
 </script>
 
 <template>

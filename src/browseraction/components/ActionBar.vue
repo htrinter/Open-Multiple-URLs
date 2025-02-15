@@ -16,6 +16,16 @@
         {{ group.title }}
       </option>
     </select>
+    <select
+      id="containerSelection"
+      v-if="containersSupported"
+      v-model="selectedContainerId"
+      @change="setContainerSelection"
+    >
+      <option v-for="c in containers" :key="c.cookieStoreId" :value="c.cookieStoreId">
+        {{ c.title }}
+      </option>
+    </select>
     <span
       id="tabcount"
       v-if="tabCount >= 25"
@@ -34,11 +44,13 @@ import { getTabCount, loadSites } from '@/browseraction/components/logic/load'
 import { extractURLs } from '@/browseraction/components/logic/extract'
 import { store } from '@/browseraction/components/store/store'
 import { loadTabGroups } from './logic/tabgroups'
+import { loadContainers } from './logic/containers'
 
 export default {
   data() {
     return {
-      selectedTabGroupId: store.selectedTabGroupId
+      selectedTabGroupId: store.selectedTabGroupId,
+      selectedContainerId: store.selectedContainerId
     }
   },
   methods: {
@@ -50,10 +62,14 @@ export default {
         store.loadInReverseOrderChecked,
         store.deduplicateURLsChecked,
         store.handleAsSearchQueryChecked,
-        this.selectedTabGroupId
+        this.selectedTabGroupId,
+        this.selectedContainerId
       ).then(() => {
         loadTabGroups().then((tabGroups) => {
           store.tabGroups = tabGroups
+        })
+        loadContainers().then((containers) => {
+          store.containers = containers
         })
       })
     },
@@ -63,6 +79,11 @@ export default {
     setTabGroupSelection() {
       this.$nextTick(() => {
         store.setSelectedTabGroupId(this.selectedTabGroupId)
+      })
+    },
+    setContainerSelection() {
+      this.$nextTick(() => {
+        store.setSelectedContainerId(this.selectedContainerId)
       })
     }
   },
@@ -75,6 +96,12 @@ export default {
     },
     tabGroups: function () {
       return store.tabGroups
+    },
+    containersSupported: function () {
+      return store.hasContainerSupport
+    },
+    containers: function () {
+      return store.containers
     }
   }
 }

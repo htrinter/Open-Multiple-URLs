@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getSchema, hasValidSchema, canLazyLoad } from '../components/logic/urlschema'
+import { getSchema, hasValidSchema, canLazyLoad } from '../../components/logic/urlschema'
 
 describe('urlschema', () => {
   describe('getSchema', () => {

@@ -1,5 +1,6 @@
 import browser from 'webextension-polyfill'
 import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from './tabgroups'
+import { CONTAINER_COLORS, NEW_CONTAINER_ID, NO_CONTAINER_ID } from './containers'
 import { canLazyLoad, hasValidSchema } from './urlschema'
 
 /**
@@ -32,7 +33,8 @@ export const loadSites = async (
   reverse: boolean,
   deduplicate: boolean,
   handleAsSearchQuery: boolean,
-  selectedTabGroupId: number | null | undefined
+  selectedTabGroupId: number | null | undefined = undefined,
+  selectedContainerId: string | null | undefined = undefined
 ): Promise<void> => {
   let lines = splitInputLines(text, deduplicate)
 
@@ -63,20 +65,34 @@ export const loadSites = async (
       url = browser.runtime.getURL('lazyloading.html#') + url
     }
 
-    const createdTab = await browser.tabs.create({
+    if (selectedContainerId === NEW_CONTAINER_ID) {
+      selectedContainerId = (
+        await browser.contextualIdentities.create({
+          name: 'OMU ' + new Date().toLocaleString(),
+          color: CONTAINER_COLORS[Math.floor(Math.random() * CONTAINER_COLORS.length)],
+          icon: 'circle'
+        })
+      ).cookieStoreId
+    }
+
+    const tabCreateProperties: browser.Tabs.CreateCreatePropertiesType = {
       url: isSearchQuery ? 'about:blank' : url,
       active: false
-    })
+    }
+    if (selectedContainerId != null && selectedContainerId !== NO_CONTAINER_ID) {
+      tabCreateProperties.cookieStoreId = selectedContainerId
+    }
+    const createdTab = await browser.tabs.create(tabCreateProperties)
     createdTabs.push(createdTab)
 
     if (isSearchQuery) {
-      await browser.search.query({ text: url, tabId: createdTab?.id || -1 })
+      await browser.search.query({ text: url, tabId: createdTab.id })
     }
   }
 
   if (selectedTabGroupId != null && selectedTabGroupId !== NO_TAB_GROUP_ID) {
     await browser.tabs.group?.({
-      tabIds: createdTabs.map((tab) => tab?.id || -1),
+      tabIds: createdTabs.map((tab) => tab.id || -1),
       groupId: selectedTabGroupId === NEW_TAB_GROUP_ID ? undefined : selectedTabGroupId
     })
   }

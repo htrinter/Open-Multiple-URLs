@@ -2,6 +2,7 @@ import { reactive } from 'vue'
 import browser from 'webextension-polyfill'
 import { BrowserStorageKey } from '@/browseraction/components/store/browser-storage'
 import { NO_TAB_GROUP_ID, type TabGroup } from '../logic/tabgroups'
+import { NO_CONTAINER_ID, type Container } from '../logic/containers'
 
 export const store = reactive({
   urlList: '',
@@ -11,9 +12,15 @@ export const store = reactive({
   preserveInputChecked: false,
   deduplicateURLsChecked: false,
   handleAsSearchQueryChecked: false,
+
   hasTabGroupSupport: false,
   tabGroups: [] as TabGroup[],
   selectedTabGroupId: NO_TAB_GROUP_ID,
+
+  hasContainerSupport: false,
+  containers: [] as Container[],
+  selectedContainerId: NO_CONTAINER_ID,
+
   setUrlList(value: string) {
     this.urlList = value
     if (store.preserveInputChecked) {
@@ -44,6 +51,10 @@ export const store = reactive({
   setSelectedTabGroupId(value: number) {
     this.selectedTabGroupId = Number(value)
     browser.storage.local.set({ [BrowserStorageKey.selectedTabGroupId]: value })
+  },
+  setSelectedContainerId(value: string) {
+    this.selectedContainerId = value
+    browser.storage.local.set({ [BrowserStorageKey.selectedContainerId]: value })
   },
   setHandleAsSearchQueryChecked(value: boolean) {
     this.handleAsSearchQueryChecked = value
