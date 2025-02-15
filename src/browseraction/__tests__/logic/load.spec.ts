@@ -3,7 +3,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { getTabCount, splitInputLines, loadSites } from '@/browseraction/components/logic/load'
 import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from '@/browseraction/components/logic/tabgroups'
 import { NEW_CONTAINER_ID, NO_CONTAINER_ID } from '@/browseraction/components/logic/containers'
-import { beforeEach } from 'node:test'
 
 const MOCK_TAB_GROUP_ID = 42
 const MOCK_CONTAINER_ID = '123-container'

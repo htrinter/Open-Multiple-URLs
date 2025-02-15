@@ -92,7 +92,7 @@ export const loadSites = async (
 
   if (selectedTabGroupId != null && selectedTabGroupId !== NO_TAB_GROUP_ID) {
     await browser.tabs.group?.({
-      tabIds: createdTabs.map((tab) => tab.id).filter((id) => id != null),
+      tabIds: createdTabs.map((tab) => tab.id || -1),
       groupId: selectedTabGroupId === NEW_TAB_GROUP_ID ? undefined : selectedTabGroupId
     })
   }
