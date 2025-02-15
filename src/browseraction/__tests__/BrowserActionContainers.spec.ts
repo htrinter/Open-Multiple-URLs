@@ -151,7 +151,7 @@ describe('browser action', () => {
         await flushPromises()
 
         expect((wrapper.find('select#containerSelection').element as HTMLInputElement).value).toBe(
-          String(expectedStates.selectedContainerId)
+          expectedStates.selectedContainerId
         )
       }
     )

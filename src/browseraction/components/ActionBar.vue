@@ -22,8 +22,8 @@
       v-model="selectedContainerId"
       @change="setContainerSelection"
     >
-      <option v-for="ci in containers" :key="ci.cookieStoreId" :value="ci.cookieStoreId">
-        {{ ci.title }}
+      <option v-for="c in containers" :key="c.cookieStoreId" :value="c.cookieStoreId">
+        {{ c.title }}
       </option>
     </select>
     <span
