@@ -86,13 +86,13 @@ export const loadSites = async (
     createdTabs.push(createdTab)
 
     if (isSearchQuery) {
-      await browser.search.query({ text: url, tabId: createdTab?.id || -1 })
+      await browser.search.query({ text: url, tabId: createdTab.id })
     }
   }
 
   if (selectedTabGroupId != null && selectedTabGroupId !== NO_TAB_GROUP_ID) {
     await browser.tabs.group?.({
-      tabIds: createdTabs.map((tab) => tab?.id || -1),
+      tabIds: createdTabs.map((tab) => tab.id).filter((id) => id != null),
       groupId: selectedTabGroupId === NEW_TAB_GROUP_ID ? undefined : selectedTabGroupId
     })
   }
