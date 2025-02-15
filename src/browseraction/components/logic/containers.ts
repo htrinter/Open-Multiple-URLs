@@ -16,14 +16,16 @@ export const CONTAINER_COLORS = [
   'purple'
 ]
 
-export const NO_CONTAINER_ID = String('NO_CONTAINER_ID')
-export const NEW_CONTAINER_ID = String('NEW_CONTAINER_ID')
+export const NO_CONTAINER_ID = 'NO_CONTAINER_ID'
+export const NO_CONTAINER_TITLE = 'No Container'
+export const NEW_CONTAINER_ID = 'NEW_CONTAINER_ID'
+export const NEW_CONTAINER_TITLE = 'New Container'
 
 export const loadContainers = async (): Promise<Container[]> => {
   const containers = await (browser.contextualIdentities?.query({}) || Promise.resolve([]))
   return [
-    { cookieStoreId: NO_CONTAINER_ID, title: 'No Container' },
-    { cookieStoreId: NEW_CONTAINER_ID, title: 'New Container' },
+    { cookieStoreId: NO_CONTAINER_ID, title: NO_CONTAINER_TITLE },
+    { cookieStoreId: NEW_CONTAINER_ID, title: NEW_CONTAINER_TITLE },
     ...containers.map((ci) => ({
       cookieStoreId: ci.cookieStoreId,
       title: `${ci.name}${ci.name ? ' ' : ''}(${ci.color})`

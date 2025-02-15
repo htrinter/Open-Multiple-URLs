@@ -2,7 +2,8 @@ import { describe, it, beforeEach, vi, expect } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import App from '../BrowserAction.vue'
 import { BrowserStorageKey } from '../components/store/browser-storage'
-import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from '../components/logic/tabgroups'
+import { NEW_TAB_GROUP_ID, NEW_TAB_GROUP_TITLE, NO_TAB_GROUP_ID, NO_TAB_GROUP_TITLE } from '../components/logic/tabgroups'
+import { NEW_CONTAINER_TITLE, NO_CONTAINER_TITLE } from '../components/logic/containers'
 
 const MOCK_TAB_GROUP_ID = 123
 const MOCK_TAB_GROUP_TITLE = 'Mock Tab Group'
@@ -54,9 +55,11 @@ describe('browser action', () => {
     await flushPromises()
     expect(wrapper.text()).toContain('List of URLs / Text to extract URLs from:')
     expect(wrapper.text()).toContain('Open URLs')
-    expect(wrapper.text()).toContain('No Tab Group')
-    expect(wrapper.text()).toContain('New Tab Group')
+    expect(wrapper.text()).toContain(NO_TAB_GROUP_TITLE)
+    expect(wrapper.text()).toContain(NEW_TAB_GROUP_TITLE)
     expect(wrapper.text()).toContain(MOCK_TAB_GROUP_TITLE)
+    expect(wrapper.text()).not.toContain(NO_CONTAINER_TITLE)
+    expect(wrapper.text()).not.toContain(NEW_CONTAINER_TITLE)
     expect(wrapper.text()).toContain('Extract URLs from text')
     expect(wrapper.text()).toContain('Do not load tabs until selected')
     expect(wrapper.text()).toContain('Load in random order')
