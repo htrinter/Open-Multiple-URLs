@@ -12,7 +12,7 @@
       v-model="selectedTabGroupId"
       @change="setTabGroupSelection"
     >
-      <option v-for="group in tabGroups" :key="group.groupId" :value="group.groupId">
+      <option v-for="group in tabGroups" :key="group.id" :value="group.id">
         {{ group.title }}
       </option>
     </select>
