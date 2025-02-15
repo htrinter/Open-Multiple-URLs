@@ -75,14 +75,14 @@ export const loadSites = async (
       ).cookieStoreId
     }
 
-    const createdTab = await browser.tabs.create({
-      url: isSearchQuery ? 'about:blank' : url,
-      active: false,
-      cookieStoreId:
-        selectedContainerId != null && selectedContainerId !== NO_CONTAINER_ID
-          ? selectedContainerId
-          : undefined
-    })
+    const tabCreateProperties: browser.Tabs.CreateCreatePropertiesType = {
+        url: isSearchQuery ? 'about:blank' : url,
+        active: false
+    }
+    if(selectedContainerId != null && selectedContainerId !== NO_CONTAINER_ID) {
+      tabCreateProperties.cookieStoreId = selectedContainerId
+    }
+    const createdTab = await browser.tabs.create(tabCreateProperties)
     createdTabs.push(createdTab)
 
     if (isSearchQuery) {
