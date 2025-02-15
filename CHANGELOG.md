@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.3
+
+- Added
+  - Container support for Firefox
+
 ## 1.7.2
 
 - Fix
