@@ -7,12 +7,13 @@ import browser from 'webextension-polyfill'
 import { store } from '@/browseraction/components/store/store'
 import { ref } from 'vue'
 import { NO_TAB_GROUP_ID, loadTabGroups } from './components/logic/tabgroups'
-import { NO_CONTAINER_ID, loadContainers } from './components/logic/containers'
+import { NO_CONTAINER_ID, loadContainers, hasContainerSupport } from './components/logic/containers'
 
 const isStoredValuesLoaded = ref(false)
 Promise.all([
   browser.storage.local.get(Object.values(BrowserStorageKey)),
   loadTabGroups(),
+  hasContainerSupport(),
   loadContainers()
 ]).then((data) => {
   // stored options
@@ -34,8 +35,8 @@ Promise.all([
     )?.id ?? NO_TAB_GROUP_ID
 
   // contextual identities (Firefox only)
-  store.hasContainerSupport = Boolean(browser.contextualIdentities) ?? false
-  store.containers = data[2]
+  store.hasContainerSupport = data[2]
+  store.containers = data[3]
   store.selectedContainerId =
     store.containers.find((c) => c.cookieStoreId === data[0][BrowserStorageKey.selectedContainerId])
       ?.cookieStoreId ?? NO_CONTAINER_ID
