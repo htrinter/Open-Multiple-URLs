@@ -13,6 +13,13 @@
     "default_icon": "icon19.png",
     "default_popup": "browseraction.html"
   },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+M"
+      }
+    }
+  },
   "permissions": ["storage", "search", "contextualIdentities", "cookies"],
   "incognito": "spanning"
 }
