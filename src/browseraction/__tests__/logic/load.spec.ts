@@ -112,11 +112,11 @@ describe('load tabs', () => {
     expect(tabCreateMock).toHaveBeenCalledTimes(2)
   })
 
-  it('appends http protocol if protocol does not exist', async () => {
+  it('prepends http protocol if protocol does not exist', async () => {
     await loadSites('test.de', false, false, true, false, false, null)
 
     expect(tabCreateMock).toHaveBeenNthCalledWith(1, {
-      url: 'https://test.de',
+      url: 'http://test.de',
       active: false
     })
   })

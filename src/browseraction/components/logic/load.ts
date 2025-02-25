@@ -58,7 +58,7 @@ export const loadSites = async (
 
     let url = line
     if (!hasSchema && !isSearchQuery) {
-      url = 'https://' + url
+      url = 'http://' + url
     }
 
     if (lazyloading && canLazyLoad(url) && !isSearchQuery) {
