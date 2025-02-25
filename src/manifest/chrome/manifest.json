@@ -15,7 +15,9 @@
   },
   "commands": {
     "_execute_action": {
-      "default": "CTRL+M"
+      "suggested_key": {
+        "default": "Ctrl+Shift+O"
+      }
     }
   },
   "permissions": ["storage", "tabGroups", "search"],

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Changed
+  - Keyboard shortcut defaults to non-assigned keys
+
 ## 1.7.4
 
 - Added
