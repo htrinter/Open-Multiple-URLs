@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.4
+
+- Added
+  - Keyboard shortcut for Firefox
+
+- Fixed
+  - Revert back to http prefixing for compatibility
+
 ## 1.7.3
 
 - Added
@@ -7,7 +15,7 @@
 
 ## 1.7.2
 
-- Fix
+- Fixed
   - Issue with search queries not loading
 
 ## 1.7.1
