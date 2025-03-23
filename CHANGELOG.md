@@ -5,6 +5,9 @@
 - Changed
   - Keyboard shortcut defaults to non-assigned keys
 
+- Fixed
+  - Error handling on tab creation
+
 ## 1.7.4
 
 - Added

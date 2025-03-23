@@ -82,11 +82,16 @@ export const loadSites = async (
     if (selectedContainerId != null && selectedContainerId !== NO_CONTAINER_ID) {
       tabCreateProperties.cookieStoreId = selectedContainerId
     }
-    const createdTab = await browser.tabs.create(tabCreateProperties)
-    createdTabs.push(createdTab)
 
-    if (isSearchQuery) {
-      await browser.search.query({ text: url, tabId: createdTab.id })
+    try {
+      const createdTab = await browser.tabs.create(tabCreateProperties)
+      createdTabs.push(createdTab)
+
+      if (isSearchQuery) {
+        await browser.search.query({ text: url, tabId: createdTab.id })
+      }
+    } catch (error) {
+      console.error('Failed to create tab', tabCreateProperties, error)
     }
   }
 
