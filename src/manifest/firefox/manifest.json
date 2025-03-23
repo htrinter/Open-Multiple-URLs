@@ -14,11 +14,7 @@
     "default_popup": "browseraction.html"
   },
   "commands": {
-    "_execute_browser_action": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+M"
-      }
-    }
+    "_execute_browser_action": {}
   },
   "permissions": ["storage", "search", "contextualIdentities", "cookies"],
   "incognito": "spanning"

@@ -3,7 +3,7 @@
 ## Unreleased
 
 - Changed
-  - Keyboard shortcut defaults to non-assigned keys
+  - Keyboard shortcut defaults for compatibility
 
 - Fixed
   - Error handling on tab creation

@@ -14,11 +14,7 @@
     "default_popup": "browseraction.html"
   },
   "commands": {
-    "_execute_action": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+O"
-      }
-    }
+    "_execute_action": {}
   },
   "permissions": ["storage", "tabGroups", "search"],
   "incognito": "split"
