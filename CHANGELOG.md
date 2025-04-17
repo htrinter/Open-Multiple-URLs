@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.7.5
 
 - Changed
   - Keyboard shortcut defaults for compatibility
