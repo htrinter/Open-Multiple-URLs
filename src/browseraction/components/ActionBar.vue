@@ -40,11 +40,13 @@
 </template>
 
 <script lang="ts">
-import { getTabCount, loadSites } from '@/browseraction/components/logic/load'
+import { getTabCount } from '@/browseraction/components/logic/load'
 import { extractURLs } from '@/browseraction/components/logic/extract'
 import { store } from '@/browseraction/components/store/store'
 import { loadTabGroups } from './logic/tabgroups'
 import { loadContainers } from './logic/containers'
+import browser from 'webextension-polyfill'
+import type { LoadSitesMessage } from '@/types'
 
 export default {
   data() {
@@ -55,16 +57,18 @@ export default {
   },
   methods: {
     openURLs() {
-      loadSites(
-        store.urlList,
-        store.lazyLoadingChecked,
-        store.loadInRandomOrderChecked,
-        store.loadInReverseOrderChecked,
-        store.deduplicateURLsChecked,
-        store.handleAsSearchQueryChecked,
-        this.selectedTabGroupId,
-        this.selectedContainerId
-      ).then(() => {
+      const message: LoadSitesMessage = {
+        action: 'loadSites',
+        text: store.urlList,
+        lazyloading: store.lazyLoadingChecked,
+        random: store.loadInRandomOrderChecked,
+        reverse: store.loadInReverseOrderChecked,
+        deduplicate: store.deduplicateURLsChecked,
+        handleAsSearchQuery: store.handleAsSearchQueryChecked,
+        selectedTabGroupId: this.selectedTabGroupId,
+        selectedContainerId: this.selectedContainerId
+      };
+      browser.runtime.sendMessage(message).then(() => {
         loadTabGroups().then((tabGroups) => {
           store.tabGroups = tabGroups
         })
