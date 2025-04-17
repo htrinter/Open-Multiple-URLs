@@ -6,26 +6,24 @@ import { NEW_TAB_GROUP_TITLE, NO_TAB_GROUP_TITLE } from '../components/logic/tab
 import { NEW_CONTAINER_TITLE, NO_CONTAINER_TITLE } from '../components/logic/containers'
 
 let mockStore: Record<string, string> = {}
-let tabCreateMockCallCount = 0
-let searchQueryMockCalls: any[] = []
+let sendMessageCalls: any[] = []
 
 beforeEach(() => {
   mockStore = {}
-  tabCreateMockCallCount = 0
-  searchQueryMockCalls = []
+  sendMessageCalls = []
 
   vi.mock('webextension-polyfill', () => ({
     default: {
-      tabs: {
-        create: () => {
-          tabCreateMockCallCount++
-          return Promise.resolve({ id: 41 + tabCreateMockCallCount })
+      runtime: {
+        getURL: (val: string) => val,
+        sendMessage: (message: any) => {
+          sendMessageCalls.push(message)
+          return Promise.resolve()
+        },
+        onMessage: {
+          addListener: vi.fn()
         }
       },
-      search: {
-        query: (props: any) => searchQueryMockCalls.push(props)
-      },
-      runtime: { getURL: (val: string) => val },
       storage: {
         local: {
           get: (key: string | string[]) => {
@@ -71,7 +69,7 @@ describe('browser action', () => {
       expect((urlInput.element as HTMLInputElement).value).toBe('https://github.com\n')
     })
 
-    it('opens urls in new tabs', async () => {
+    it('sends loadSites message to background script', async () => {
       const wrapper = mount(App)
       await flushPromises()
 
@@ -79,43 +77,19 @@ describe('browser action', () => {
         .find('textarea#urls')
         .setValue('https://github.com\nhttps://github.com/htrinter/')
 
-      expect(tabCreateMockCallCount).toBe(0)
-
       await wrapper.find('button#open').trigger('click')
 
-      expect(tabCreateMockCallCount).toBe(2)
-      expect(searchQueryMockCalls).toHaveLength(0)
-    })
-
-    it('does not handle non-urls as search queries', async () => {
-      const wrapper = mount(App)
-      await flushPromises()
-
-      await wrapper.find('textarea#urls').setValue('test')
-
-      await wrapper.find('button#open').trigger('click')
-
-      expect(tabCreateMockCallCount).toBe(1)
-      expect(searchQueryMockCalls).toHaveLength(0)
-    })
-
-    it('handles non-urls as search queries', async () => {
-      mockStore = {
-        [BrowserStorageKey.handleAsSearchQuery]: String(true)
-      }
-
-      const wrapper = mount(App)
-      await flushPromises()
-
-      await wrapper.find('textarea#urls').setValue('test')
-
-      await wrapper.find('button#open').trigger('click')
-
-      expect(tabCreateMockCallCount).toBe(1)
-      expect(searchQueryMockCalls).toHaveLength(1)
-      expect(searchQueryMockCalls[0]).toEqual({
-        text: 'test',
-        tabId: 42
+      expect(sendMessageCalls).toHaveLength(1)
+      expect(sendMessageCalls[0]).toEqual({
+        action: 'loadSites',
+        deduplicate: false,
+        handleAsSearchQuery: false,
+        lazyloading: false,
+        random: false,
+        reverse: false,
+        selectedContainerId: 'NO_CONTAINER_ID',
+        selectedTabGroupId: -1,
+        text: 'https://github.com\nhttps://github.com/htrinter/'
       })
     })
 

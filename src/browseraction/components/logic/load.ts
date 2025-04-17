@@ -1,13 +1,13 @@
 import browser from 'webextension-polyfill'
-import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from './tabgroups'
-import { CONTAINER_COLORS, NEW_CONTAINER_ID, NO_CONTAINER_ID } from './containers'
 import { canLazyLoad, hasValidSchema } from './urlschema'
+import { CONTAINER_COLORS, NEW_CONTAINER_ID, NO_CONTAINER_ID } from './containers'
+import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from './tabgroups'
 
 /**
  * Shuffles array in place.
  * @param {Array} a items An array containing the items.
  */
-const shuffle = (a: string[]) => {
+export const shuffle = (a: string[]) => {
   let j, x, i
   for (i = a.length - 1; i > 0; i--) {
     j = Math.floor(Math.random() * (i + 1))
@@ -19,12 +19,27 @@ const shuffle = (a: string[]) => {
 }
 
 /**
- * Loads sites in new background tabs
- * @param text Text containing one URL per line
- * @param lazyloading Lazy-load tabs
- * @param random Open tabs in random order
- * @param reverse Open tabs in reverse order
- * @param deduplicate Ignores duplicate URLs on open
+ * Splits input text into lines and removes duplicates if specified.
+ * @param {string} text The input text to split.
+ * @param {boolean} deduplicate Whether to remove duplicate lines.
+ * @returns {string[]} An array of lines from the input text.
+ */
+export const splitInputLines = (text: string, deduplicate: boolean): string[] => {
+  const urlLineSplitRegex = /\r\n?|\n/g
+  const urls = text.split(urlLineSplitRegex).filter((line) => line.trim() !== '')
+  return deduplicate ? Array.from(new Set(urls)) : urls
+}
+
+/**
+ * Loads URLs from the input text into new tabs.
+ * @param {string} text The input text containing URLs.
+ * @param {boolean} lazyloading Whether to use lazy loading.
+ * @param {boolean} random Whether to shuffle the URLs.
+ * @param {boolean} reverse Whether to reverse the order of URLs.
+ * @param {boolean} deduplicate Whether to remove duplicate URLs.
+ * @param {boolean} handleAsSearchQuery Whether to handle as search query.
+ * @param {number|null|undefined} selectedTabGroupId The ID of the selected tab group.
+ * @param {string|null|undefined} selectedContainerId The ID of the selected container.
  */
 export const loadSites = async (
   text: string,
@@ -105,10 +120,4 @@ export const loadSites = async (
 
 export const getTabCount = (text: string, deduplicate: boolean) => {
   return text ? splitInputLines(text, deduplicate).length : 0
-}
-
-export const splitInputLines = (text: string, deduplicate: boolean): string[] => {
-  const urlLineSplitRegex = /\r\n?|\n/g
-  const urls = text.split(urlLineSplitRegex).filter((line) => line.trim() !== '')
-  return deduplicate ? Array.from(new Set(urls)) : urls
 }

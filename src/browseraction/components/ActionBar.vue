@@ -40,13 +40,13 @@
 </template>
 
 <script lang="ts">
-import { getTabCount } from '@/browseraction/components/logic/load'
 import { extractURLs } from '@/browseraction/components/logic/extract'
 import { store } from '@/browseraction/components/store/store'
 import { loadTabGroups } from './logic/tabgroups'
 import { loadContainers } from './logic/containers'
 import browser from 'webextension-polyfill'
 import type { LoadSitesMessage } from '@/types'
+import { getTabCount } from './logic/load'
 
 export default {
   data() {
@@ -67,7 +67,7 @@ export default {
         handleAsSearchQuery: store.handleAsSearchQueryChecked,
         selectedTabGroupId: this.selectedTabGroupId,
         selectedContainerId: this.selectedContainerId
-      };
+      }
       browser.runtime.sendMessage(message).then(() => {
         loadTabGroups().then((tabGroups) => {
           store.tabGroups = tabGroups
