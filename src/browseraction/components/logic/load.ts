@@ -7,7 +7,7 @@ import { NEW_TAB_GROUP_ID, NO_TAB_GROUP_ID } from './tabgroups'
  * Shuffles array in place.
  * @param {Array} a items An array containing the items.
  */
-export const shuffle = (a: string[]) => {
+const shuffle = (a: string[]) => {
   let j, x, i
   for (i = a.length - 1; i > 0; i--) {
     j = Math.floor(Math.random() * (i + 1))
