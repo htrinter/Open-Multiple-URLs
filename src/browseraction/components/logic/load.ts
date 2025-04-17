@@ -61,6 +61,16 @@ export const loadSites = async (
     lines = shuffle(lines)
   }
 
+  if (selectedContainerId === NEW_CONTAINER_ID) {
+    selectedContainerId = (
+      await browser.contextualIdentities.create({
+        name: 'OMU ' + new Date().toLocaleString(),
+        color: CONTAINER_COLORS[Math.floor(Math.random() * CONTAINER_COLORS.length)],
+        icon: 'circle'
+      })
+    ).cookieStoreId
+  }
+
   const createdTabs: browser.Tabs.Tab[] = []
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim()
@@ -78,16 +88,6 @@ export const loadSites = async (
 
     if (lazyloading && canLazyLoad(url) && !isSearchQuery) {
       url = browser.runtime.getURL('lazyloading.html#') + url
-    }
-
-    if (selectedContainerId === NEW_CONTAINER_ID) {
-      selectedContainerId = (
-        await browser.contextualIdentities.create({
-          name: 'OMU ' + new Date().toLocaleString(),
-          color: CONTAINER_COLORS[Math.floor(Math.random() * CONTAINER_COLORS.length)],
-          icon: 'circle'
-        })
-      ).cookieStoreId
     }
 
     const tabCreateProperties: browser.Tabs.CreateCreatePropertiesType = {
