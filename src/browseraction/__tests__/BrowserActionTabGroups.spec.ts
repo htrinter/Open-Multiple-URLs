@@ -14,31 +14,27 @@ const MOCK_TAB_GROUP_ID = 123
 const MOCK_TAB_GROUP_TITLE = 'Mock Tab Group'
 
 let mockStore: Record<string, string> = {}
-let tabCreateMockCallCount = 0
-let searchQueryMockCalls: any[] = []
-let tabGroupMockCalls: any[] = []
+let sendMessageCalls: any[] = []
+
 beforeEach(() => {
   mockStore = {}
-  tabCreateMockCallCount = 0
-  searchQueryMockCalls = []
-  tabGroupMockCalls = []
+  sendMessageCalls = []
 
   vi.mock('webextension-polyfill', () => ({
     default: {
-      tabs: {
-        create: () => {
-          tabCreateMockCallCount++
-          return Promise.resolve({ id: 41 + tabCreateMockCallCount })
-        },
-        group: (props: any) => tabGroupMockCalls.push(props)
-      },
       tabGroups: {
         query: () => Promise.resolve([{ id: MOCK_TAB_GROUP_ID, title: MOCK_TAB_GROUP_TITLE }])
       },
-      search: {
-        query: (props: any) => searchQueryMockCalls.push(props)
+      runtime: {
+        getURL: (val: string) => val,
+        sendMessage: (message: any) => {
+          sendMessageCalls.push(message)
+          return Promise.resolve()
+        },
+        onMessage: {
+          addListener: vi.fn()
+        }
       },
-      runtime: { getURL: (val: string) => val },
       storage: {
         local: {
           get: (key: string | string[]) => {
@@ -84,16 +80,19 @@ describe('browser action', () => {
         .setValue('https://github.com\nhttps://github.com/htrinter/')
       await wrapper.find('select#tabGroupSelection').setValue(NEW_TAB_GROUP_ID)
 
-      expect(tabCreateMockCallCount).toBe(0)
-      expect(tabGroupMockCalls).toHaveLength(0)
-
       await wrapper.find('button#open').trigger('click')
 
-      expect(tabCreateMockCallCount).toBe(2)
-      expect(tabGroupMockCalls).toHaveLength(1)
-      expect(tabGroupMockCalls[0]).toEqual({
-        tabIds: [42, 43],
-        groupId: undefined
+      expect(sendMessageCalls).toHaveLength(1)
+      expect(sendMessageCalls[0]).toEqual({
+        action: 'loadSites',
+        deduplicate: false,
+        handleAsSearchQuery: false,
+        lazyloading: false,
+        random: false,
+        reverse: false,
+        selectedContainerId: 'NO_CONTAINER_ID',
+        selectedTabGroupId: -2,
+        text: 'https://github.com\nhttps://github.com/htrinter/'
       })
     })
 
@@ -106,16 +105,19 @@ describe('browser action', () => {
         .setValue('https://github.com\nhttps://github.com/htrinter/')
       await wrapper.find('select#tabGroupSelection').setValue(MOCK_TAB_GROUP_ID)
 
-      expect(tabCreateMockCallCount).toBe(0)
-      expect(tabGroupMockCalls).toHaveLength(0)
-
       await wrapper.find('button#open').trigger('click')
 
-      expect(tabCreateMockCallCount).toBe(2)
-      expect(tabGroupMockCalls).toHaveLength(1)
-      expect(tabGroupMockCalls[0]).toEqual({
-        tabIds: [42, 43],
-        groupId: MOCK_TAB_GROUP_ID
+      expect(sendMessageCalls).toHaveLength(1)
+      expect(sendMessageCalls[0]).toEqual({
+        action: 'loadSites',
+        deduplicate: false,
+        handleAsSearchQuery: false,
+        lazyloading: false,
+        random: false,
+        reverse: false,
+        selectedContainerId: 'NO_CONTAINER_ID',
+        selectedTabGroupId: 123,
+        text: 'https://github.com\nhttps://github.com/htrinter/'
       })
     })
   })

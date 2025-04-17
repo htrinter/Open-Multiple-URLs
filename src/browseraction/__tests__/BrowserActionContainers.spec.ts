@@ -11,39 +11,31 @@ import {
 import { NEW_TAB_GROUP_TITLE, NO_TAB_GROUP_TITLE } from '../components/logic/tabgroups'
 
 const MOCK_CONTAINER_ID = '123'
-const MOCK_NEW_CONTAINER_ID = '123-new'
 const MOCK_CONTAINER_NAME = 'Mock Container'
 
 let mockStore: Record<string, string> = {}
-let tabCreateMockCalls: any[] = []
-let searchQueryMockCalls: any[] = []
-let createContainerMockCalls: any[] = []
+let sendMessageCalls: any[] = []
 beforeEach(() => {
   mockStore = {}
-  tabCreateMockCalls = []
-  searchQueryMockCalls = []
-  createContainerMockCalls = []
+  sendMessageCalls = []
 
   vi.mock('webextension-polyfill', () => ({
     default: {
-      tabs: {
-        create: (props: any) => {
-          tabCreateMockCalls.push(props)
-          return Promise.resolve({ id: 41 + tabCreateMockCalls.length })
-        }
-      },
       contextualIdentities: {
         query: () =>
-          Promise.resolve([{ cookieStoreId: MOCK_CONTAINER_ID, name: MOCK_CONTAINER_NAME }]),
-        create: (props: any) => {
-          createContainerMockCalls.push(props)
-          return Promise.resolve({ cookieStoreId: MOCK_NEW_CONTAINER_ID })
+          Promise.resolve([{ cookieStoreId: MOCK_CONTAINER_ID, name: MOCK_CONTAINER_NAME }])
+      },
+
+      runtime: {
+        getURL: (val: string) => val,
+        sendMessage: (message: any) => {
+          sendMessageCalls.push(message)
+          return Promise.resolve()
+        },
+        onMessage: {
+          addListener: vi.fn()
         }
       },
-      search: {
-        query: (props: any) => searchQueryMockCalls.push(props)
-      },
-      runtime: { getURL: (val: string) => val },
       storage: {
         local: {
           get: (key: string | string[]) => {
@@ -89,17 +81,19 @@ describe('browser action', () => {
         .setValue('https://github.com\nhttps://github.com/htrinter/')
       await wrapper.find('select#containerSelection').setValue(NEW_CONTAINER_ID)
 
-      expect(tabCreateMockCalls.length).toBe(0)
-      expect(createContainerMockCalls).toHaveLength(0)
-
       await wrapper.find('button#open').trigger('click')
 
-      expect(tabCreateMockCalls.length).toBe(2)
-      expect(createContainerMockCalls).toHaveLength(1)
-      expect(tabCreateMockCalls[0]).toEqual({
-        active: false,
-        cookieStoreId: MOCK_NEW_CONTAINER_ID,
-        url: 'https://github.com'
+      expect(sendMessageCalls).toHaveLength(1)
+      expect(sendMessageCalls[0]).toEqual({
+        action: 'loadSites',
+        deduplicate: false,
+        handleAsSearchQuery: false,
+        lazyloading: false,
+        random: false,
+        reverse: false,
+        selectedContainerId: 'NEW_CONTAINER_ID',
+        selectedTabGroupId: -1,
+        text: 'https://github.com\nhttps://github.com/htrinter/'
       })
     })
 
@@ -112,13 +106,20 @@ describe('browser action', () => {
         .setValue('https://github.com\nhttps://github.com/htrinter/')
       await wrapper.find('select#containerSelection').setValue(MOCK_CONTAINER_ID)
 
-      expect(tabCreateMockCalls.length).toBe(0)
-      expect(createContainerMockCalls).toHaveLength(0)
-
       await wrapper.find('button#open').trigger('click')
 
-      expect(tabCreateMockCalls.length).toBe(2)
-      expect(createContainerMockCalls).toHaveLength(0)
+      expect(sendMessageCalls).toHaveLength(1)
+      expect(sendMessageCalls[0]).toEqual({
+        action: 'loadSites',
+        deduplicate: false,
+        handleAsSearchQuery: false,
+        lazyloading: false,
+        random: false,
+        reverse: false,
+        selectedContainerId: '123',
+        selectedTabGroupId: -1,
+        text: 'https://github.com\nhttps://github.com/htrinter/'
+      })
     })
   })
 

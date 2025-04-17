@@ -56,8 +56,12 @@ export default defineConfig({
       input: {
         BrowserAction: "./browseraction.html",
         LazyLoading: "./lazyloading.html",
+        background: "./src/serviceworker/background.ts"
       },
       output: {
+        entryFileNames: (chunkInfo) => {
+          return chunkInfo.name === 'background' ? 'background.js' : '[name]-[hash].js';
+        },
         manualChunks(id) {
           if (id.includes("node_modules")) {
             return "vendor";

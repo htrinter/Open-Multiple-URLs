@@ -4,6 +4,7 @@
 
 - Changed
   - Keyboard shortcut defaults for compatibility
+  - Refactored load process to run in background script for reliability
 
 - Fixed
   - Error handling on tab creation
