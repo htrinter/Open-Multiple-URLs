@@ -14,7 +14,9 @@
     "default_popup": "browseraction.html"
   },
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": false,
+    "type": "module"
   },
   "commands": {
     "_execute_browser_action": {}
