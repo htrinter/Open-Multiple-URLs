@@ -56,7 +56,7 @@ export default defineConfig({
       input: {
         BrowserAction: "./browseraction.html",
         LazyLoading: "./lazyloading.html",
-        background: "./src/background.ts"
+        background: "./src/serviceworker/background.ts"
       },
       output: {
         entryFileNames: (chunkInfo) => {
