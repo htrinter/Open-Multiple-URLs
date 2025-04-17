@@ -28,7 +28,7 @@ vi.mock('webextension-polyfill', () => ({
         return { cookieStoreId: MOCK_CONTAINER_ID }
       }
     },
-    runtime: { getURL: (val: string) => val, onMessage: { addListener: vi.fn() } }
+    runtime: { getURL: (val: string) => val }
   }
 }))
 
