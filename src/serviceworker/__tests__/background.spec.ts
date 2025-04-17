@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { loadSitesListener } from '@/background'
+import { loadSitesListener } from '@/serviceworker/background'
 
 vi.mock('webextension-polyfill', () => ({
   default: {

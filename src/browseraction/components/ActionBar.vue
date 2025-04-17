@@ -45,7 +45,7 @@ import { store } from '@/browseraction/components/store/store'
 import { loadTabGroups } from './logic/tabgroups'
 import { loadContainers } from './logic/containers'
 import browser from 'webextension-polyfill'
-import type { LoadSitesMessage } from '@/types'
+import type { LoadSitesMessage } from '@/serviceworker/types'
 import { getTabCount } from './logic/load'
 
 export default {

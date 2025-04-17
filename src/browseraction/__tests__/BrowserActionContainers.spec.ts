@@ -11,7 +11,6 @@ import {
 import { NEW_TAB_GROUP_TITLE, NO_TAB_GROUP_TITLE } from '../components/logic/tabgroups'
 
 const MOCK_CONTAINER_ID = '123'
-const MOCK_NEW_CONTAINER_ID = '123-new'
 const MOCK_CONTAINER_NAME = 'Mock Container'
 
 let mockStore: Record<string, string> = {}
